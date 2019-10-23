@@ -1,4 +1,98 @@
-                    GNU GENERAL PUBLIC LICENSE
+Copyright 2019, OpenRemote Inc.
+
+See the CONTRIBUTORS.txt file in the distribution for a
+full listing of individual contributors.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+This software is a collective work, it combines the following independent works:
+
+antlr:antlr: ANTLR BSD LICENSE
+aopalliance:aopalliance: PUBLIC DOMAIN
+ch.qos.logback:logback-classic: ECLIPSE DISTRIBUTION LICENSE, VERSION 1.0
+ch.qos.logback:logback-core: ECLIPSE DISTRIBUTION LICENSE, VERSION 1.0
+cglib:*: APACHE LICENSE, VERSION 2.0
+com.ahome-it:ahome-tooling-common: APACHE LICENSE, VERSION 2.0
+com.ahome-it:ahome-tooling-nativetools: APACHE LICENSE, VERSION 2.0
+com.ahome-it:lienzo-core: APACHE LICENSE, VERSION 2.0
+com.fasterxml.jackson.core:*: APACHE LICENSE, VERSION 2.0
+com.fasterxml.jackson.module:*: APACHE LICENSE, VERSION 2.0
+com.fasterxml.jackson.jaxrs:*: APACHE LICENSE, VERSION 2.0
+com.fasterxml:classmate: APACHE LICENSE, VERSION 2.0
+com.google.code.findbugs: GNU LESSER GENERAL PUBLIC LICENSE, VERSION 3
+com.google.errorprone:error_prone_annotations: APACHE LICENSE, VERSION 2.0
+com.google.guava:*: APACHE LICENSE, VERSION 2.0
+com.google.gwt:*: APACHE LICENSE, VERSION 2.0
+com.google.gwt.inject:*: APACHE LICENSE, VERSION 2.0
+com.google.j2objc:j2objc-annotations: APACHE LICENSE, VERSION 2.0
+com.ning:async-http-client: APACHE LICENSE, VERSION 2.0
+com.sun.xml.bind:*: GNU GENERAL PUBLIC LICENSE, VERSION 2.0 WITH CLASSPATH EXCEPTION
+com.zaxxer:HikariCP: APACHE LICENSE, VERSION 2.0
+commons-codec:commons-codec: APACHE LICENSE, VERSION 2.0
+commons-io:commons-io: APACHE LICENSE, VERSION 2.0
+commons-httpclient:commons-httpclient: APACHE LICENSE, VERSION 2.0
+commons-logging:commons-logging: APACHE LICENSE, VERSION 2.0
+dom4j:dom4j: DOM4J BSD LICENSE
+io.netty:netty: APACHE LICENSE, VERSION 2.0
+io.undertow:*: APACHE LICENSE, VERSION 2.0
+javax.jmdns:jmdns: APACHE LICENSE, VERSION 2.0
+javax.validation:validation-api: APACHE LICENSE, VERSION 2.0
+javax.activation:activation: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+javax.mail:mail: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+jdom:jdom: APACHE LICENSE, VERSION 2.0
+net.jcip:jcip-annotations: Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.5), see http://www.jcip.net
+org.apache.camel:*: APACHE LICENSE, VERSION 2.0
+org.apache.httpcomponents:*: APACHE LICENSE, VERSION 2.0
+org.apache.geronimo.specs:geronimo-jta_1.1_spec: APACHE LICENSE, VERSION 2.0
+org.apache.james:*: APACHE LICENSE, VERSION 2.0
+org.bidib.com.neuronrobotics:nrjavaserial: RXTX LICENSE, VERSION 2.1
+org.bouncycastle:bcpkix-jdk15on: BOUNCYCASTLE LICENSE
+org.bouncycastle:bcprov-jdk15on: BOUNCYCASTLE LICENSE
+org.codehaus.btm:btm: GNU LESSER GENERAL PUBLIC LICENSE, VERSION 3
+org.codehaus.groovy:*: APACHE LICENSE, VERSION 2.0
+org.hibernate.common:hibernate-commons-annotations: GNU LESSER GENERAL PUBLIC LICENSE, VERSION 2.1
+org.hibernate.javax.persistence:hibernate-jpa-2.1-api: ECLIPSE DISTRIBUTION LICENSE, VERSION 1.0
+org.hibernate:hibernate-core: GNU LESSER GENERAL PUBLIC LICENSE, VERSION 2.1
+org.hibernate:hibernate-validator: APACHE LICENSE, VERSION 2.0
+org.infinispan:*: APACHE LICENSE, VERSION 2.0
+org.javassist:javassist: APACHE LICENSE, VERSION 2.0
+org.jboss.jdeparser:jdeparser: GNU GENERAL PUBLIC LICENSE, VERSION 2.0 WITH CLASSPATH EXCEPTION
+org.jboss.logging:*: GNU LESSER GENERAL PUBLIC LICENSE, VERSION 2.1
+org.jboss.spec.javax.annotation:*: GNU GENERAL PUBLIC LICENSE, VERSION 2.0 WITH CLASSPATH EXCEPTION
+org.jboss.spec.javax.servlet:*: GNU GENERAL PUBLIC LICENSE, VERSION 2.0 WITH CLASSPATH EXCEPTION
+org.jboss.spec.javax.websocket:*: GNU GENERAL PUBLIC LICENSE, VERSION 2.0 WITH CLASSPATH EXCEPTION
+org.jboss.spec.javax.transaction:*: GNU GENERAL PUBLIC LICENSE, VERSION 2.0 WITH CLASSPATH EXCEPTION
+org.jboss.spec.javax.ws:*: GNU GENERAL PUBLIC LICENSE, VERSION 2.0 WITH CLASSPATH EXCEPTION
+org.jboss.spec.javax.ws.rs:*: GNU GENERAL PUBLIC LICENSE, VERSION 2.0 WITH CLASSPATH EXCEPTION
+org.jboss.xnio:*: APACHE LICENSE, VERSION 2.0
+org.jboss:jandex:*: APACHE LICENSE, VERSION 2.0
+org.jboss.resteasy:*: APACHE LICENSE, VERSION 2.0
+org.jboss.marshalling:*: GNU LESSER GENERAL PUBLIC LICENSE, VERSION 2.1
+org.jgroups:jgroups:*: GNU LESSER GENERAL PUBLIC LICENSE, VERSION 2.1
+org.keycloak:*: APACHE LICENSE, VERSION 2.0
+org.bouncycastle:*: BOUNCYCASTLE LICENSE
+org.rhq.helpers:rhq-pluginAnnotations: TODO GPL?
+org.codehaus.woodstox:*: APACHE LICENSE, VERSION 2.0
+org.openremote:or-commons: GNU AFFERO GENERAL PUBLIC LICENSE, VERSION 3
+org.openremote:or-controller: GNU AFFERO GENERAL PUBLIC LICENSE, VERSION 3
+org.openremote:or-shared: GNU AFFERO GENERAL PUBLIC LICENSE, VERSION 3
+org.openremote:or-zwave: TODO Proprietary?
+org.slf4j:*: SLF4J LICENSE
+xml-apis:xml-apis: APACHE LICENSE, VERSION 2.0
+org.xerial:sqlite-jdbc: APACHE LICENSE, VERSION 2.0
+https://github.com/workingflows/gwt-jscore: TODO Unknown!
+
+---
+
+                      GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
