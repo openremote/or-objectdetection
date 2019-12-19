@@ -37,7 +37,7 @@ Tensor = torch.cuda.FloatTensor
 
 result = {}
 
-def detect_image(img):
+def detect_image(img, classList):
     # scale and pad image
     ratio = min(img_size/img.size[0], img_size/img.size[1])
     imw = round(img.size[0] * ratio)
@@ -54,28 +54,26 @@ def detect_image(img):
     # run inference on the model and get detections
     with torch.no_grad():
         detections = model(input_img)
-
         detections = utils.non_max_suppression(detections, 80, conf_thres, nms_thres)
         
         realDetections = []
+        
         #remove unwanted classes
-        #print(classes[int(detections.cpu()[0][6])])
         if detections is not None:
             for d in detections:
                 if d is not None:
                     className = classes[int(d[0].cpu()[6])]
-                    if className == "person":
+                    if className in classList:
                         realDetections.append(d)
         
         if len(realDetections):
-            #printprint(realDetections)
             return realDetections[0]
 
     return None
 
-def writeJson(peopleCountJson, totalPeopleCountJson, speedJson, directionxJson, directionyJson):
+def writeJson(peopleCountJson, totalPeopleCountJson, speedJson, directionxJson, directionyJson, totalLineCrossedLeftJson, totalLineCrossedRightJson, totalLineCrossedJson):
     global result 
-    result = {'camera': "one",'people': int(peopleCountJson), 'totalpeople': int(totalPeopleCountJson), 'speed': int(speedJson), 'directionx': directionxJson, 'directiony': directionyJson}
+    result = {'camera': "one",'people': int(peopleCountJson), 'totalpeople': int(totalPeopleCountJson), 'speed': int(speedJson), 'directionx': directionxJson, 'directiony': directionyJson, 'lineCrossedLeft': int(totalLineCrossedLeftJson), 'lineCrossedRight': int(totalLineCrossedRightJson), 'totalLineCrossed': int(totalLineCrossedJson)}
 
 def getJson():
     return result
@@ -91,41 +89,44 @@ def yoloWorker(parameterlist):
     calculateSpeed = parameterlist[3]
     calculatePeopleCount = parameterlist[4]
     calculateTotalPeopleCount = parameterlist[5]
-    calculatePeopleOnly = parameterlist[6]
-    calculateEverything = parameterlist[7]
-    #videoSource = parameterlist[8]
+    classList = parameterlist[6]
+    calculateLineCrossed = parameterlist[7]
+    videoSource = parameterlist[8]
 
     #videopath = '/home/openremote/Desktop/pytorch_objectdetecttrack-master/video.mp4'
+
+    #setup 
     colors=[(255,0,0),(0,255,0),(0,0,255),(255,0,255),(128,0,0),(0,128,0),(0,0,128),(128,0,128),(128,128,0),(0,128,128)]
-    vid = cv2.VideoCapture(0)
-    #vid = cv2.VideoCapture(videopath)
+    vid = cv2.VideoCapture(videoSource)
     mot_tracker = Sort() 
 
-    cv2.namedWindow('Stream',cv2.WINDOW_NORMAL)
-    cv2.resizeWindow('Stream', (800,600))
-
     pointsDict = {}
-    ParametersDict = {} #list with all ID's and parameters from that ID  (ID): (direction(x,y), speed(int), )
+    TrackedIDs = []
+    lineCrossingIDs = [] #list of ID's which are currantly crossing the line
 
+    #parameters saved each frame
     prevPeopleCount = 0
     totalPeopleCount = 0
 
+    totalLineCrossedLeft = 0
+    totalLineCrossedRight = 0
     totalLineCrossed = 0
-    LineCrossedLeft = 0
-    LineCrossedRight = 0
 
     frames = 0
 
+    #START!
     while(True):
 
         peoplecount = 0
+        
         ret, frame = vid.read()
         if not ret:
             break
+
         frames += 1
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         pilimg = Image.fromarray(frame)
-        detections = detect_image(pilimg)
+        detections = detect_image(pilimg, classList)
 
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
         img = np.array(pilimg)
@@ -134,145 +135,160 @@ def yoloWorker(parameterlist):
         unpad_h = img_size - pad_y
         unpad_w = img_size - pad_x
         
-        speed = 0
-        xdir = ""
-        ydir = ""
-
+        #total parameters
         totalSpeed = 0
-        
-       
         left = 0
         right = 0
         up = 0
         down = 0
         
+
         if detections is not None:
             tracked_objects = mot_tracker.update(detections.cpu())
-            unique_labels = detections[:, -1].cpu().unique()
-            #n_cls_preds = len(unique_labels)
-            
+            #unique_labels = detections[:, -1].cpu().unique()
+
+            #currentlyTrackedId = []
+
             for x1, y1, x2, y2, obj_id, cls_pred in tracked_objects:
             
-                if classes[int(cls_pred)] == "person":
+                speed = 0
+                xdir = ""
+                ydir = ""
 
-                    if calculatePeopleCount:
+                #get bounding box cordinates
+                box_h = int(((y2 - y1) / unpad_h) * img.shape[0])
+                box_w = int(((x2 - x1) / unpad_w) * img.shape[1])
+                y1 = int(((y1 - pad_y // 2) / unpad_h) * img.shape[0])
+                x1 = int(((x1 - pad_x // 2) / unpad_w) * img.shape[1])
+
+                #calculate center of object
+                center = (round(x1 + (box_w / 2)), round(y1 + (box_h / 2)))
+                
+                #get ID
+                Id = int(obj_id)
+
+                #if Id not in currentlyTrackedId:
+                #    currentlyTrackedId.append(Id)
+
+                if calculatePeopleCount:
+                    if Id not in TrackedIDs:
                         peoplecount += 1
 
-                    #get bounding box cordinates
-                    box_h = int(((y2 - y1) / unpad_h) * img.shape[0])
-                    box_w = int(((x2 - x1) / unpad_w) * img.shape[1])
-                    y1 = int(((y1 - pad_y // 2) / unpad_h) * img.shape[0])
-                    x1 = int(((x1 - pad_x // 2) / unpad_w) * img.shape[1])
+                #add center to dict
+                if Id in pointsDict:
+                    pointsDict[Id].appendleft(center)
 
-                    #calculate center of object
-                    
-                    center = (round(x1 + (box_w / 2)), round(y1 + (box_h / 2)))
-                    
-                    Id = int(obj_id)
+                else:
+                    #if(len(pointsDict) > maxPointsDictLength):
+                    #    del list(pointsDict)[0]
+                    #    print("delete")
+                    pointsDict[Id] = deque(maxlen=25)
+                    pointsDict[Id].appendleft(center)
 
-                    #add center to dict
-                    if Id in pointsDict:
-                        pointsDict[Id].appendleft(center)
+                
 
-                    else:
-                        pointsDict[Id] = deque(maxlen=25)
-                        pointsDict[Id].appendleft(center)
-                    
-                    if len(pointsDict[Id]) > 5:
+                if len(pointsDict[Id]) > 6:
+                    if calculateDirection:
+                        xdir, ydir = getDirection(frame, pointsDict[Id])
                         
-
-                        if calculateDirection:
-                            xdir, ydir = getDirection(frame, pointsDict[Id])
-                            
-                            if(xdir == "left"):
-                                left += 1
-                            if(xdir == "right"):
-                                right += 1
-                            if(ydir == "up"):
-                                up += 1
-                            if(ydir == "down"):
-                                down += 1
+                        if(xdir == "left"):
+                            left += 1
+                        if(xdir == "right"):
+                            right += 1
+                        if(ydir == "up"):
+                            up += 1
+                        if(ydir == "down"):
+                            down += 1
 
 
-                        if calculateSpeed:
-                            speed = getSpeed(pointsDict[Id])
-                            totalSpeed += speed
-                        
-                        #lineCrossed = getCountLineCrossed(frame, pointsDict[Id])
-                        #if lineCrossed != None:
-                        #    if lineCrossed == "left":
-                        #        LineCrossedLeft += 1
-                        #    elif lineCrossed == "right":
-                        #        LineCrossedRight += 1
-                        #    totalLineCrossed += 1
+                    if calculateSpeed:
+                        speed = getSpeed(pointsDict[Id])
+                        totalSpeed += speed
 
+                    if(frames % 10 == 0):
+                        if calculateLineCrossed:
+                            lineCrossed = getCountLineCrossed(pointsDict[Id])
+                            if lineCrossed != None:
+                                if Id not in lineCrossingIDs:
+                                    if lineCrossed == "left":
+                                        totalLineCrossedLeft += 1
+                                    elif lineCrossed == "right":
+                                        totalLineCrossedRight += 1
+                                    totalLineCrossed += 1
+                                    lineCrossingIDs.append(Id)
+                            else:
+                                if Id in lineCrossingIDs:
+                                    lineCrossingIDs.remove(Id)
+                    
 
+                #Add ID to total tracked id's
+                TrackedIDs.append(Id)
 
-                    #visualize boxes
-                    if visualizeBBoxes:
-                        color = colors[Id % len(colors)]
-                        cls = classes[int(cls_pred)]
-                        cv2.rectangle(frame, (x1, y1), (x1+box_w, y1+box_h), color, 4)
-                        cv2.rectangle(frame, (x1, y1-105), (x1+len(cls)*19+80, y1), color, -1)
-                        cv2.putText(frame, cls + "-" + str(Id), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
-                        
-                        if calculateDirection:
-                            cv2.putText(frame, xdir  + " - " + ydir, (x1, y1 - 35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
+                #visualize boxes
+                if visualizeBBoxes:
+                    color = colors[Id % len(colors)]
+                    cls = classes[int(cls_pred)]
+                    cv2.rectangle(frame, (x1, y1), (x1+box_w, y1+box_h), color, 4)
+                    cv2.rectangle(frame, (x1, y1-105), (x1+len(cls)*19+80, y1), color, -1)
+                    cv2.putText(frame, cls + "-" + str(Id), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
+                    
+                    if calculateDirection:
+                        cv2.putText(frame, xdir  + " - " + ydir, (x1, y1 - 35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
 
-                        if calculateSpeed:
-                            cv2.putText(frame, "speed " + str(speed), (x1, y1 - 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
+                    if calculateSpeed:
+                        cv2.putText(frame, "speed " + str(speed), (x1, y1 - 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
 
-                    #visualize centers
-                    if visualizerCenters:
-                        cv2.circle(frame, center, 5, (0, 0, 255), 5)
+                #visualize centers
+                if visualizerCenters:
+                    cv2.circle(frame, center, 5, (0, 0, 255), 5)
+            
+        # clean up unused Id's
+        #if(frames % 90 == 0):
+        #    idsToRemove = []
+        #    for Id in pointsDict: 
+        #        if Id not in currentlyTrackedId:
+        #            idsToRemove.append(Id)
+        #    for Id in idsToRemove:
+        #        del pointsDict[Id]
+
 
         #visualize line
-        #cv2.line(frame, (1,333), (648,333), [0, 255, 0], 10)
-        #cv2.putText(frame, "poeple count line crossed to left " + str(LineCrossedLeft), (0, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
-        #cv2.putText(frame, "poeple count line crossed to right " + str(LineCrossedRight), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
-        #cv2.putText(frame, "poeple count line crossed Total " + str(totalLineCrossed), (0, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
-        
-        
-
+        if calculateLineCrossed:
+            cv2.line(frame, (1,1079), (1023,678), [0, 255, 0], 10)
+            cv2.putText(frame, "poeple count line crossed to left " + str(totalLineCrossedLeft), (0, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
+            cv2.putText(frame, "poeple count line crossed to right " + str(totalLineCrossedRight), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
+            cv2.putText(frame, "poeple count line crossed Total " + str(totalLineCrossed), (0, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
+            
         # visualize People count
         if calculatePeopleCount:
             cv2.putText(frame, "people count " + str(peoplecount), (0, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
        
-
+        #get total people count
         if calculateTotalPeopleCount:
             if peoplecount > prevPeopleCount:
                 totalPeopleCount += abs(peoplecount - prevPeopleCount)
             prevPeopleCount = peoplecount
             cv2.putText(frame, "total people count " + str(totalPeopleCount), (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
-                            
-        totalxdir = ""
-        totalydir = ""
 
-        if(left > right):
-            totalxdir = "left"
-        elif(left < right):
-            totalxdir = "right"
-        else:
-            totalxdir = "unavailable"
-        
-        if(up > down):
-            totalydir = "up"
-        elif(up < down):
-            totalydir = "down"
-        else:
-            totalydir = "unavailable"
+        #get total direction
+        if calculateDirection:
+            totalxdir, totalydir = getTotalDirection(left,right,up,down)
+            cv2.putText(frame, "Total Xdir " + totalxdir, (0, 180), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
+            cv2.putText(frame, "total Ydir " + totalydir, (0, 210), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)   
 
+
+        #get Average speed
         if peoplecount != 0:
             totalSpeed/peoplecount
         else:
             totalSpeed = 0
 
-        if(frames % 30 == 0):
-            writeJson(peoplecount, totalPeopleCount, totalSpeed, totalxdir, totalydir)
+        #write json for API
+        if(frames % 10 == 0):
+            writeJson(peoplecount, totalPeopleCount, totalSpeed, totalxdir, totalydir, totalLineCrossedLeft, totalLineCrossedRight, totalLineCrossed)
 
-        
+        #visualize
         cv2.imshow('Stream', frame)
-        #outvideo.write(frame)
         ch = 0xFF & cv2.waitKey(1)
         if ch == 27:
             break

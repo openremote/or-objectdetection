@@ -6,18 +6,14 @@ from itertools import islice
 import numpy as np
 import math
 
-def getCountLineCrossed(image, pointList):
+def getCountLineCrossed(pointList):
 
-    a = (40,662)
-    b = (628,304)
+    a = (1,1079)
+    b = (1023,678)
     
     position = ((b[0] - a[0])*(pointList[0][1] - a[1]) - (b[1] - a[1])*(pointList[0][0] - a[0]))
-
     prevposition = ((b[0] - a[0])*(pointList[0 - 5][1] - a[1]) - (b[1] - a[1])*(pointList[0 - 5][0] - a[0]))
 
-    print(position)
-    print(prevposition)
-    #cv2.line(image, (40,662), (648,427), [0, 255, 0], 10)
     if(prevposition != 0 and position != 0):
         if(position > 0 and prevposition < 0):
             print("crossed to right")
@@ -71,3 +67,21 @@ def getDirection(image, pointList):
 
     return (x,y)
     
+def getTotalDirection(left, right, up, down):
+    totalxdir = ""
+    totalydir = ""
+
+    if(left > right):
+        totalxdir = "left"
+    elif(left < right):
+        totalxdir = "right"
+    else:
+        totalxdir = "unavailable"
+    if(up > down):
+        totalydir = "up"
+    elif(up < down):
+        totalydir = "down"
+    else:
+        totalydir = "unavailable"
+
+    return (totalxdir,totalydir)
