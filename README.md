@@ -1,5 +1,5 @@
 # OpenRemote Object Tracking
-Open source implementation of a human tracking algorithm that gets diffrent parameters of the humans it is tracking and displays this information inside the OpenRemote manager. 
+Open source implementation of an object tracking algorithm that takes an input of a video source and calculates different parameters from the objects in the frame (people, bikes, cars) then displays the parameters (number of objects, average speed, direction of moving) and sends them to be displayed on the Open Remote manager throw an HTTP API in a Json format.
 
 
 # Installation
