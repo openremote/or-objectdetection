@@ -171,8 +171,9 @@ def yoloWorker(parameterlist):
                 #    currentlyTrackedId.append(Id)
 
                 if calculatePeopleCount:
+                    peoplecount += 1 
                     if Id not in TrackedIDs:
-                        peoplecount += 1
+                        TrackedIDs.append(Id)
 
                 #add center to dict
                 if Id in pointsDict:
@@ -184,8 +185,6 @@ def yoloWorker(parameterlist):
                     #    print("delete")
                     pointsDict[Id] = deque(maxlen=25)
                     pointsDict[Id].appendleft(center)
-
-                
 
                 if len(pointsDict[Id]) > 6:
                     if calculateDirection:
@@ -219,10 +218,6 @@ def yoloWorker(parameterlist):
                             else:
                                 if Id in lineCrossingIDs:
                                     lineCrossingIDs.remove(Id)
-                    
-
-                #Add ID to total tracked id's
-                TrackedIDs.append(Id)
 
                 #visualize boxes
                 if visualizeBBoxes:
@@ -265,10 +260,10 @@ def yoloWorker(parameterlist):
        
         #get total people count
         if calculateTotalPeopleCount:
-            if peoplecount > prevPeopleCount:
-                totalPeopleCount += abs(peoplecount - prevPeopleCount)
-            prevPeopleCount = peoplecount
-            cv2.putText(frame, "total people count " + str(totalPeopleCount), (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
+            #if peoplecount > prevPeopleCount:
+            #    totalPeopleCount += abs(peoplecount - prevPeopleCount)
+            #prevPeopleCount = peoplecount
+            cv2.putText(frame, "total people count " + str(len(TrackedIDs)), (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
 
         #get total direction
         if calculateDirection:
@@ -285,9 +280,10 @@ def yoloWorker(parameterlist):
 
         #write json for API
         if(frames % 10 == 0):
-            writeJson(peoplecount, totalPeopleCount, totalSpeed, totalxdir, totalydir, totalLineCrossedLeft, totalLineCrossedRight, totalLineCrossed)
+            writeJson(peoplecount, len(TrackedIDs), totalSpeed, totalxdir, totalydir, totalLineCrossedLeft, totalLineCrossedRight, totalLineCrossed)
 
         #visualize
+
         cv2.imshow('Stream', frame)
         ch = 0xFF & cv2.waitKey(1)
         if ch == 27:

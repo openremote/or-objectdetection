@@ -1,7 +1,7 @@
 import wx
 import cv2
 import threading
-from tracker import *
+import pickle
 
 # calculation flags
 calculateDirection = False
@@ -12,8 +12,7 @@ calculateTheSpeed = False
 # visual flags
 visualizeBBoxes = False
 visualizerCenters = False
-calculatePeopleOnly = False
-calculateEverything = False
+calculateLineCross = False
 
 videoSource = 0
 
@@ -106,36 +105,25 @@ def VisualizerCenters(e):
         visualizerCenters = False
         print(visualizerCenters)
 
-def CalculatePeopleOnly(e):
+def CalculateLineCross(e):
     sender = e.GetEventObject()
     isChecked = sender.GetValue()
 
-    global calculatePeopleOnly
+    global calculateLineCross
     if isChecked:
-        calculatePeopleOnly = True
-        print(calculatePeopleOnly)
+        calculateLineCross = True
+        print(calculateLineCross)
     else:
-        calculatePeopleOnly = False
-        print(calculatePeopleOnly)
+        calculateLineCross = False
+        print(calculateLineCross)
 
-def CalculateEverything(e):
-    sender = e.GetEventObject()
-    isChecked = sender.GetValue()
-
-    global calculateEverything
-    if isChecked:
-        calculateEverything = True
-        print(calculateEverything)
-    else:
-        calculateEverything = False
-        print(calculateEverything)
 
 class App(wx.Frame):
     def __init__(self, parent, title):
         super(App, self).__init__(parent, title=title)
         self.widgets()
         self.Show()
-        self.SetSize(600,350)
+        self.SetSize(370,500)
 
 
 
@@ -167,20 +155,20 @@ class App(wx.Frame):
         # Check box Show people count
         cbVisualizeBBoxes = wx.CheckBox(pnl, label='Draw boundary box ', pos=(10, 80))
         cbVisualizeBBoxes.SetValue(False)
-        cbVisualizeBBoxes.Bind(wx.EVT_CHECKBOX, VisualizeBBoxes)c
+        cbVisualizeBBoxes.Bind(wx.EVT_CHECKBOX, VisualizeBBoxes)
 
         # Check box Show people count
         cbVisualizerCenters = wx.CheckBox(pnl, label='Visualizer Centers', pos=(10, 100))
         cbVisualizerCenters.SetValue(False)
         cbVisualizerCenters.Bind(wx.EVT_CHECKBOX,  VisualizerCenters)
 
-        cbCalculatePeopleOnly = wx.CheckBox(pnl, label='Calculate people only', pos=(10, 120))
+        cbCalculatePeopleOnly = wx.CheckBox(pnl, label='Calculate Line Cross', pos=(10, 120) )
         cbCalculatePeopleOnly.SetValue(False)
-        cbCalculatePeopleOnly.Bind(wx.EVT_CHECKBOX, CalculatePeopleOnly)
+        cbCalculatePeopleOnly.Bind(wx.EVT_CHECKBOX, CalculateLineCross)
 
-        cbCalculateEverything = wx.CheckBox(pnl, label='Calculate everything', pos=(10, 140))
-        cbCalculateEverything.SetValue(False)
-        cbCalculateEverything.Bind(wx.EVT_CHECKBOX, CalculateEverything)
+        # cbCalculateEverything = wx.CheckBox(pnl, label='Calculate everything', pos=(10, 140))
+        # cbCalculateEverything.SetValue(False)
+        # cbCalculateEverything.Bind(wx.EVT_CHECKBOX, CalculateEverything)
 
         # lbPeopleID = wx.StaticText(pnl, label='People IDs', pos=(10, 40))
         #
@@ -195,11 +183,17 @@ class App(wx.Frame):
 
         self.basicText = wx.TextCtrl(pnl, -1, 'http://root:root@192.168.70.52/mjpg/1/video.mjpg', size=(300, -1), pos=(10, 230))
 
-        closeButton = wx.Button(pnl, label='Start detection', pos=(10, 260))
+        self.labelDetection = wx.StaticText(pnl, label="Enter the detections", pos=(10, 260), style=0)
+
+        self.basicTextt = wx.TextCtrl(pnl, -1, size=(300, -1), pos=(10, 280))
+        closeButton = wx.Button(pnl, label='Start detection', pos=(10, 310))
+
         closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
 
     def OnClose(self, e):
         parameterlist = []
+        classlist = []
+        classlist.append(self.basicTextt.GetValue().split(","))
 
         parameterlist.append(visualizeBBoxes)  # visualizeBBoxes
         parameterlist.append(visualizerCenters)  # visualizerCenters
@@ -207,21 +201,18 @@ class App(wx.Frame):
         parameterlist.append(calculateTheSpeed)  # calculateSpeed
         parameterlist.append(calculatePeopleCount)  # calculatePeopleCount
         parameterlist.append(calculateTotalPeopleCount)  # calculateTotalPeopleCount
-        parameterlist.append(calculatePeopleOnly)  # calculatePeopleOnly
-        parameterlist.append(calculateEverything)  # calculateEverything
+        parameterlist.append(classlist)
+        parameterlist.append(calculateLineCross)  # calculateLineCross
         
-
         stateVal = self.rbox.GetSelection()
         global videoSource
         if stateVal == 2:
             videoSource = self.basicText.GetValue()
             print(videoSource)
-        
         parameterlist.append(videoSource)
-
-        yoloWorker(parameterlist)
-
-
+        with open('settings.data', 'wb') as filehandle:
+            pickle.dump(parameterlist, filehandle)
+        self.Close()
 
     def SetVal(self, event):
         state1 = self.rbox.GetSelection()
