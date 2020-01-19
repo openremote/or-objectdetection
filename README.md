@@ -7,6 +7,7 @@ Open source implementation of an object tracking algorithm that takes an input o
 - Install CUDA
 - Install Python3
 - Install OpenCV
+- pyQT
 
 # Run
 - Go to the YOLO_DETECTION folder
