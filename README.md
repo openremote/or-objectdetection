@@ -21,6 +21,13 @@ Open source implementation of an object tracking algorithm that takes an input o
 
 It should now work.
 
+# Manager Installation
+- Install manager
+https://github.com/openremote/openremote/blob/master/README.md
+
+- Setup HTTP API 
+https://github.com/openremote/or-objectdetection/wiki/Editing-Seting-up-the-HTTP-API-connection-with-the-manager
+
 THIS REPO IS WORK IN PROGRESS. THERE ARE BUGS! A DETAILED INSTRUCTIONS WILL COME LATER.
 
 
