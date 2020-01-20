@@ -21,6 +21,13 @@ Open source implementation of an object tracking algorithm that takes an input o
 
 It should now work.
 
+If you are having problems with the GUI you can also manualy edit the main.py script and then run "python3 main.py" to start the detection. 
+
+If you are having problems starting the program:
+- Make sure you have selected the right Camera input!
+- Installed all packages
+- Have a CUDA compatible GPU and that CUDA is working
+
 # Manager Installation
 - Install manager
 https://github.com/openremote/openremote/blob/master/README.md
