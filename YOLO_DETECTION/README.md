@@ -1,8 +1,3 @@
-# PyTorch Object Detection and Tracking
-Object detection in images, and tracking across video frames
-
-Full story at:
-https://towardsdatascience.com/object-detection-and-tracking-in-pytorch-b3cf1a696a98
 
 References:
 1. YOLOv3: https://pjreddie.com/darknet/yolo/
