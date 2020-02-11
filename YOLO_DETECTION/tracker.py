@@ -93,11 +93,18 @@ def yoloWorker(parameterlist):
     calculateLineCrossed = parameterlist[7]
     videoSource = parameterlist[8]
 
+    print(classList)
+
     #videopath = '/home/openremote/Desktop/pytorch_objectdetecttrack-master/video.mp4'
 
     #setup 
     colors=[(255,0,0),(0,255,0),(0,0,255),(255,0,255),(128,0,0),(0,128,0),(0,0,128),(128,0,128),(128,128,0),(0,128,128)]
-    vid = cv2.VideoCapture(videoSource)
+
+    if videoSource == "0" or videoSource == "1":
+        vid = cv2.VideoCapture(int(videoSource))
+    else:
+        vid = cv2.VideoCapture(videoSource)
+
     mot_tracker = Sort() 
 
     pointsDict = {}
@@ -135,6 +142,7 @@ def yoloWorker(parameterlist):
         unpad_h = img_size - pad_y
         unpad_w = img_size - pad_x
         
+
         #total parameters
         totalSpeed = 0
         left = 0
@@ -245,31 +253,29 @@ def yoloWorker(parameterlist):
         #            idsToRemove.append(Id)
         #    for Id in idsToRemove:
         #        del pointsDict[Id]
-
-
         #visualize line
         if calculateLineCrossed:
-            cv2.line(frame, (1,1079), (1023,678), [0, 255, 0], 10)
-            cv2.putText(frame, "poeple count line crossed to left " + str(totalLineCrossedLeft), (0, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
-            cv2.putText(frame, "poeple count line crossed to right " + str(totalLineCrossedRight), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
-            cv2.putText(frame, "poeple count line crossed Total " + str(totalLineCrossed), (0, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
+            cv2.line(frame, (0,318), (637,221), [0, 255, 0], 10)
+            cv2.putText(frame, "poeple count line crossed to left " + str(totalLineCrossedLeft), (0, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)            
+            cv2.putText(frame, "poeple count line crossed to right " + str(totalLineCrossedRight), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)            
+            cv2.putText(frame, "poeple count line crossed Total " + str(totalLineCrossed), (0, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)            
             
         # visualize People count
         if calculatePeopleCount:
-            cv2.putText(frame, "people count " + str(peoplecount), (0, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
+            cv2.putText(frame, "people count " + str(peoplecount), (0, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)            
        
         #get total people count
         if calculateTotalPeopleCount:
             #if peoplecount > prevPeopleCount:
             #    totalPeopleCount += abs(peoplecount - prevPeopleCount)
             #prevPeopleCount = peoplecount
-            cv2.putText(frame, "total people count " + str(len(TrackedIDs)), (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
+            cv2.putText(frame, "total people count " + str(len(TrackedIDs)), (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)            
 
         #get total direction
         if calculateDirection:
             totalxdir, totalydir = getTotalDirection(left,right,up,down)
-            cv2.putText(frame, "Total Xdir " + totalxdir, (0, 180), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)            
-            cv2.putText(frame, "total Ydir " + totalydir, (0, 210), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)   
+            cv2.putText(frame, "Total Xdir " + totalxdir, (0, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)            
+            cv2.putText(frame, "total Ydir " + totalydir, (0, 210), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)   
 
 
         #get Average speed
@@ -283,7 +289,7 @@ def yoloWorker(parameterlist):
             writeJson(peoplecount, len(TrackedIDs), totalSpeed, totalxdir, totalydir, totalLineCrossedLeft, totalLineCrossedRight, totalLineCrossed)
 
         #visualize
-
+        #frame = cv2.resize(frame, (1920,1080))
         cv2.imshow('Stream', frame)
         ch = 0xFF & cv2.waitKey(1)
         if ch == 27:

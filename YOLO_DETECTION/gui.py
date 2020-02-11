@@ -205,6 +205,7 @@ class App(wx.Frame):
         parameterlist.append(calculateLineCross)  # calculateLineCross
         
         stateVal = self.rbox.GetSelection()
+	    print(classlist)
         global videoSource
         if stateVal == 2:
             videoSource = self.basicText.GetValue()

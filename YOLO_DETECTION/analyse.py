@@ -8,8 +8,8 @@ import math
 
 def getCountLineCrossed(pointList):
 
-    a = (1,1079)
-    b = (1023,678)
+    a = (0,318)
+    b = (637,221)
     
     position = ((b[0] - a[0])*(pointList[0][1] - a[1]) - (b[1] - a[1])*(pointList[0][0] - a[0]))
     prevposition = ((b[0] - a[0])*(pointList[0 - 5][1] - a[1]) - (b[1] - a[1])*(pointList[0 - 5][0] - a[0]))

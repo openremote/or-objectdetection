@@ -14,8 +14,8 @@ def readParameters():
     parameterlist.append(True)           #calculatePeopleCount
     parameterlist.append(True)       #calculateTotalPeopleCount
     parameterlist.append(["person", "car"]) #classesToDetect
-    parameterlist.append(True)        #calculateLineCrossed
-    parameterlist.append("http://root:root@192.168.70.52/mjpg/1/video.mjpg")    #videoSource make 0 for internal camera or 1 for external usb camera
+    parameterlist.append(False)        #calculateLineCrossed
+    parameterlist.append("0")    #videoSource make 0 for internal camera or 1 for external usb camera
  
 readParameters()
 yoloWorkerThread = threading.Thread(target=yoloWorker, args=(parameterlist,))

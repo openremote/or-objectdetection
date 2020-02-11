@@ -7,7 +7,6 @@ import pickle
 
 #text_file = open("settings.txt", "r")
 #parameterlist = text_file.readlines()
-
 parameterlist = []
 
 with open('settings.data', 'rb') as filehandle:
