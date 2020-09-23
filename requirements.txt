@@ -1,3 +1,4 @@
 torchvision==0.5.0
 opencv-python==4.3.0.38
 numba==0.22.0
+numpy
