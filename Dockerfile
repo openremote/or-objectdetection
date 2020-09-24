@@ -13,4 +13,4 @@ python-pip
 RUN pip install --upgrade scikit-image
 
 
-ENTRYPOINT ["python", "start.py"]
+ENTRYPOINT ["python", "/app/YOLO_DETECTION/start.py"]
