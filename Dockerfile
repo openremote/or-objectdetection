@@ -10,6 +10,6 @@ apt-get install -y \
 python-skimage \
 python-pip
 RUN pip install --upgrade scikit-image
-RUN apt-get -y install python-sklearn
+
 
 ENTRYPOINT ["python", "/app/YOLO_DETECTION/start.py"]
