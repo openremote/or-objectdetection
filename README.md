@@ -4,12 +4,16 @@ Open source implementation of an object tracking algorithm that takes an input o
 ![Image description](https://github.com/openremote/or-objectdetection/blob/master/YOLO_DETECTION/demoPicture.png)
 
 # Installation
-- Install CUDA
-- Install Python3
-- Install OpenCV
-- Install pyQT
-- Install pyTorch
-- Install torchVision
+- Install CUDA Toolkit (10.2 recommended) NVIDIA GPU required
+- Install Python3 (3.8.5)
+- Install OpenCV (pip install opencv-python)
+- Install pyQT (pip install PyQt5)
+- Install pyTorch (https://pytorch.org/get-started/locally/ -> select proper install instructions and use the command).
+- Install torchVision (included with pytorch install above)
+- Install numba (pip install numba)
+- Install Scikit (pip install scikit-image)
+- Install sklearn (pip install sklearn)
+- Install filterpy (pip install filterpy)
 
 
 # Run
