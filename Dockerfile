@@ -1,6 +1,7 @@
 FROM python
 
 COPY YOLO_DETECTION /app/YOLO_DETECTION
+COPY entrypoint.sh /app/entrypoint.sh
 COPY requirements.txt /app/requirements.txt
 
 RUN cd /app/YOLO_DETECTION
@@ -13,4 +14,4 @@ python-pip
 RUN pip install --upgrade scikit-image
 
 
-ENTRYPOINT ["python", "/app/YOLO_DETECTION/start.py"]
+ENTRYPOINT ["/app/entrypoint.sh"]
