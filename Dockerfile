@@ -12,6 +12,7 @@ COPY entrypoint.sh /app/entrypoint.sh
 COPY requirements.txt /app/requirements.txt
 
 WORKDIR /app/YOLO_DETECTION
+RUN pip3 install --upgrade pip3
 RUN pip3 install --upgrade scikit-image scikit-build
 RUN pip3 install -r /app/requirements.txt
 
