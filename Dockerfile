@@ -16,7 +16,5 @@ python-skimage \
 python-pip
 RUN pip install --upgrade scikit-image
 
-FROM nvidia/cuda:10.2-base
-CMD nvidia-smi
 
 ENTRYPOINT ["/app/entrypoint.sh"]
