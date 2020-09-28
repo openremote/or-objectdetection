@@ -1,0 +1,7 @@
+python 3.7.9
+pyqt 5.9.2
+opencv 3.4.2
+py-opencv 3.4.2
+libopencv 3.4.2
+wxpython 4.0.4
+pytorch 1.6.0

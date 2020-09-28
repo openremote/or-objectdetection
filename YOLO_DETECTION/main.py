@@ -1,6 +1,6 @@
 import sys
 from tracker import *
-sys.path.append('/home/openremote/Desktop/or-objectdetection/YOLO_DETECTION')
+sys.path.append('D:\Projects\or-objectdetection\YOLO_DETECTION')
 from api import *
 import threading
 
