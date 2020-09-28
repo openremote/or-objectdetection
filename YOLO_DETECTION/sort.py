@@ -34,6 +34,7 @@ def iou(bb_test,bb_gt):
   """
   Computes IUO between two bboxes in the form [x1,y1,x2,y2]
   """
+  print(bb_gt,bb_test)
   xx1 = np.maximum(bb_test[0], bb_gt[0])
   yy1 = np.maximum(bb_test[1], bb_gt[1])
   xx2 = np.minimum(bb_test[2], bb_gt[2])

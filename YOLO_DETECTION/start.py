@@ -1,6 +1,5 @@
 import sys
 from tracker import *
-sys.path.append('D:\Projects\or-objectdetection\YOLO_DETECTION')
 from api import *
 import threading
 import pickle

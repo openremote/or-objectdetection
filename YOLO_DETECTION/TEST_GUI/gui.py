@@ -9,7 +9,7 @@ from PyQt5.QtGui import QPixmap, QPainter, QPen
 from PyQt5.QtCore import QTimer
 
 import sys
-sys.path.append('D:\Projects\or-objectdetection\YOLO_DETECTION')
+# sys.path.append('D:\Projects\or-objectdetection\YOLO_DETECTION')
 #from start import *
 
 # import Opencv module

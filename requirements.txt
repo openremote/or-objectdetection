@@ -5,3 +5,4 @@ py-opencv 3.4.2
 libopencv 3.4.2
 wxpython 4.0.4
 pytorch 1.6.0
+keyboard 0.13.5
