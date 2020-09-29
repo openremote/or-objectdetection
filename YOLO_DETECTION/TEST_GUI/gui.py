@@ -9,7 +9,7 @@ from PyQt5.QtGui import QPixmap, QPainter, QPen
 from PyQt5.QtCore import QTimer
 
 import sys
-#sys.path.append('/home/openremote/Desktop/or-objectdetection/YOLO_DETECTION')
+sys.path.append('D:\Projects\or-objectdetection\YOLO_DETECTION')
 #from start import *
 
 # import Opencv module
@@ -189,12 +189,12 @@ class MainWindow(QWidget):
         parameterlist.append(calculateTotalPeopleCount)
         parameterlist.append(classlist)
         parameterlist.append(calculateLineCross)  # calculateLineCross
-
+        
         if(sourceCamera == True):
             videoSource = self.ui.tbVidepSorce.text()
 
         parameterlist.append(videoSource)
-
+        print(parameterlist)
         with open('/home/openremote/Desktop/or-objectdetection/YOLO_DETECTION/settings.data', 'wb') as filehandle:
             pickle.dump(parameterlist, filehandle)
         self.ui.terminate()

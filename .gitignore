@@ -1,0 +1,5 @@
+
+.vscode/
+
+**/__pycache__/
+YOLO_DETECTION/config/yolov3.weights

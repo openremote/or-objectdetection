@@ -125,9 +125,6 @@ class App(wx.Frame):
         self.Show()
         self.SetSize(370,500)
 
-
-
-
     # Declare a function to add new buttons, icons, etc. to our app
     def widgets(self):
         pnl = wx.Panel(self)
@@ -192,8 +189,9 @@ class App(wx.Frame):
 
     def OnClose(self, e):
         parameterlist = []
-        classlist = []
-        classlist.append(self.basicTextt.GetValue().split(","))
+        classlist = []#'person','laptop'
+        classlist = classlist+self.basicTextt.GetValue().split(",")
+        # classlist.append()
 
         parameterlist.append(visualizeBBoxes)  # visualizeBBoxes
         parameterlist.append(visualizerCenters)  # visualizerCenters
@@ -205,7 +203,7 @@ class App(wx.Frame):
         parameterlist.append(calculateLineCross)  # calculateLineCross
         
         stateVal = self.rbox.GetSelection()
-	    print(classlist)
+	    #print(classlist)
         global videoSource
         if stateVal == 2:
             videoSource = self.basicText.GetValue()

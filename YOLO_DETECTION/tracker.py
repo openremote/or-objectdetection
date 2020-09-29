@@ -29,7 +29,8 @@ nms_thres=0.4
 # load model and put into eval mode
 model = Darknet(config_path, img_size=img_size)
 model.load_weights(weights_path)
-model.cuda()
+
+model.cuda(0)
 model.eval()
 
 classes = utils.load_classes(class_path)
@@ -272,6 +273,8 @@ def yoloWorker(parameterlist):
             cv2.putText(frame, "total people count " + str(len(TrackedIDs)), (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)            
 
         #get total direction
+        totalxdir = None
+        totalydir = None
         if calculateDirection:
             totalxdir, totalydir = getTotalDirection(left,right,up,down)
             cv2.putText(frame, "Total Xdir " + totalxdir, (0, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)            
