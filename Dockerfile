@@ -1,4 +1,5 @@
-FROM nvidia/cuda:10.2-base
+FROM FROM nvcr.io/nvidia/l4t-base:r32.2.1
+
 CMD nvidia-smi
 
 ENV DEBIAN_FRONTEND=noninteractive
