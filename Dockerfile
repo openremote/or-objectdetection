@@ -1,11 +1,10 @@
 FROM nvcr.io/nvidia/l4t-base:r32.2.1
-
 CMD nvidia-smi
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 #set up environment
-RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y curl
+RUN apt-get update && apt-get install 
 RUN apt-get -y install unzip python3 python3-pip libgl1-mesa-glx wget python-skimage
 
 COPY YOLO_DETECTION /app/YOLO_DETECTION
