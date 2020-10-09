@@ -2,7 +2,7 @@
     "data" : [
       {
           "name": "Dashboard",
-          "icon": "AccessAlarmIcon",
+          "icon": "DashboardIcon",
           "url": "/"
       }
     ]
