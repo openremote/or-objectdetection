@@ -1,0 +1,8 @@
+.drawer {
+    width: 210px;
+    flex-shrink: 0;
+}
+
+.drawerPaper {
+    width: 210px;
+}

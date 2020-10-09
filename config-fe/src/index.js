@@ -7,6 +7,8 @@ import { Provider } from 'react-redux'
 import store from 'store/store'
 import Routes from 'router/routes'
 
+import 'fontsource-roboto';
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
