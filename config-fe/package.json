@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^7.2.1",
     "clsx": "^1.1.1",
     "fontsource-roboto": "^3.0.3",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-async-component": "^2.0.0",
     "react-dom": "^16.13.1",
