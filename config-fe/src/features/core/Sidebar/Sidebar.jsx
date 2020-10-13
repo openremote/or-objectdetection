@@ -83,6 +83,7 @@ class SideBar extends React.Component {
         const { classes } = this.props;
         return(
           <Drawer
+            color="primary"
             variant="permanent"
             className={clsx(classes.drawer, {
               [classes.drawerOpen]: this.state.open,
@@ -110,9 +111,9 @@ class SideBar extends React.Component {
             <Divider />
             <List>
               {SidebarItems.data.map((item, index) => (
-                <Link to={item.url} style={{ color: 'inherit', textDecoration: 'inherit'}}>
-                <ListItem button key={item.name}>
-                  <ListItemIcon> <MaterialIconAsync icon={item.icon}/>  </ListItemIcon>
+                <Link key={item.name} to={item.url} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                  <ListItem button key={item.name}>
+                    <ListItemIcon> <MaterialIconAsync icon={item.icon}/>  </ListItemIcon>
                     <ListItemText primary={item.name}/>
                   </ListItem>
                 </Link>

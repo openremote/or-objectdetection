@@ -30,7 +30,7 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <BrowserRouter>
-          <Container maxWidth="false" disableGutters="true">
+          <Container maxWidth={false} disableGutters>
             <Box display="flex" flexDirection="row">
               <Box>
                 <Sidebar/>
