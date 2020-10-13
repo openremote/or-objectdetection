@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+//core material UI components
 import { Typography, Card, CardHeader, Avatar, CardMedia, CardContent, IconButton, CardActions } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
@@ -15,9 +16,6 @@ import AvatarIcon from './avatarIcon';
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
-    root: {
-        maxWidth: 345,
-    },
     media: {
         height: 0,
         paddingTop: '56.25%', // 16:9
@@ -31,7 +29,7 @@ class customVideoCard extends React.Component {
     render() {
         const classes = this.props.classes;
         return(
-            <Card className={classes.root}>
+            <Card>
                 <CardHeader
                     avatar={
                         <Avatar className={classes.avatar}>
