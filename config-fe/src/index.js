@@ -17,7 +17,7 @@ import { Container, Box } from '@material-ui/core';
 //TODO : make dark mode configurable for user
 const theme = createMuiTheme({
   palette: {
-    type: "dark"
+    type: "light"
   }
 });
 
@@ -28,19 +28,19 @@ ReactDOM.render(
         <Container maxWidth="false" disableGutters="true">
           <Box display="flex" flexDirection="row">
             <Box>
-              <Sidebar/>
+              <Sidebar />
             </Box>
             <Box flexGrow={1}>
               <Box display="flex" flexDirection="column">
                 <Box>
-                  <AppBar/>
+                  <AppBar />
                 </Box>
                 <Box flexGrow={1} p={2}>
-                  <Routes/>
+                  <Routes />
                 </Box>
+              </Box>
             </Box>
           </Box>
-        </Box>
         </Container>
       </Provider>
     </ThemeProvider>
