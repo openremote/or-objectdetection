@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
 import store from 'store/store'
 import Routes from 'router/routes'
+import { BrowserRouter } from "react-router-dom";
 
 //font and themes
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -17,7 +18,10 @@ import { Container, Box } from '@material-ui/core';
 //TODO : make dark mode configurable for user
 const theme = createMuiTheme({
   palette: {
-    type: "light"
+    type: "light",
+    primary: {
+      main: '#4D9D2A'
+    }
   }
 });
 
@@ -25,23 +29,25 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <Container maxWidth="false" disableGutters="true">
-          <Box display="flex" flexDirection="row">
-            <Box>
-              <Sidebar />
-            </Box>
-            <Box flexGrow={1}>
-              <Box display="flex" flexDirection="column">
-                <Box>
-                  <AppBar />
-                </Box>
-                <Box flexGrow={1} p={2}>
-                  <Routes />
+        <BrowserRouter>
+          <Container maxWidth={false} disableGutters>
+            <Box display="flex" flexDirection="row">
+              <Box>
+                <Sidebar />
+              </Box>
+              <Box flexGrow={1}>
+                <Box display="flex" flexDirection="column">
+                  <Box>
+                    <AppBar />
+                  </Box>
+                  <Box flexGrow={1} p={3}>
+                    <Routes />
+                  </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
-        </Container>
+          </Container>
+        </BrowserRouter>
       </Provider>
     </ThemeProvider>
   </React.StrictMode>,

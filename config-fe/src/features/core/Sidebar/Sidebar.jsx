@@ -7,7 +7,7 @@ import { Link} from 'react-router-dom';
 import { Drawer, List, Divider, ListItem, ListItemText, ListItemIcon, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles  } from '@material-ui/core/styles';
-//Custom styles
+
 import SidebarItems from './SidebarItems.json'
 
 //create css using material ui css helper, since we need some theme values. 
@@ -45,7 +45,7 @@ const styles = theme => ({
     overflowX: 'hidden',
     width: theme.spacing(7) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(7) + 1,
     },
   },
   HamburgerStart: {
@@ -83,6 +83,7 @@ class SideBar extends React.Component {
         const { classes } = this.props;
         return(
           <Drawer
+            color="primary"
             variant="permanent"
             className={clsx(classes.drawer, {
               [classes.drawerOpen]: this.state.open,
@@ -110,12 +111,12 @@ class SideBar extends React.Component {
             <Divider />
             <List>
               {SidebarItems.data.map((item, index) => (
-                <ListItem button key={item.name}>
-                  <ListItemIcon><MaterialIconAsync icon={item.icon}/></ListItemIcon>
-                  <ListItemText primary={item.name}>
-                    <Link to={item.url} />
-                  </ListItemText>
-                </ListItem>
+                <Link key={item.name} to={item.url} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                  <ListItem button key={item.name}>
+                    <ListItemIcon> <MaterialIconAsync icon={item.icon}/>  </ListItemIcon>
+                    <ListItemText primary={item.name}/>
+                  </ListItem>
+                </Link>
               ))}
             </List>
           </Drawer>

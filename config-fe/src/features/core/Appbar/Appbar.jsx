@@ -17,7 +17,7 @@ class Appbar extends React.Component {
     render() {
         const { classes } = this.props;
         return(
-            <AppBar position="sticky" color="default" className={classes.AppBar}>
+            <AppBar position="sticky" color="primary" className={classes.AppBar}>
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
                         OpenRemote
