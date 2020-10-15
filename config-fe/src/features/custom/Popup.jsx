@@ -113,7 +113,7 @@ export default function Popup() {
 
     return (
         <div>
-            <Card className={pulseclasses.root} onClick={handleClickOpen}>
+            <Card className={pulseclasses.root} raised variant="outlined" onClick={handleClickOpen}>
                 <CardHeader
                     avatar={
                         <Avatar className={pulseclasses.avatar}>
