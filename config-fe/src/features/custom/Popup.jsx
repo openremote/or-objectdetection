@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Container, Grid, Typography, CardActions, Card, CardContent, Box, TextField, handleClickOpen, handleClose } from '@material-ui/core';
+import { Button, CardHeader, CardMedia, Grid, Typography, CardActions, Card, CardContent, Box, TextField, Avatar } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -8,6 +8,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Image from '../../Images/CamPlaceholder.PNG';
+import { grey } from '@material-ui/core/colors';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import plusIcon from 'assets/plusicon.png';
 
 const useStyles = makeStyles({
     title: {
@@ -49,6 +52,46 @@ const useStyles = makeStyles({
     }
 });
 
+const pulseStyles = makeStyles(theme => ({
+    media: {
+        height: 0,
+        width: "50%",
+        paddingTop: '56.25%',
+    },
+    avatar: {
+        backgroundColor: grey[500],
+    },
+    title: {
+        color: "grey",
+    },
+    root: {
+        height: 358,
+        opacity: "0.5",
+        cursor: "pointer",
+        animation: `$pulse 3000ms infinite ${theme.transitions.easing.easeInOut}`
+    },
+    mediaContainer: {
+        display: "flex",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    "@keyframes pulse": {
+        "0%": {
+            transform: 'scale(0.95)',
+            boxShadow: '0 0 0 0 rgba(0, 0, 0, 0.7)',
+        },
+        "70%": {
+            transform: 'scale(1)',
+            boxShadow: '0 0 0 10px rgba(0, 0, 0, 0)',
+        },
+        "100%": {
+            transform: 'scale(0.95)',
+            boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
+        }
+    },
+}));
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -56,6 +99,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function Popup() {
 
     const classes = useStyles();
+    const pulseclasses = pulseStyles();
 
     const [open, setOpen] = React.useState(false);
 
@@ -69,9 +113,30 @@ export default function Popup() {
 
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Slide in alert dialog
-            </Button>
+            <Card className={pulseclasses.root} onClick={handleClickOpen}>
+                <CardHeader
+                    avatar={
+                        <Avatar className={pulseclasses.avatar}>
+                            <AddCircleIcon />
+                        </Avatar>
+                    }
+                    classes={{
+                        title: pulseclasses.title,
+                        subheader: pulseclasses.title
+                    }}
+                    titleTypographyProps={{ variant: 'h6' }}
+                    title={"New Source"}
+                    subheader={"Click here to add a new source"}
+                />
+                <div className={pulseclasses.mediaContainer}>
+                    <CardMedia
+                        className={pulseclasses.media}
+                        title="plusIcon"
+                        image={plusIcon}
+                    />
+                </div>
+            </Card>
+
             <Dialog
                 classes={{
                     root: classes.root,
