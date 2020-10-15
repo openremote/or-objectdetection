@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -6,29 +7,45 @@ import { Provider } from 'react-redux'
 import store from 'store/store'
 import Routes from 'router/routes'
 import {BrowserRouter} from "react-router-dom";
+=======
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import store from "store/store";
+import Routes from "router/routes";
+>>>>>>> Stashed changes
 
 //font and themes
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import 'fontsource-roboto';
+import "fontsource-roboto";
 
-import Sidebar from 'features/core/Sidebar/Sidebar';
-import AppBar from 'features/core/Appbar/Appbar';
-import { Container, Box } from '@material-ui/core';
+import Sidebar from "features/core/Sidebar/Sidebar";
+import AppBar from "features/core/Appbar/Appbar";
+import { Container, Box } from "@material-ui/core";
 
 //TODO : make dark mode configurable for user
 const theme = createMuiTheme({
   palette: {
     type: "light",
     primary: {
+<<<<<<< Updated upstream
       main: '#4D9D2A'
     }
   }
+=======
+      main: "#4D9D2A",
+    },
+  },
+>>>>>>> Stashed changes
 });
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
+<<<<<<< Updated upstream
         <BrowserRouter>
           <Container maxWidth={false} disableGutters>
             <Box display="flex" flexDirection="row">
@@ -48,10 +65,29 @@ ReactDOM.render(
           </Box>
           </Container>
         </BrowserRouter>
+=======
+        <Container maxWidth="false" disableGutters="true">
+          <Box display="flex" flexDirection="row">
+            <Box>
+              <Sidebar />
+            </Box>
+            <Box flexGrow={1}>
+              <Box display="flex" flexDirection="column">
+                <Box>
+                  <AppBar />
+                </Box>
+                <Box flexGrow={1} p={2}>
+                  <Routes />
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+>>>>>>> Stashed changes
       </Provider>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
