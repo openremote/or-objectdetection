@@ -4,7 +4,6 @@ import {Route, Switch} from "react-router-dom";
 import Dashboard from "pages/Dashboard";
 import Livefeed from "pages/Livefeed";
 import NotFound from "pages/NotFound";
-import App from 'App';
 
 function Routes() {
     return (
