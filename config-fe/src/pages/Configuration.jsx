@@ -13,7 +13,6 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import ReactPlayer from 'react-player';
 
-
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
@@ -35,8 +34,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Configuration() {
-
+const Configuration = (props) => {
     const classes = useStyles();
     const [age, setAge] = React.useState('');
     const [state, setState] = React.useState({
@@ -56,12 +54,14 @@ export default function Configuration() {
         setAge(event.target.value);
     };
 
+    const id = props.match.params.id;
+
     return (
         <div>
             <Grid container spacing={3} style={{ margin: '5%' }}>
                 <Grid item xs={6} >
                     <Typography variant="h3" className={classes.title}>
-                        Configuratie
+                        Configuratie - {id}
                     </Typography>
                     <InputLabel className={classes.inputTitle}><b>Selecteer Camera Source</b></InputLabel>
                     <FormControl className={classes.formControl}>
@@ -146,3 +146,4 @@ export default function Configuration() {
     )
 }
 
+export default Configuration;
