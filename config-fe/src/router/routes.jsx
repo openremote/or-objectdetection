@@ -12,7 +12,7 @@ function Routes() {
         <Switch>
             <Route path="/" exact component={Dashboard} />
             <Route path="/feed/:id" exact component={Livefeed} />
-            <Route path="/configuration" component={Configuration} />
+            <Route path="/configuration/:id" component={Configuration} />
             <Route path="/Login" component={Login} />
             <Route component={NotFound} />
         </Switch>
