@@ -65,7 +65,7 @@ const Configuration = (props) => {
             <Grid container spacing={3} style={{ margin: '5%' }}>
                 <Grid item xs={6} >
                     <Typography variant="h3" className={classes.title}>
-                        Configuratie - {id}
+                        Configuratie
                     </Typography>
                     <InputLabel className={classes.inputTitle}><b>Selecteer Camera Source</b></InputLabel>
                     <FormControl className={classes.formControl}>

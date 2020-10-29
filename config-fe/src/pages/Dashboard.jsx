@@ -1,9 +1,15 @@
 import React from 'react';
 
-import { Grid, Typography, Card, CardHeader, CardMedia, CardContent, Avatar, CardActions } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import Popup from 'features/custom/Popup'
 import CustomVideoCard from 'features/card/customVideoCard';
+import { withStyles } from '@material-ui/core/styles';
 
+const useStyles = theme => ({
+    title: {
+        marginBottom: 20,
+    }
+});
 
 class Dashboard extends React.Component {
     //method responsible for fetching video sources
@@ -12,9 +18,10 @@ class Dashboard extends React.Component {
     }
 
     render() {
+        const { classes } = this.props;
         return (
             <div>
-                <Typography variant="h4" color="primary">
+                <Typography className={classes.title} variant="h4" color="primary">
                     VIDEO SOURCES
                 </Typography>
 
@@ -55,4 +62,4 @@ class Dashboard extends React.Component {
     }
 }
 
-export default Dashboard;
+export default withStyles(useStyles)(Dashboard);
