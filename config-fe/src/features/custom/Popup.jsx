@@ -188,7 +188,7 @@ export default function Popup() {
                     </Typography>
 
                     <Box align="center">
-                        <TextField className={classes.textField} id="outlined-basic" label="Outlined" variant="outlined" />
+                        <TextField className={classes.textField} id="outlined-basic" label="URL" variant="outlined" />
                     </Box>
                     <Box align="center" >
                         <Button variant="contained" color="primary" size="large" marginBottom={30}>ADD</Button>
