@@ -38,17 +38,21 @@ const Configuration = (props) => {
     const classes = useStyles();
     const [age, setAge] = React.useState('');
     const [state, setState] = React.useState({
-        gilad: true,
+        gilad: false,
         jason: false,
         antoine: false,
+        bert: false,
+        jan: false,
+        peer: false,
+        johan: false
     });
 
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
 
-    const { gilad, jason, antoine } = state;
-    const error = [gilad, jason, antoine].filter((v) => v).length !== 2;
+    const { gilad, jason, antoine, bert, jan, peer, johan } = state;
+    const error = [gilad, jason, antoine, bert, jan, peer, johan].filter((v) => v).length !== 2;
 
     const handleAge = (event) => {
         setAge(event.target.value);
@@ -103,25 +107,25 @@ const Configuration = (props) => {
                                 label="Boundary Boxes"
                             />
                             <FormControlLabel
-                                control={<Checkbox checked={gilad} onChange={handleChange} name="gilad" style={{
+                                control={<Checkbox checked={bert} onChange={handleChange} name="bert" style={{
                                     color: "#4D9D2A",
                                 }} />}
                                 label="Calculate Line Cross"
                             />
                             <FormControlLabel
-                                control={<Checkbox checked={jason} onChange={handleChange} name="jason" style={{
+                                control={<Checkbox checked={jan} onChange={handleChange} name="jan" style={{
                                     color: "#4D9D2A",
                                 }} />}
                                 label="Count People"
                             />
                             <FormControlLabel
-                                control={<Checkbox checked={antoine} onChange={handleChange} name="antoine" style={{
+                                control={<Checkbox checked={peer} onChange={handleChange} name="peer" style={{
                                     color: "#4D9D2A",
                                 }} />}
                                 label="Show Speed"
                             />
                             <FormControlLabel
-                                control={<Checkbox checked={antoine} onChange={handleChange} name="antoine" style={{
+                                control={<Checkbox checked={johan} onChange={handleChange} name="johan" style={{
                                     color: "#4D9D2A",
                                 }} />}
                                 label="Visualize Centers"
