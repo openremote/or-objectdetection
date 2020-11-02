@@ -3,8 +3,8 @@ from flask import Flask
 from flask_restful import Api
 
 # import resources
-from resources.configuration import Configuration
-from resources.feed import VideoFeed
+from resources.configuration import ConfigurationAPI, ConfigurationListAPI
+from resources.feed import VideoFeedAPI, VideoFeedListAPI
 
 # import database
 from database.init_db import db_session, init_db
@@ -17,8 +17,10 @@ app = Flask(__name__)
 api = Api(app)
 
 # add resources
-api.add_resource(Configuration, '/')
-api.add_resource(VideoFeed, '/feed')
+api.add_resource(ConfigurationListAPI, '/configurations', endpoint='tasks')
+api.add_resource(ConfigurationAPI, '/configurations/<int:config_ID>', endpoint='task')
+api.add_resource(VideoFeedListAPI, '/feeds', endpoint='feeds')
+api.add_resource(VideoFeedAPI, '/feeds/<int:feed_ID>', endpoint='feed')
 
 
 @app.teardown_appcontext
