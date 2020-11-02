@@ -7,3 +7,4 @@ dependencies:
     - flask
     - Flask-RESTful
     - SQLAlchemy
+    - Flask-SQLAlchemy
