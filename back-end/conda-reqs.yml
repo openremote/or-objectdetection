@@ -1,0 +1,8 @@
+name: backend
+
+dependencies:
+  - python==3.7
+  - pip
+  - pip:
+    - flask
+    - Flask-RESTful
