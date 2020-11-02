@@ -6,11 +6,11 @@ from flask_restful import Api
 from resources.configuration import Configuration
 from resources.feed import VideoFeed
 
-# import database initalizer
-from database.init_db import generate_db, close_connection
+# import database
+from database.init_db import db_session, init_db
 
-# generate DB if not done already
-generate_db()
+# init Database
+init_db()
 
 # init API
 app = Flask(__name__)
@@ -22,8 +22,8 @@ api.add_resource(VideoFeed, '/feed')
 
 
 @app.teardown_appcontext
-def close_db(exception):
-    close_connection(exception)
+def shutdown_session(exception=None):
+    db_session.remove()
 
 
 if __name__ == '__main__':

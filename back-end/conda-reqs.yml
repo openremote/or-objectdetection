@@ -6,3 +6,5 @@ dependencies:
   - pip:
     - flask
     - Flask-RESTful
+    - SQLAlchemy
+    - Flask-SQLAlchemy
