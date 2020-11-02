@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
-import { withStyles  } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
     title: {
@@ -16,17 +16,17 @@ const styles = theme => ({
 class Appbar extends React.Component {
     render() {
         const { classes } = this.props;
-        return(
+        return (
             <AppBar position="sticky" color="primary" className={classes.AppBar}>
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
                         OpenRemote
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit" href="/login">Login</Button>
                 </Toolbar>
             </AppBar>
         )
     }
 }
 
-export default withStyles(styles, {withTheme: true})(Appbar);
+export default withStyles(styles, { withTheme: true })(Appbar);
