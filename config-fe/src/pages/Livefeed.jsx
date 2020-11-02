@@ -7,7 +7,7 @@ import { withStyles  } from '@material-ui/core/styles';
 const styles = theme => ({
     videoPlayer: {
         width: '100%',
-        height: '80vh'
+        height: '90vh'
     }
 })
 
@@ -21,7 +21,7 @@ class Livefeed extends React.Component {
         const { classes } = this.props;
         return(
             <Container maxWidth={false}>
-                <video
+                {/*<video
                     id="feed-player"
                     class="video-js vjs-default-skin vjs-16-9"
                     className={clsx(classes.videoPlayer)}
@@ -30,7 +30,7 @@ class Livefeed extends React.Component {
                     data-setup='{
                         "aspectRatio":"16:9", "fluid": true
                     }'>
-                    <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
+                        <source src="http://localhost:5000/video_feed" type="multipart/x-mixed-replace"></source>
                     <p class="vjs-no-js">
                         To view this video please enable JavaScript, and consider upgrading to a
                         web browser that
@@ -38,7 +38,8 @@ class Livefeed extends React.Component {
                         supports HTML5 video
                         </a>
                     </p>
-                </video>
+                </video> */}
+                <img className={clsx(classes.videoPlayer)} src="http://localhost:5000/video_feed"/>
             </Container>
         )
     }
