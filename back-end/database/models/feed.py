@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from ..init_db import Base
 
+
 class Feed(Base):
     __tablename__ = 'feeds'
     id = Column(Integer, primary_key=True)

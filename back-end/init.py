@@ -1,7 +1,7 @@
 import os
+
 from flask import Flask
 from flask_restful import Api
-
 # import resources
 from resources.configuration import ConfigurationAPI, ConfigurationListAPI
 from resources.feed import VideoFeedAPI, VideoFeedListAPI
