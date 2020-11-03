@@ -1,4 +1,3 @@
-import sys
 from tracker import *
 from api import *
 import threading
