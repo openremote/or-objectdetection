@@ -3,3 +3,5 @@
 
 **/__pycache__/
 YOLO_DETECTION/config/yolov3.weights
+
+YOLO_DETECTION_OLD/config/yolov3.weights

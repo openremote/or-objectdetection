@@ -17,6 +17,7 @@ from sort import *
 import torch
 import json
 import cv2
+import keyboard
 
 # load weights and set defaults
 config_path='config/yolov3.cfg'
@@ -130,6 +131,10 @@ def yoloWorker(parameterlist):
         ret, frame = vid.read()
         if not ret:
             break
+        if keyboard.read_key() == 'q':
+            print("stopping video analysis")
+            break
+        
 
         frames += 1
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
