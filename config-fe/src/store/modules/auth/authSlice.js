@@ -29,7 +29,7 @@ export const { authenticate, deauthenticate, setLoading } = authSlice.actions;
 export const checkIsUserAuthenticated = () => (dispatch) => {
   dispatch(setLoading());
   // Fetch the data from the session storage
-  const user = window.sessionStorage.getItem("user");
+  const user = window.localStorage.getItem("user");
 
   if (user) {
     dispatch(authenticate());
@@ -41,7 +41,7 @@ export const checkIsUserAuthenticated = () => (dispatch) => {
 export const login = (username, password, history) => (dispatch) => {
   dispatch(setLoading());
   if (username === "admin@or.com" && password === "admin") {
-    window.sessionStorage.setItem("user", "admin");
+    window.localStorage.setItem("user", "admin");
     dispatch(authenticate());
     history.push("/");
   } else {
@@ -52,7 +52,7 @@ export const login = (username, password, history) => (dispatch) => {
 };
 
 export const logout = (history) => (dispatch) => {
-  window.sessionStorage.removeItem("user");
+  window.localStorage.removeItem("user");
   dispatch(deauthenticate());
   history.push("/login");
 };
