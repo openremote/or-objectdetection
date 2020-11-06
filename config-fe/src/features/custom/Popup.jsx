@@ -152,7 +152,7 @@ export default function Popup() {
                 maxWidth={'md'}
             >
 
-                <DialogContent marginBottom={30}>
+                <DialogContent>
                     <Typography className={classes.title1} variant="h3" fontWeight="bold" color="primary" align="center" >
                         Add New Video Source
                     </Typography>
@@ -164,13 +164,13 @@ export default function Popup() {
                                 {/* Card met content */}
                                 <Card className={classes.card}>
                                     <CardContent>
-                                        <Typography className={classes.title} color="black" gutterBottom>
+                                        <Typography className={classes.title} gutterBottom>
                                             Camera 1
                                     </Typography>
                                         <Typography variant="h5">
                                             Hallway
                                     </Typography>
-                                        <Typography className={classes.pos} color="black">
+                                        <Typography className={classes.pos}>
                                             Building TQ
                                      </Typography>
                                     </CardContent>
@@ -191,7 +191,7 @@ export default function Popup() {
                         <TextField className={classes.textField} id="outlined-basic" label="URL" variant="outlined" />
                     </Box>
                     <Box align="center" >
-                        <Button variant="contained" color="primary" size="large" marginBottom={30}>ADD</Button>
+                        <Button variant="contained" color="primary" size="large">ADD</Button>
                     </Box>
                 </DialogContent>
             </Dialog>

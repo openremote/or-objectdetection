@@ -7,6 +7,8 @@ import Configuration from "pages/Configuration";
 import Login from "pages/Login";
 import NotFound from "pages/NotFound";
 
+import PrivateRoute from "./privateRoute.jsx"
+
 function Routes() {
     return (
         <Switch>
@@ -14,8 +16,10 @@ function Routes() {
             <Route path="/feed/:id" exact component={Livefeed} />
             <Route path="/configuration/:id" component={Configuration} />
             <Route path="/Login" component={Login} />
-            <Route component={NotFound} />
+            <PrivateRoute path="/Test" component={NotFound} />
         </Switch>
+        //<Route component={NotFound} />
+
     )
 }
 
