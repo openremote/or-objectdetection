@@ -1,9 +1,9 @@
 {
-    "data" : [
-      {
-          "name": "Dashboard",
-          "icon": "DashboardIcon",
-          "url": "/"
-      }
-    ]
+  "data": [
+    {
+      "name": "Dashboard",
+      "icon": "DashboardIcon",
+      "url": "/"
+    }
+  ]
 }

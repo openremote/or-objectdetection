@@ -4,10 +4,11 @@ import { Grid, Typography } from '@material-ui/core';
 import Popup from 'features/custom/Popup'
 import CustomVideoCard from 'features/card/customVideoCard';
 import { withStyles } from '@material-ui/core/styles';
+import User from '../Model/User';
 
-const useStyles = theme => ({
+const useStyles = (theme) => ({
     title: {
-        marginBottom: 20,
+        marginBottom: 22,
     }
 });
 
@@ -17,10 +18,18 @@ class Dashboard extends React.Component {
 
     }
 
+    // componentDidMount() {
+    //     if (User.getID() === null) {
+    //         this.props.history.push("/login");
+    //     }
+    // }
+
     render() {
         const { classes } = this.props;
+        const { user } = User.getID;
         return (
             <div>
+                <h1>{user}</h1>
                 <Typography className={classes.title} variant="h4" color="primary">
                     VIDEO SOURCES
                 </Typography>
