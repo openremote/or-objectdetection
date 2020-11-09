@@ -60,6 +60,9 @@ class Login extends React.Component {
         const { classes } = this.props;
         return (
             <div>
+                <Typography component="h6" variant="h6" align="center">
+                    ID: admin@or.com WW: admin
+                </Typography>
                 <Grid
                     container
                     className={classes.container}
@@ -67,6 +70,7 @@ class Login extends React.Component {
                     justify="center"
                     direction="row"
                 >
+
                     <Grid item>
                         <Grid
                             container
@@ -83,8 +87,8 @@ class Login extends React.Component {
                             >
                                 <Grid item className={classes.title1}>
                                     <Typography component="h1" variant="h4" align="center">
-                                        Login admin@or.com
-                  </Typography>
+                                        Login
+                                    </Typography>
                                 </Grid>
                                 <Grid item>
                                     <form onSubmit={this.handleSubmit}>
@@ -140,10 +144,15 @@ class Login extends React.Component {
                                         Wachtwoord vergeten?
                   </Link>
                                 </Grid>
+
                             </Paper>
+
                         </Grid>
+
                     </Grid>
+
                 </Grid>
+
             </div>
         );
     }

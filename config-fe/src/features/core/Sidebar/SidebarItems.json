@@ -1,14 +1,9 @@
 {
-    "data" : [
-      {
-          "name": "Dashboard",
-          "icon": "DashboardIcon",
-          "url": "/"
-      },
-      {
-        "name": "Test",
-        "icon": "DashboardIcon",
-        "url": "/yeet"
-      }
-    ]
+  "data": [
+    {
+      "name": "Dashboard",
+      "icon": "DashboardIcon",
+      "url": "/"
+    }
+  ]
 }
