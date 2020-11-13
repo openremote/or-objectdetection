@@ -1,4 +1,4 @@
-from flask import Flask, abort
+from flask import Flask, abort, Response
 from flask_restful import Resource
 from database.models.feed import Feed
 
