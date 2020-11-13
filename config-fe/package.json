@@ -6,6 +6,7 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@reduxjs/toolkit": "^1.4.0",
+    "@stomp/stompjs": "^6.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -22,7 +23,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
     "socket.io-client": "^2.3.0",
-    "stompjs": "^2.3.3"
+    "websocket": "^1.0.32"
   },
   "scripts": {
     "start": "react-scripts start",

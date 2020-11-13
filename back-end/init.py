@@ -38,9 +38,9 @@ def shutdown_session(exception=None):
 
 
 # probably switch to flask-script for non POC implementation, this one is not fired until we receive a first request
-@app.before_first_request
-def _run_on_start():
-    startConsumingWorker()
+#@app.before_first_request
+#def _run_on_start():
+    #startConsumingWorker()
 
 
 if __name__ == '__main__':
