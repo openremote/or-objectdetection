@@ -2,6 +2,5 @@
 *.avi
 *.weights
 outputs/**
-model_data/**
 detections/**
 checkpoints/**
