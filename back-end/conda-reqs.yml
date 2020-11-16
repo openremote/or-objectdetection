@@ -3,15 +3,12 @@ name: backend
 dependencies:
   - python==3.7
   - pip
-  - opencv
   - pip:
     - flask
     - Flask-RESTful
-    - Flask-SocketIO
     - SQLAlchemy
     - Flask-SQLAlchemy
     - marshmallow-sqlalchemy
+    - marshmallow-enum
     - kombu
-    - opencv-python==4.1.1.26
-    - numpy
     - eventlet
