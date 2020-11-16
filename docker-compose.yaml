@@ -16,4 +16,12 @@ services:
       - "15674:15674"
     labels:
       NAME: "rabbitmq1"
+  frontend:
+    build: config-fe/.
+     volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+
   
