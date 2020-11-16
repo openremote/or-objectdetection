@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  rabbitmq:
+    build: RabbitMQ/. 
+    hostname: "rabbitmq"
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      - "15674:15674"
+    labels:
+      NAME: "rabbitmq1"
+  
