@@ -1,0 +1,7 @@
+*.mp4
+*.avi
+*.weights
+outputs/**
+model_data/**
+detections/**
+checkpoints/**
