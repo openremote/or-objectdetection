@@ -5,6 +5,7 @@ from database.models.configuration import Configuration as Conf
 from database.init_db import db_session
 from database.schemas.Schemas import ConfigurationSchema
 
+
 class ConfigurationListAPI(Resource):
     def get(self):
         configs = Conf.query.all()
@@ -59,11 +60,8 @@ class ConfigurationAPI(Resource):
                 json_data = request.get_json(force=True)
                 # Update entity based on JSON data
                 configuration.name = json_data['name']
-                configuration.email  = json_data['email']
+                configuration.email = json_data['email']
                 db_session.commit()
                 # convert to JSON and return to user
                 config_schema = ConfigurationSchema()
                 return config_schema.dump(configuration)
-
-
-
