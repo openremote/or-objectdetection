@@ -11,6 +11,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import ReactPlayer from 'react-player';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Chip from '@material-ui/core/Chip';
+import Paper from '@material-ui/core/Paper';
+
+
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -30,7 +35,19 @@ const useStyles = makeStyles((theme) => ({
     },
     Buttons: {
         marginTop: '10px'
-    }
+    },
+    chipControl: {
+        display: 'flex',
+        justifyContent: 'left',
+        flexWrap: 'wrap',
+        listStyle: 'none',
+        marginTop: 10,
+        maxWidth: 300,
+        padding: 0
+    },
+    chip: {
+        margin: theme.spacing(0.5),
+    },
 }));
 
 const Configuration = (props) => {
@@ -57,7 +74,22 @@ const Configuration = (props) => {
         setAge(event.target.value);
     };
 
+    const handleDelete = chipToDelete => () => {
+        setChipData(chips => chips.filter(chips => chips.key !== chipToDelete.key));
+    };
+
+    const handleSelect = e => {
+        setChipData([...chipData, { key: e.target.value, label: e.target.value }]);
+    };
+
     const id = props.match.params.id;
+
+    const [chipData, setChipData] = React.useState([]);
+
+    const detectionOptions = [
+        { key: 1, label: "Person" },
+        { key: 2, label: "Car" }
+    ];
 
     return (
         <div>
@@ -68,21 +100,33 @@ const Configuration = (props) => {
                     </Typography>
                     <InputLabel className={classes.inputTitle}><b>Selecteer Camera Source</b></InputLabel>
                     <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-filled-label">Video Source</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-filled-label"
-                            id="demo-simple-select-filled"
-                            value={age}
-                            onChange={handleAge}
-                        >
-                            <MenuItem value={'Default'}>Default</MenuItem>
-                            <MenuItem value={'192.168.1.1'}>OpenRemote</MenuItem>
-                            <MenuItem value={'30.30.30.30'}>Fontys</MenuItem>
-                        </Select>
+                        <TextField id="standard-basic" value="https://www.openremote.com/videofeed/stream.mp4" />
                     </FormControl>
+
                     <InputLabel className={classes.inputTitle}><b>Selecteer Detecties</b></InputLabel>
                     <FormControl className={classes.formControl}>
-                        <TextField id="standard-basic" label="Bijv. Person" />
+                        <TextField select value="" onChange={e => handleSelect(e)}>
+                            {detectionOptions.map(option => (
+                                <MenuItem key={option.key} value={option.label}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <ul className={classes.chipControl}>
+                            {
+                                chipData.map((data, index) => {
+                                    return (
+                                        <Chip
+                                            className={classes.chip}
+                                            key={data.key + index}
+                                            label={data.label}
+                                            onDelete={handleDelete(data)}
+                                            color="primary"
+                                        />
+                                    );
+                                })
+                            }
+                        </ul>
                     </FormControl>
                     <InputLabel className={classes.inputTitle}><b>Detectie Opties</b></InputLabel>
                     <FormControl component="fieldset" className={classes.formControl}>
