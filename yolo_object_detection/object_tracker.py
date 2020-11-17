@@ -12,14 +12,12 @@ from absl import app, flags
 from absl.flags import FLAGS
 import core.utils as utils
 from core.yolov4 import filter_boxes
-from tensorflow.python.saved_model import tag_constants
+
 from core.config import cfg
 import cv2
 import numpy as np
-from tensorflow.compat.v1 import ConfigProto
 
 import threading
-import base64
 #endregion
 
 # helper files
@@ -132,38 +130,16 @@ def analyse_frame(frame, input_size, interpreter, input_details, output_details,
 
 def main(_argv):
 		encoder, tracker = obj_helper.init_deepsort(max_cosine_distance, nn_budget)
-		outputFrame = None
-		#region setup
-		# load configuration for object detector
-		config = ConfigProto()
-		config.gpu_options.allow_growth = True
-		input_size = FLAGS.size
-		video_path = FLAGS.video
-
-		# load tflite model if flag is set
-		interpreter = None
-		input_details = None
-		output_details = None
-		infer = None
-		if FLAGS.framework == 'tflite':
-				interpreter = tf.lite.Interpreter(model_path=FLAGS.weights)
-				interpreter.allocate_tensors()
-				input_details = interpreter.get_input_details()
-				output_details = interpreter.get_output_details()
-		# otherwise load standard tensorflow saved model
-		else:
-				saved_model_loaded = tf.saved_model.load(FLAGS.weights, tags=[tag_constants.SERVING])
-				infer = saved_model_loaded.signatures['serving_default']
-
+		interpreter, input_details, output_details, infer = obj_helper.setup_yolo(FLAGS.framework, FLAGS.weights)
 		# begin video capture
+		video_path = FLAGS.video
 		try:
 				vid = cv2.VideoCapture(int(video_path))
 		except:
 				vid = cv2.VideoCapture(video_path)
 
-		#endregion
-
 		frame_num = 0
+		outputFrame = None
 		# while video is running
 		while True:
 				return_value, frame = vid.read()
@@ -177,7 +153,7 @@ def main(_argv):
 				start_time = time.time()
 
 				#detection_classes=['person']
-				frame, bboxes, scores, names = analyse_frame(frame, input_size, interpreter, input_details, output_details, infer, detection_classes=None)
+				frame, bboxes, scores, names = analyse_frame(frame, FLAGS.size, interpreter, input_details, output_details, infer, detection_classes=None)
 				result = obj_helper.apply_deepsort(encoder, tracker, frame, bboxes, scores, names, nms_max_overlap)
 
 				if not FLAGS.dont_show:

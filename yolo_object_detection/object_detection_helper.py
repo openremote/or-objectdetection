@@ -6,6 +6,9 @@ from deep_sort import preprocessing, nn_matching
 from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
 from tools import generate_detections as gdet
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.python.saved_model import tag_constants
+import tensorflow as tf
 
 def init_deepsort(max_cosine_distance, nn_budget):
 	model_filename = 'model_data/mars-small128.pb'
@@ -18,7 +21,6 @@ def init_deepsort(max_cosine_distance, nn_budget):
 
 def transform_detections_to_deepsort(bboxes, scores, names, features):
 	return [Detection(bbox, score, class_name, feature) for bbox, score, class_name, feature in zip(bboxes, scores, names, features)]
-
 
 def apply_deepsort(encoder, tracker, frame, bboxes, scores, names, nms_max_overlap):
 	# encode yolo detections and feed to tracker
@@ -56,3 +58,25 @@ def apply_deepsort(encoder, tracker, frame, bboxes, scores, names, nms_max_overl
 	result = np.asarray(frame)
 	result = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 	return result
+
+def setup_yolo(framework, weights):
+	config = ConfigProto()
+	config.gpu_options.allow_growth = True
+
+	# load tflite model if flag is set
+	interpreter = None
+	input_details = None
+	output_details = None
+	infer = None
+	if framework == 'tflite':
+		interpreter = tf.lite.Interpreter(model_path=weights)
+		interpreter.allocate_tensors()
+		input_details = interpreter.get_input_details()
+		output_details = interpreter.get_output_details()
+	# otherwise load standard tensorflow saved model
+	else:
+		saved_model_loaded = tf.saved_model.load(weights, tags=[tag_constants.SERVING])
+		infer = saved_model_loaded.signatures['serving_default']
+		
+	return interpreter, input_details, output_details, infer
+	
