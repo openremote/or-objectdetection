@@ -5,6 +5,7 @@ eventlet.monkey_patch()
 
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 
 # import resources
 from resources.configuration import ConfigurationAPI, ConfigurationListAPI
@@ -18,10 +19,13 @@ init_db()
 
 # init API
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
 api = Api(app)
 
+cors = CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 # add resources
-api.add_resource(ConfigurationListAPI, '/configurations', endpoint='tasks')
+api.add_resource(ConfigurationListAPI, '/configurations',   endpoint='tasks')
 api.add_resource(ConfigurationAPI, '/configurations/<int:config_ID>', endpoint='task')
 api.add_resource(VideoFeedListAPI, '/feeds', endpoint='feeds')
 api.add_resource(VideoFeedAPI, '/feeds/<int:feed_ID>', endpoint='feed')

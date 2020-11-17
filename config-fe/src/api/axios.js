@@ -14,6 +14,7 @@ const apiConfig = {
             "Content-Type": "application/json",
             Accept: "application/json",
         },
+        "Access-Control-Allow-Origin": "*"
     },
     paramsSerializer: (params: PathLike) => qs.stringify(params, { indices: false }),
 }
