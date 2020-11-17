@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from 'react-redux';
 import {
     Button,
     TextField,
@@ -7,24 +8,25 @@ import {
     Typography,
     Link,
 } from "@material-ui/core";
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from "@material-ui/core/styles";
+import { withRouter } from 'react-router-dom';
 
-const useStyles = theme => ({
+import { login } from "../store/modules/auth/authSlice";
+
+const useStyles = (theme) => ({
     loginform: {
-        justifycontent: 'center',
-        height: "75%"
+        justifycontent: "center",
+        height: "75%",
     },
     buttonblock: {
         width: "100%",
     },
-    loginbackground:
-    {
+    loginbackground: {
         justifycontent: "center",
         minheight: "30vh",
         padding: 50,
         width: 400,
         height: 500,
-
     },
     title1: {
         marginBottom: 40,
@@ -32,7 +34,7 @@ const useStyles = theme => ({
     container: {
         top: "40%",
         marginTop: "10%",
-    }
+    },
 });
 
 class Login extends React.Component {
@@ -42,22 +44,33 @@ class Login extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
     handleChange(event) {
-        this.setState({ username: event.state.username, password: event.state.password });
+        this.setState({
+            username: event.state.username,
+            password: event.state.password,
+        });
     }
     handleSubmit(event) {
-        event.preventDefault();
-        if (this.state.username === 'admin@littech.in' && this.state.password === 'secret') {
-            this.props.history.push("/home");
-        } else {
-            alert('Incorrect Credntials!');
-        }
+        event.preventDefault()
+        this.props.dispatch(login(this.state.username, this.state.password, this.props.history))
     }
+
     render() {
         const { classes } = this.props;
         return (
             <div>
-                <Grid container className={classes.container} spacing={0} justify="center" direction="row">
+                <Typography component="h6" variant="h6" align="center">
+                    ID: admin@or.com WW: admin
+                </Typography>
+                <Grid
+                    container
+                    className={classes.container}
+                    spacing={0}
+                    justify="center"
+                    direction="row"
+                >
+
                     <Grid item>
                         <Grid
                             container
@@ -75,7 +88,7 @@ class Login extends React.Component {
                                 <Grid item className={classes.title1}>
                                     <Typography component="h1" variant="h4" align="center">
                                         Login
-                                </Typography>
+                                    </Typography>
                                 </Grid>
                                 <Grid item>
                                     <form onSubmit={this.handleSubmit}>
@@ -119,10 +132,9 @@ class Login extends React.Component {
                                                     color="primary"
                                                     type="submit"
                                                     className={classes.buttonblock}
-                                                    href="/"
                                                 >
                                                     Inloggen
-</Button>
+                        </Button>
                                             </Grid>
                                         </Grid>
                                     </form>
@@ -130,14 +142,19 @@ class Login extends React.Component {
                                 <Grid item>
                                     <Link href="#" variant="body2">
                                         Wachtwoord vergeten?
-</Link>
+                  </Link>
                                 </Grid>
+
                             </Paper>
+
                         </Grid>
+
                     </Grid>
+
                 </Grid>
-            </div >
+
+            </div>
         );
     }
 }
-export default withStyles(useStyles)(Login);
+export default withRouter(connect()(withStyles(useStyles)(Login)))

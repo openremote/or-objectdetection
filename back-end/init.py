@@ -1,4 +1,8 @@
 import os
+import eventlet
+#patch python threading to green threads from eventlet
+eventlet.monkey_patch()
+
 from flask import Flask
 from flask_restful import Api
 
@@ -30,3 +34,4 @@ def shutdown_session(exception=None):
 
 if __name__ == '__main__':
     app.run(host=os.getenv("BACKEND_HOST", "localhost"), port=os.getenv("BACKEND_PORT", "5050"), debug=True)
+

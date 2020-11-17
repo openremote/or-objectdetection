@@ -1,82 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Container, Grid, Paper, Typography, CardActions, Card, CardContent } from '@material-ui/core';
-import Image from '../src/Images/CamPlaceholder.PNG';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Container, Box } from "@material-ui/core";
 
-const useStyles = makeStyles({
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  container: {
-    position: 'absolute',
-    minHeight: 600,
-    minHeight: 800,
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    borderWidth: 1,
-    borderColor: 'grey',
-    borderStyle: 'solid',
-    borderRadius: 15,
-  },
-  card: {
-    minWidth: 275,
-    minHeight: 220,
-    backgroundImage: `url(${Image})`,
-    backgroundSize: '100%'
+// Custom components
+import Routes from "router/routes";
+import Sidebar from "features/core/Sidebar/Sidebar";
+import AppBar from "features/core/Appbar/Appbar";
+
+// Actions
+import { checkIsUserAuthenticated } from "./store/modules/auth/authSlice";
+
+const App = () => {
+  const dispatch = useDispatch();
+  const authSelect = useSelector(state => state.auth);
+
+  useEffect(() => {
+    dispatch(checkIsUserAuthenticated());
+  }, []);
+
+  if(!authSelect.loading) {
+    return (
+      <Container maxWidth={false} disableGutters>
+        <Box display="flex" flexDirection="row">
+          <Box>
+            <Sidebar />
+          </Box>
+          <Box flexGrow={1}>
+            <Box display="flex" flexDirection="column">
+              <Box>
+                <AppBar />
+              </Box>
+              <Box flexGrow={1} p={3}>
+                <Routes />
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Container>
+    );
   }
-});
-
-{/* <Button variant="contained" color="primary">
-                Hello World
-              </Button> */}
-
-function App() {
-  const classes = useStyles();
 
   return (
-
-
-
-    <Container className={classes.container} maxWidth="md" >
-      <Grid item xs={12}>
-        <Grid container justify="center" spacing={4}>
-
-          {/* Voegt 3 cards toe */}
-          {[0, 1, 2].map((value) => (
-            <Grid key={value} item>
-
-              {/* Card met content */}
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Camera 1
-                  </Typography>
-                  <Typography variant="h5" component="h2">
-                    Hallway
-                  </Typography>
-                  <Typography className={classes.pos} color="textSecondary">
-                    Building TQ
-                  </Typography>
-                </CardContent>
-
-                <CardActions>
-                  <Button size="small">ADD</Button>
-                </CardActions>
-              </Card>
-
-
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-    </Container>
-  );
-}
+    <p>Loading WIP</p>
+  )
+};
 
 export default App;

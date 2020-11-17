@@ -8,3 +8,7 @@ dependencies:
     - Flask-RESTful
     - SQLAlchemy
     - Flask-SQLAlchemy
+    - marshmallow-sqlalchemy
+    - marshmallow-enum
+    - kombu
+    - eventlet

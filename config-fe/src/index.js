@@ -4,25 +4,21 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "store/store";
-import Routes from "router/routes";
 import { BrowserRouter } from "react-router-dom";
+import App from "./App";
 
 //font and themes
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import "fontsource-roboto";
-
-import Sidebar from "features/core/Sidebar/Sidebar";
-import AppBar from "features/core/Appbar/Appbar";
-import { Container, Box } from "@material-ui/core";
 
 //TODO : make dark mode configurable for user
 const theme = createMuiTheme({
   palette: {
     type: "light",
     primary: {
-      main: "#4D9D2A",
-    },
-  },
+      main: "#4D9D2A"
+    }
+  }
 });
 
 ReactDOM.render(
@@ -30,23 +26,7 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <BrowserRouter>
-          <Container maxWidth={false} disableGutters>
-            <Box display="flex" flexDirection="row">
-              <Box>
-                <Sidebar />
-              </Box>
-              <Box flexGrow={1}>
-                <Box display="flex" flexDirection="column">
-                  <Box>
-                    <AppBar />
-                  </Box>
-                  <Box flexGrow={1} p={3}>
-                    <Routes />
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </Container>
+          <App />
         </BrowserRouter>
       </Provider>
     </ThemeProvider>

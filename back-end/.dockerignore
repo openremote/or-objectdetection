@@ -1,0 +1,5 @@
+.idea
+.dockerignore
+Dockerfile
+Dockerfile.prod
+__pycache__
