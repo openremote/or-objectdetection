@@ -93,14 +93,14 @@ const Configuration = (props) => {
 
     return (
         <div>
-            <Grid container spacing={3} style={{ margin: '5%' }}>
+            <Grid container spacing={3} style={{ margin: '1%' }}>
                 <Grid item xs={6} >
                     <Typography variant="h3" className={classes.title}>
-                        Configuratie
+                        Configuratie - Camera X
                     </Typography>
-                    <InputLabel className={classes.inputTitle}><b>Selecteer Camera Source</b></InputLabel>
+                    <InputLabel className={classes.inputTitle}><b>Display name:</b></InputLabel>
                     <FormControl className={classes.formControl}>
-                        <TextField id="standard-basic" value="https://www.openremote.com/videofeed/stream.mp4" />
+                        <TextField id="standard-basic" value="Kruispunt XY" />
                     </FormControl>
 
                     <InputLabel className={classes.inputTitle}><b>Selecteer Detecties</b></InputLabel>
@@ -136,12 +136,6 @@ const Configuration = (props) => {
                                     color: "#4D9D2A",
                                 }} />}
                                 label="Directions"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox checked={jason} onChange={handleChange} name="jason" style={{
-                                    color: "#4D9D2A",
-                                }} />}
-                                label="Total People Count"
                             />
                             <FormControlLabel
                                 control={<Checkbox checked={antoine} onChange={handleChange} name="antoine" style={{
