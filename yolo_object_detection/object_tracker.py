@@ -21,9 +21,8 @@ import threading
 #endregion
 
 # helper files
-from rabbitmq_helper import setup_rabbitMQ
 import object_detection_helper as obj_helper
-
+import rabbitmq_helper as rabbit
 
 flags.DEFINE_string('framework', 'tf', '(tf, tflite, trt')
 flags.DEFINE_string('weights', './checkpoints/yolov4-416',
@@ -37,9 +36,6 @@ flags.DEFINE_float('score', 0.50, 'score threshold')
 flags.DEFINE_boolean('dont_show', False, 'dont show video output')
 flags.DEFINE_boolean('info', False, 'show detailed info of tracked objects')
 flags.DEFINE_boolean('count', False, 'count objects being tracked on screen')
-
-import rabbitmq_helper as rabbit
-(queue, exchange, producer) = rabbit.setup_rabbitMQ()
 
 lock = threading.Lock()
 # Definition of the parameters
@@ -129,6 +125,7 @@ def analyse_frame(frame, input_size, interpreter, input_details, output_details,
 		return frame, bboxes,scores, names
 
 def main(_argv):
+		(queue, exchange, producer) = rabbit.setup_rabbitMQ()
 		encoder, tracker = obj_helper.init_deepsort(max_cosine_distance, nn_budget)
 		interpreter, input_details, output_details, infer = obj_helper.setup_yolo(FLAGS.framework, FLAGS.weights)
 		# begin video capture
