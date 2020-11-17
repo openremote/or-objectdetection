@@ -1,10 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import { LoadVideoSources, AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
 
 import { Grid, Typography } from '@material-ui/core';
 import Popup from 'features/custom/Popup'
 import CustomVideoCard from 'features/card/customVideoCard';
 import { withStyles } from '@material-ui/core/styles';
 import User from '../Model/User';
+
+
+const mapDispatch = { LoadVideoSources, AddVideoSource }
 
 const useStyles = (theme) => ({
     title: {
@@ -71,4 +76,4 @@ class Dashboard extends React.Component {
     }
 }
 
-export default withStyles(useStyles)(Dashboard);
+export default connect(null, mapDispatch)(withStyles(useStyles)(Dashboard));

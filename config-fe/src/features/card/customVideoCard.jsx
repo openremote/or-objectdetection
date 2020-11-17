@@ -73,7 +73,6 @@ customVideoCard.propTypes = {
     SubName: PropTypes.string,
     Descripton: PropTypes.string,
     SourceType: PropTypes.string
-
 };
 
 export default withStyles(styles, { withTheme: true })(customVideoCard);
