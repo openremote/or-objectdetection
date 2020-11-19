@@ -7,11 +7,12 @@ import CameraIcon from '@material-ui/icons/Camera';
 const AvatarIcon = props => {
   let { SourceType } = props;
   switch (SourceType) {
-    case "IP_CAM":
+    case 2:
       return <LinkedCameraIcon/>;
-    case "WEBCAM":
+    case 1:
       return <CameraIcon/>;
-    case "LIVE_FEED":
+      //local file of live feed??
+    case 3:
       return <LiveTvIcon/>;
     default:
       return null;
