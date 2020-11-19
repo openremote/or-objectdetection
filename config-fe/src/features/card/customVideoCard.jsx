@@ -28,23 +28,26 @@ const styles = theme => ({
 class customVideoCard extends React.Component {
     render() {
         const classes = this.props.classes;
-        return(
+        return (
             <Card>
                 <CardHeader
                     avatar={
                         <Avatar className={classes.avatar}>
-                            <AvatarIcon SourceType={this.props.SourceType}/> 
+                            <AvatarIcon SourceType={this.props.SourceType} />
                         </Avatar>
                     }
-                    titleTypographyProps={{variant:'h6' }}
+                    titleTypographyProps={{ variant: 'h6' }}
                     title={this.props.SourceName}
                     subheader={this.props.SubName}
                 />
-                <CardMedia
-                    className={classes.media}
-                    image={logo}
-                    title="Paella dish"
-                />
+                <Link to={'/feed/' + this.props.Id}>
+                    <CardMedia
+                        className={classes.media}
+                        image={logo}
+                        title="Paella dish"
+                    />
+                </Link>
+
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
                         {this.props.Descripton}
@@ -54,11 +57,6 @@ class customVideoCard extends React.Component {
                     <IconButton aria-label="add to favorites">
                         <Link to={'/configuration/' + this.props.Id}>
                             <EditIcon color="primary" />
-                        </Link>
-                    </IconButton>
-                    <IconButton aria-label="share">
-                        <Link to={'/feed/' + this.props.Id}>
-                            <VisibilityIcon color="primary"/>
                         </Link>
                     </IconButton>
                 </CardActions>
