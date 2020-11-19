@@ -80,7 +80,12 @@ const useStyles = makeStyles({
         width: "100%",
         "& .MuiTab-root": {
             maxWidth: 1000,
-        },
+        }
+        ,
+        textAlign: "left"
+    },
+    tabs: {
+        marginLeft: "45px"
     }
 });
 
@@ -101,7 +106,8 @@ const pulseStyles = makeStyles((theme) => ({
         opacity: "0.5",
         cursor: "pointer",
         "& .MuiPaper-outlined": {
-            borderColor: "#4D9D2A",
+            border: "2px solid rgb(77, 157, 42)",
+            borderRadius: 50,
         }
     },
     mediaContainer: {
@@ -109,20 +115,6 @@ const pulseStyles = makeStyles((theme) => ({
         width: "100%",
         justifyContent: "center",
         alignItems: "center"
-    },
-    "@keyframes pulse": {
-        "0%": {
-            transform: "scale(0.95)",
-            boxShadow: "0 0 0 0 rgba(0, 0, 0, 0.7)"
-        },
-        "70%": {
-            transform: "scale(1)",
-            boxShadow: "0 0 0 10px rgba(0, 0, 0, 0)"
-        },
-        "100%": {
-            transform: "scale(0.95)",
-            boxShadow: "0 0 0 0 rgba(0, 0, 0, 0)"
-        }
     },
 
 }));
@@ -240,6 +232,7 @@ export default function Popup(props) {
                     value={value}
                     onChange={handleChange}
                     aria-label="simple tabs example"
+                    className={classes.tabs}
                 >
                     <Tab label="Simpele Configuratie" {...a11yProps(0)} className={classes.tab} />
                     <Tab label="Geavanceerde Configuratie" {...a11yProps(1)} className={classes.tab} />
@@ -301,13 +294,6 @@ export default function Popup(props) {
             </Button>
                     </Box>
                 </TabPanel>
-
-                <DialogContent>
-
-
-
-
-                </DialogContent>
             </Dialog>
         </div>
     );
