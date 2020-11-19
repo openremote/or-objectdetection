@@ -1,9 +1,15 @@
+# standard python import
 from http import HTTPStatus
+# flask imports
 from flask import abort, request
 from flask_restful import Resource
+# DB related things
 from database.models.feed import Feed
 from database.init_db import db_session
 from database.schemas.Schemas import FeedSchema
+# rabbitMQ
+from rabbitmq.rabbitMQ import rabbit_url, feed_queue
+from kombu import Connection
 
 
 class VideoFeedListAPI(Resource):
@@ -73,3 +79,37 @@ class VideoFeedAPI(Resource):
                 # convert to JSON and return to user
                 feed_schema = FeedSchema()
                 return feed_schema.dump(feed)
+
+
+class VideoFeedStreamAPI(Resource):
+    def put(self, feed_ID):
+        if feed_ID is None:
+            return abort(400, description="missing required parameter")
+        else:
+            feed = Feed.query.filter_by(id=feed_ID).first()
+            if feed is None:
+                abort(404, description=f"Feed {feed_ID} not found")
+            else:
+                json_data = request.get_json(force=True)
+                # TODO : in de toekomst meer waardes sturen naast de id?, bijv coco classes, tenzij we deze ook
+                #  opslaan in de db.
+                with Connection(rabbit_url, heartbeat=4) as conn:
+                    # flip boolean
+                    feed.active = not feed.active
+                    # Produce a message to RabbitMQ so detection manager can consume and start the approriate feed
+                    # with the given data.
+                    producer = conn.Producer(serializer='json')
+                    producer.publish(
+                        # TODO: fix json serializer, for now we mock it.
+                        #{feed.id, feed.feed_type, feed.url, feed.active},
+                        { 'id' : '1', 'feed_type': 'IP_CAM', 'url': 'http://test.com/file.mp4', 'active': 'true'},
+                        retry=True,
+                        exchange=feed_queue.exchange,
+                        routing_key=feed_queue.routing_key,
+                        declare=[feed_queue],  # declares exchange, queue and binds.
+                    )
+                    # set feed to active, TODO : add active/inactive to the queue
+
+                    db_session.commit()
+
+                    conn.release()
