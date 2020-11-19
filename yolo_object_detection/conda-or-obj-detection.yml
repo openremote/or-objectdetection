@@ -15,3 +15,5 @@ dependencies:
     - absl-py
     - easydict
     - pillow
+    - youtube-dl
+    - pafy

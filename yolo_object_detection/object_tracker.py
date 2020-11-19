@@ -2,7 +2,7 @@
 import os
 # comment out below line to enable tensorflow logging outputs
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
+from tensorflow.compat.v1 import ConfigProto
 import time
 import tensorflow as tf
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
@@ -16,14 +16,13 @@ from core.yolov4 import filter_boxes
 from core.config import cfg
 import cv2
 import numpy as np
-
+from tensorflow.python.saved_model import tag_constants
 import threading
 #endregion
-
 # helper files
 import object_detection_helper as obj_helper
 import rabbitmq_helper as rabbit
-
+#region flags
 flags.DEFINE_string('framework', 'tf', '(tf, tflite, trt')
 flags.DEFINE_string('weights', './checkpoints/yolov4-416',
 										'path to weights file')
@@ -36,12 +35,13 @@ flags.DEFINE_float('score', 0.50, 'score threshold')
 flags.DEFINE_boolean('dont_show', False, 'dont show video output')
 flags.DEFINE_boolean('info', False, 'show detailed info of tracked objects')
 flags.DEFINE_boolean('count', False, 'count objects being tracked on screen')
-
-lock = threading.Lock()
+#endregion
 # Definition of the parameters
+lock = threading.Lock()
 nms_max_overlap = 1.0
 max_cosine_distance = 0.4
 nn_budget = None
+(queue, exchange, producer) = rabbit.setup_rabbitMQ()
 
 def analyse_frame(frame, input_size, interpreter, input_details, output_details, infer, detection_classes = None):
 		image_data = cv2.resize(frame, (input_size, input_size))
@@ -124,19 +124,39 @@ def analyse_frame(frame, input_size, interpreter, input_details, output_details,
 		# apply_deepsort(frame) 
 		return frame, bboxes,scores, names
 
-def main(_argv):
-		(queue, exchange, producer) = rabbit.setup_rabbitMQ()
+def main(_argv):	
 		encoder, tracker = obj_helper.init_deepsort(max_cosine_distance, nn_budget)
-		interpreter, input_details, output_details, infer = obj_helper.setup_yolo(FLAGS.framework, FLAGS.weights)
-		# begin video capture
+		outputFrame = None
+		#region setup
+		# load configuration for object detector
+		config = ConfigProto()
+		config.gpu_options.allow_growth = True
+		input_size = FLAGS.size
 		video_path = FLAGS.video
+
+		# load tflite model if flag is set
+		interpreter = None
+		input_details = None
+		output_details = None
+		infer = None
+		if FLAGS.framework == 'tflite':
+				interpreter = tf.lite.Interpreter(model_path=FLAGS.weights)
+				interpreter.allocate_tensors()
+				input_details = interpreter.get_input_details()
+				output_details = interpreter.get_output_details()
+		# otherwise load standard tensorflow saved model
+		else:
+				saved_model_loaded = tf.saved_model.load(FLAGS.weights, tags=[tag_constants.SERVING])
+				infer = saved_model_loaded.signatures['serving_default']
+
+		# begin video capture
 		try:
 				vid = cv2.VideoCapture(int(video_path))
 		except:
 				vid = cv2.VideoCapture(video_path)
+		#endregion
 
 		frame_num = 0
-		outputFrame = None
 		# while video is running
 		while True:
 				return_value, frame = vid.read()
@@ -145,7 +165,7 @@ def main(_argv):
 				else:
 						print('Video has ended or failed, try a different video format!')
 						break
-				frame_num +=1
+				frame_num += 1
 
 				start_time = time.time()
 

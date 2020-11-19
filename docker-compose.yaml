@@ -18,7 +18,7 @@ services:
       NAME: "rabbitmq1"
   frontend:
     build: config-fe/.
-     volumes:
+    volumes:
       - '.:/app'
       - '/app/node_modules'
     ports:
