@@ -1,10 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import { LoadVideoSources, AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
 
 import { Grid, Typography } from '@material-ui/core';
 import Popup from 'features/custom/Popup'
 import CustomVideoCard from 'features/card/customVideoCard';
 import { withStyles } from '@material-ui/core/styles';
-import User from '../Model/User';
+
+const mapStateToProps = state => ({
+    feeds: state.sources.videoSources
+});
+const mapDispatch = { LoadVideoSources, AddVideoSource }
 
 const useStyles = (theme) => ({
     title: {
@@ -13,57 +19,33 @@ const useStyles = (theme) => ({
 });
 
 class Dashboard extends React.Component {
-    //method responsible for fetching video sources
-    fetchVideoSources() {
-
+    componentDidMount() {
+        this.props.LoadVideoSources();
     }
 
-    // componentDidMount() {
-    //     if (User.getID() === null) {
-    //         this.props.history.push("/login");
-    //     }
-    // }
-
     render() {
-        const { classes } = this.props;
-        const { user } = User.getID;
+        const { classes, feeds } = this.props;
         return (
             <div>
-                <h1>{user}</h1>
                 <Typography className={classes.title} variant="h4" color="primary">
                     VIDEO SOURCES
                 </Typography>
 
                 <Grid container spacing={1}>
+                    {feeds.map((value, index) => {
+                        return (
+                        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={index}>
+                            <CustomVideoCard
+                                Id={value.id}
+                                SourceName={value.name}
+                                SubName={value.location}
+                                Descripton={value.description}
+                                SourceType={value.feed_type}
+                            />
+                        </Grid>)
+                    })}
                     <Grid item xs={12} sm={6} md={4} lg={3} xl={2} heigth="100%">
                         <Popup />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                        <CustomVideoCard
-                            Id={"74bc2a9b-c9b9-44cf-95e6-954da5449b1a"}
-                            SourceName={"Traffic Cam"}
-                            SubName={"Eindhoven"}
-                            Descripton={"Wat een mooie descriptie ofniet?"}
-                            SourceType={"IP_CAM"}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                        <CustomVideoCard
-                            Id={"2cde58f1-1b38-440a-ac25-9a2fab17542d"}
-                            SourceName={"Traffic Cam"}
-                            SubName={"Eindhoven"}
-                            Descripton={"Wat een mooie descriptie ofniet?"}
-                            SourceType={"WEBCAM"}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                        <CustomVideoCard
-                            Id={"cc1933b5-44ff-4ed2-b1d6-97fbf4ddcb21"}
-                            SourceName={"Traffic Cam"}
-                            SubName={"Eindhoven"}
-                            Descripton={"Wat een mooie descriptie ofniet?"}
-                            SourceType={"LIVE_FEED"}
-                        />
                     </Grid>
                 </Grid>
             </div>
@@ -71,4 +53,4 @@ class Dashboard extends React.Component {
     }
 }
 
-export default withStyles(useStyles)(Dashboard);
+export default connect(mapStateToProps, mapDispatch)(withStyles(useStyles)(Dashboard));

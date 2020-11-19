@@ -66,12 +66,11 @@ class customVideoCard extends React.Component {
 }
 
 customVideoCard.propTypes = {
-    Id: PropTypes.string,
+    Id: PropTypes.number,
     SourceName: PropTypes.string,
     SubName: PropTypes.string,
     Descripton: PropTypes.string,
-    SourceType: PropTypes.string
-
+    SourceType: PropTypes.number
 };
 
 export default withStyles(styles, { withTheme: true })(customVideoCard);
