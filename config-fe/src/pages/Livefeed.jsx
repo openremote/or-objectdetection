@@ -1,16 +1,20 @@
 import React from 'react';
 import clsx from 'clsx';
 import stompClient from 'rabbitMQ/rabbitMQ'
-import { Client, Message } from '@stomp/stompjs';
+import Editor from 'features/custom/Editor'
 
 import { Container } from '@material-ui/core';
 import { withStyles  } from '@material-ui/core/styles';
 
 const styles = theme => ({
     videoPlayer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
         width: '100%',
         height: '90vh',
-        border: '1px solid grey'
+        border: '1px solid grey',
+        zIndex: '-1'
     }
 })
 
@@ -18,14 +22,22 @@ class Livefeed extends React.Component {
     constructor(props) {
         super(props);
         this.id = this.props.match.params.id;
-        this.imageRef = React.createRef();
-        this.context = null;
         this.stompClient = null;
+
+        //create imageref so we can copy these values to the editor element.
+        this.imageRef = React.createRef();
+        this.state = { 
+            imageWidth: 0, 
+            imageHeight: 0 
+        };
     }
 
     componentDidMount() {
-        //this.context = this.imageRef.current.getContext("2d");
         this.connectToRabbitMQ(this.id);
+        this.setState({
+            imageWidth: this.imageRef.current.offsetWidth,
+            imageHeight: this.imageRef.current.offsetHeight,
+        });
     }
 
     connectToRabbitMQ(id) {
@@ -72,9 +84,10 @@ class Livefeed extends React.Component {
     render() {
         const { classes } = this.props;
         return(
-            <Container maxWidth={false}>
-                <img id="image" className={clsx(classes.videoPlayer)}/>
-                {/*<canvas className={clsx(classes.videoPlayer)} ref={this.imageRef}/> */}
+            <Container disableGutters maxWidth={false} style={{position: 'relative'}}>
+                {/* <div className={clsx(classes.test)}/> */}
+                <Editor width={this.state.imageWidth} height={this.state.imageHeight}/>
+                <img id="image" className={clsx(classes.videoPlayer)} ref={this.imageRef}/> 
             </Container>
         )
     }
