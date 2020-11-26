@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { Stage, Layer, Rect, Circle } from 'react-konva';
 import Konva from 'konva';
+import FreePathDrawable from 'features/custom/drawables/FreepathDrawable';
+import CircleDrawable from 'features/custom/drawables/CircleDrawable';
+import ArrowDrawable from 'features/custom/drawables/ArrowDrawable';
 
 
 
@@ -8,45 +11,56 @@ export default function Editor(props) {
     const layer = new Konva.Layer();
     const stage = useRef();
 
-    let arrow;
+    let drawables = [];
+    let newDrawable = [];
+    let newDrawableType = "FreePathDrawable";
 
-    useEffect( () => {
-        //stage.current.add(layer);
-    }, []);
-
-
-    const handleMouseDown = (e) => {
-        console.log("HOI");
-        const pos = stage.current.getPointerPosition();
-        arrow = new Konva.Arrow({
-            points: [pos.x, pos.y],
-            stroke: 'black',
-            fill: 'black'
-        });
-        layer.add(arrow);
-        layer.batchDraw();
+    getNewDrawableBasedOnType = (x, y, type) => {
+        const drawableClasses = {
+          FreePathDrawable,
+          ArrowDrawable,
+          CircleDrawable
+        };
+        return new drawableClasses[type](x, y);
     };
 
-    const handleMouseMove = (e) => {
-        console.log("HOI");
-        if (arrow) {
-            const pos = stage.current.getPointerPosition();
-            const points = [arrow.points()[0], arrow.points()[1], pos.x, pos.y];
-            arrow.points(points);
-            layer.batchDraw();
+    handleMouseDown = e => {
+        if (newDrawable.length === 0) {
+          const { x, y } = e.target.getStage().getPointerPosition();
+          const updatedNewDrawable = getNewDrawableBasedOnType(
+            x,
+            y,
+            newDrawableType
+          );
+          newDrawable = [updatedNewDrawable];
         }
-    };
-
-    const handleMouseUp = (e) => {
-        console.log("HOI");
-        arrow = null;
-    }
+      };
+    
+      handleMouseUp = e => {
+        if (newDrawable.length === 1) {
+          const { x, y } = e.target.getStage().getPointerPosition();
+          const drawableToAdd = newDrawable[0];
+          drawableToAdd.registerMovement(x, y);
+          drawables.push(drawableToAdd);
+          newDrawable = [];
+        }
+      };
+    
+      handleMouseMove = e => {
+        if (newDrawable.length === 1) {
+          const { x, y } = e.target.getStage().getPointerPosition();
+          const updatedNewDrawable = newDrawable[0];
+          updatedNewDrawable.registerMovement(x, y);
+          newDrawable = [updatedNewDrawable];
+        }
+      };
 
     return (
-        <Stage width={props.width} height={props.height} >
-            <Layer onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} ref={stage}>
-                <Rect width={50} height={50} fill="red" />
-                <Circle x={200} y={200} stroke="black" radius={50} />
+        <Stage width={props.width} height={props.height} ref={stage} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+            <Layer>
+                {drawables.map(drawable => {
+                    return drawable.render();
+                })}
             </Layer>
         </Stage>
     );
