@@ -55,7 +55,7 @@ def apply_deepsort(encoder, tracker, frame, bboxes, scores, names, nms_max_overl
 			cv2.rectangle(frame, (int(bbox[0]), int(bbox[1]-30)), (int(bbox[0])+(len(class_name)+len(str(track.track_id)))*17, int(bbox[1])), color, -1)
 			cv2.putText(frame, class_name + "-" + str(track.track_id),(int(bbox[0]), int(bbox[1]-10)),0, 0.75, (255,255,255), 2)
 
-	result = np.asarray(frame)
+	# result = np.asarray(frame)
 	result = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 	return result
 
