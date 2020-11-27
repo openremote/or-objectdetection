@@ -3,6 +3,9 @@ import { Arrow } from 'react-konva';
 import Drawable from "./drawable";
 
 export default class ArrowDrawable extends Drawable {
+    x: any;
+    y: any;
+    
     constructor(startx, starty) {
       super(startx, starty);
       this.x = startx;
@@ -14,6 +17,6 @@ export default class ArrowDrawable extends Drawable {
     }
     render() {
       const points = [this.startx, this.starty, this.x, this.y];
-      return <Arrow points={points} fill="black" stroke="black" />;
+      return <Arrow points={points} fill="black" stroke="black" key={this.startx+this.starty}/>;
     }
 }

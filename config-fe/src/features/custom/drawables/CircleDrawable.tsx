@@ -13,7 +13,7 @@ export default class CircleDrawable extends ArrowDrawable {
       const dy = this.starty - this.y;
       const radius = Math.sqrt(dx * dx + dy * dy);
       return (
-        <Circle radius={radius} x={this.startx} y={this.starty} stroke="black" />
+        <Circle radius={radius} x={this.startx} y={this.starty} stroke="black" key={this.startx + radius + dx}/>
       );
     }
   }
