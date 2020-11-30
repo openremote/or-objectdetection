@@ -1,5 +1,6 @@
 import enum
 from sqlalchemy import Column, Integer, String, Boolean, Enum
+from sqlalchemy.orm import relationship
 from ..init_db import Base
 
 
@@ -10,7 +11,7 @@ class CamType(enum.Enum):
 
 
 class Feed(Base):
-    __tablename__ = 'feeds'
+    __tablename__ = 'feed'
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
     location = Column(String(50))
@@ -18,6 +19,7 @@ class Feed(Base):
     feed_type = Column(Enum(CamType))
     url = Column(String(120))
     active = Column(Boolean)
+    configuration = relationship("Configuration", uselist=False, back_populates="feed")
 
     def __init__(self, name=None, location=None, description=None, feed_type=None, url=None, active=None):
         self.name = name
