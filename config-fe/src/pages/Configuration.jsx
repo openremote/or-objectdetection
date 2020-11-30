@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Card, TextField, FormGroup, FormControlLabel, Checkbox, Button, Chip, CardContent, FormControl, MenuItem, InputLabel, Box } from '@material-ui/core';
 import ReactPlayer from 'react-player';
-import Canvas from 'react-canvas-draw'
+import Canvas from '../features/custom/Canvas'
 
 const Configuration = (props) => {
     const classes = useStyles();
@@ -46,8 +46,6 @@ const Configuration = (props) => {
         { key: 1, label: "Person" },
         { key: 2, label: "Car" }
     ];
-
-
 
     return (
         <div>
@@ -174,16 +172,18 @@ const Configuration = (props) => {
                     </Typography>
                     <ReactPlayer url='https://www.youtube.com/watch?v=njCzFI149Rc' />
 
-                    <Canvas
+                    {/* <Canvas
                         brushColor={canvasprops.color}
                         brushRadius={canvasprops.brushRadius}
                         lazyRadius={canvasprops.lazyRadius}
                         canvasWidth={canvasprops.width}
                         canvasHeight={canvasprops.height}
                         imgSrc="https://static.dw.com/image/47113704_303.jpg"
-                    />
+                    /> */}
                 </Grid>
             </Grid>
+            <h1>Canvas hier</h1>
+            <Canvas />
         </div >
     )
 }

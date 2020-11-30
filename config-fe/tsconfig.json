@@ -4,7 +4,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "target": "es2015",
-    "jsx": "react-jsx",
+    "jsx": "react",
     "types": [
       "react"
     ],
