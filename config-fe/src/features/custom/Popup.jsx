@@ -285,13 +285,12 @@ export default function Popup(props) {
                             className={classes.textField, classes.credentialsField}
                             id="outlined-basic"
                             label="Password"
-
                         />
                     </Box>
                     <Box>
                         <Button variant="contained" color="primary" size="large">
                             Toevoegen
-            </Button>
+                        </Button>
                     </Box>
                 </TabPanel>
             </Dialog>

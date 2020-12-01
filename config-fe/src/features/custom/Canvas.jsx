@@ -53,21 +53,22 @@ class FreePathDrawable extends Drawable {
 export default function Canvas(props) {
     const stage = useRef();
 
-
     const [image] = useImage("https://static.dw.com/image/47113704_303.jpg");
-
-
 
     const [drawables, setDrawables] = useState([]);
     const [newDrawable, setNewDrawables] = useState([]);
-    const [newDrawableType, setNewDrawableType] = useState("RectDrawable");
+    const [newDrawableType, setNewDrawableType] = useState("LineDrawable");
 
 
     const getNewDrawableBasedOnType = (x, y, type) => {
+
         const drawableClasses = {
             FreePathDrawable,
             LineDrawable,
         };
+        console.log(newDrawableType);
+        console.log(type);
+        console.log(newDrawable);
         return new drawableClasses[type](x, y);
     };
 
@@ -81,6 +82,7 @@ export default function Canvas(props) {
             );
             setNewDrawables([updatedNewDrawable]);
         }
+
     };
 
     const handleMouseUp = e => {
@@ -109,7 +111,7 @@ export default function Canvas(props) {
         <div>
             <Button
                 onClick={e => {
-                    setNewDrawableType("ArrowDrawable");
+                    setNewDrawableType("LineDrawable");
                 }}
             >
                 Draw Lines
@@ -130,7 +132,7 @@ export default function Canvas(props) {
             >
                 log to JSON
             </Button>
-            <Stage width={props.width} height={props.height} ref={stage} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+            <Stage width={props.width} height={props.height} ref={stage} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} >
                 <Layer >
                     {/* Om image te scalen | fillPatternScaleX = requiredWidth / imageWidth -- zelfde met Heigth/Y */}
                     <Rect width={props.width} height={props.height} fillPatternImage={image} fillPatternScaleX={props.width / 700} fillPatternScaleY={props.height / 394} />

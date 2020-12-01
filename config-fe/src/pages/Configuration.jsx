@@ -1,8 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Typography, Card, TextField, FormGroup, FormControlLabel, Checkbox, Button, Chip, CardContent, FormControl, MenuItem, InputLabel, Box } from '@material-ui/core';
+import { Grid, Container, Typography, Card, TextField, FormGroup, FormControlLabel, Checkbox, Button, Chip, CardContent, FormControl, MenuItem, InputLabel, Box } from '@material-ui/core';
 import ReactPlayer from 'react-player';
-import Canvas from '../features/custom/Canvas'
+import Canvas from '../features/custom/Canvas';
+import Editor from '../features/custom/Editor';
 
 const Configuration = (props) => {
     const classes = useStyles();
@@ -90,7 +91,7 @@ const Configuration = (props) => {
                                 </div>
                                 <InputLabel className={classes.inputTitle}><b>Url:</b></InputLabel>
                                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                    <TextField className={classes.textField} size="normal" id="standard-basic" value="https://www.openremote.com/videofeed/kruispunt" />
+                                    <TextField className={classes.textField} size="normal" id="standard-basic" value="https://www.openremote.com/videofeed/kruispunt" disabled />
                                 </Typography>
                                 <InputLabel className={classes.inputTitle}><b>Selecteer Detecties</b></InputLabel>
                                 <TextField className={classes.comboField} select size="normal" value="" onChange={e => handleSelect(e)}>
@@ -170,20 +171,10 @@ const Configuration = (props) => {
                     <Typography variant="h3" className={classes.title}>
                         Camera Preview
                     </Typography>
-                    <ReactPlayer url='https://www.youtube.com/watch?v=njCzFI149Rc' />
-
-                    {/* <Canvas
-                        brushColor={canvasprops.color}
-                        brushRadius={canvasprops.brushRadius}
-                        lazyRadius={canvasprops.lazyRadius}
-                        canvasWidth={canvasprops.width}
-                        canvasHeight={canvasprops.height}
-                        imgSrc="https://static.dw.com/image/47113704_303.jpg"
-                    /> */}
+                    <img src="https://static.dw.com/image/47113704_303.jpg" />
+                    <Editor />
                 </Grid>
             </Grid>
-            <h1>Canvas hier</h1>
-            <Canvas />
         </div >
     )
 }

@@ -13,7 +13,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from 'react-router-dom';
 
 import { login } from "../store/modules/auth/authSlice";
-import Canvas from '../features/custom/Canvas'
+
 
 const useStyles = (theme) => ({
     loginform: {
@@ -62,10 +62,7 @@ class Login extends React.Component {
         const { classes } = this.props;
         return (
             <div>
-                <Container style={{ backgroundImage: "https://static.dw.com/image/47113704_303.jpg" }} disableGutters maxWidth={false} style={{ position: 'relative' }}>
-                    {/* <div className={clsx(classes.test)}/> */}
-                    <Canvas width={1000} height={600} />
-                </Container>
+
                 <Typography component="h6" variant="h6" align="center">
                     ID: admin@or.com WW: admin
                 </Typography>
