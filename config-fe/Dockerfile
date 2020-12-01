@@ -1,20 +1,12 @@
 # pull official base image
-FROM node:13.12.0-alpine
-
+FROM node:alpine
 # set working directory
-WORKDIR /app
-
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
+WORKDIR /usr/src/app
 # install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install
-RUN npm install react-scripts -g
-
+COPY package*.json ./
+RUN npm install --production
 # add app
-COPY . ./
-
+COPY . .
+EXPOSE 3000
 # start app
 CMD ["npm", "start"]
