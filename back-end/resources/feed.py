@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from flask import abort, request
 from flask_restful import Resource
-from database.models.feed import Feed
+from database.models.models import Feed
 from database.init_db import db_session
 from database.schemas.Schemas import FeedSchema
 

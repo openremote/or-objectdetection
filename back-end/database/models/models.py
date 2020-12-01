@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, Integer, String, Boolean, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Boolean, Enum
 from sqlalchemy.orm import relationship
 from ..init_db import Base
 
@@ -31,3 +31,28 @@ class Feed(Base):
 
     def __repr__(self):
         return '<Feed %r>' % (self.name)
+
+
+class DetectionTypes(Base):
+    __tablename__ = 'detectiontypes'
+    id = Column(Integer, primary_key=True)
+    detectionType = Column(String(120), unique=False)
+    configuration_id = Column(Integer, ForeignKey('configuration.id'))
+
+    def __init__(self, detectionType):
+        self.detectionType = detectionType
+
+    def __repr__(self):
+        return '<DetectionTypes %r>' % (self.detectionType)
+
+
+class Configuration(Base):
+    __tablename__ = 'configuration'
+    id = Column(Integer, primary_key=True)
+    drawables = Column(Text, unique=False)
+    detections = relationship(DetectionTypes)
+    feed_id = Column(Integer, ForeignKey('feed.id'), nullable=True)
+    feed = relationship("Feed", back_populates="configuration")
+
+    def __repr__(self):
+        return '<Configuration %r>' % (self.feed_id)

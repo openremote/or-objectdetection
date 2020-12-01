@@ -1,8 +1,7 @@
 from http import HTTPStatus
 from flask import Flask, abort, jsonify, request
 from flask_restful import Resource
-from database.models.configuration import Configuration as Conf
-from database.models.feed import Feed
+from database.models.models import Configuration as Conf, Feed, DetectionTypes
 from database.init_db import db_session
 from database.schemas.Schemas import ConfigurationSchema
 
@@ -15,17 +14,26 @@ class ConfigurationListAPI(Resource):
 
     def post(self):
         json_data = request.get_json(force=True)
-        name = json_data['name']
-        email = json_data['email']
         feed_id = json_data['feed_id']
+        if 'detection_types' in json_data:
+            detectiontypes = json_data['detection_types']
+        else:
+            detectiontypes = None
 
         # get a scoped DB session
         scoped_session = db_session()
 
         # create config and link it to the Feed
-        config = Conf(name=name, email=email)
+        config = Conf()
         feed = Feed.query.get(feed_id)
         feed.configuration = config
+
+        # create detectiontypes object for each within detectiontypes array and add them to the configuration
+        # relationship
+        if detectiontypes is not None:
+            for item in detectiontypes:
+                dt = DetectionTypes(detectionType=item)
+                config.detections.append(dt)
 
         # commit the changes
         scoped_session.commit()
@@ -74,8 +82,7 @@ class ConfigurationAPI(Resource):
             else:
                 # Update entity based on JSON data
                 json_data = request.get_json(force=True)
-                configuration.name = json_data['name']
-                configuration.email = json_data['email']
+                configuration.drawables = json_data['drawables']
 
                 scoped_session.commit()
                 # convert to JSON and return to user
