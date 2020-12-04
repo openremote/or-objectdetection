@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Stage, Layer, Arrow, Circle, Line, RectDrawable, Rect } from 'react-konva';
+import { Stage, Layer, Arrow, Circle, Line, Rect } from 'react-konva';
 import { Button } from '@material-ui/core';
 import useImage from 'use-image';
 
@@ -31,22 +31,28 @@ class LineDrawable extends Drawable {
     }
 }
 
-class FreePathDrawable extends Drawable {
+class RectDrawable extends Drawable {
     constructor(startx, starty) {
         super(startx, starty);
-        this.points = [startx, starty];
+        this.x = startx;
+        this.y = starty;
     }
     registerMovement(x, y) {
-        this.points = [...this.points, x, y];
+        this.x = x;
+        this.y = y;
     }
     render() {
-        return <Line
-            points={this.points}
-            stroke="#E0E722"
-            opacity={0.8}
-            strokeWidth={6}
-            tension={0.6}
-            lineCap="round" />;
+        const width = this.x - this.startx;
+        const height = this.y - this.starty;
+
+        return <Rect stroke="#ccff00"
+            fill="rgb(204,255,0,0.1)"
+            strokeWidth={3}
+            x={this.startx}
+            y={this.starty}
+            width={width}
+            height={height}
+            key={this.startx + this.starty + width} />;
     }
 }
 
@@ -63,8 +69,8 @@ export default function Canvas(props) {
     const getNewDrawableBasedOnType = (x, y, type) => {
 
         const drawableClasses = {
-            FreePathDrawable,
             LineDrawable,
+            RectDrawable
         };
         console.log(newDrawableType);
         console.log(type);
@@ -118,10 +124,10 @@ export default function Canvas(props) {
             </Button>
             <Button
                 onClick={e => {
-                    setNewDrawableType("FreePathDrawable");
+                    setNewDrawableType("RectDrawable");
                 }}
             >
-                Draw FreeHand
+                Draw Rectangle
             </Button>
             <Button
                 onClick={e => {
