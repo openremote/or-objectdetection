@@ -95,6 +95,14 @@ class ConfigurationAPI(Resource):
             else:
                 # Update entity based on JSON data
                 json_data = request.get_json(force=True)
+                detectiontypes = json_data['detection_types']
+
+                # Wipe detection types and re set them based on the given detectiontypes
+                configuration.detections.clear()
+                for item in detectiontypes:
+                    dt = DetectionTypes(detectionType=item)
+                    config.detections.append(dt)
+
                 configuration.name = json_data['name']
                 configuration.resolution = json_data['resolution']
                 configuration.drawables = json_data['drawables']
