@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Stage, Layer, Arrow, Circle, Line, Rect } from 'react-konva';
+import { Stage, Layer, Line, Rect } from 'react-konva';
 import { Button } from '@material-ui/core';
 import useImage from 'use-image';
 
