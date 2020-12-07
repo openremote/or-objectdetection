@@ -11,6 +11,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import ReactPlayer from 'react-player';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Chip from '@material-ui/core/Chip';
+import Paper from '@material-ui/core/Paper';
+
+
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -30,7 +35,19 @@ const useStyles = makeStyles((theme) => ({
     },
     Buttons: {
         marginTop: '10px'
-    }
+    },
+    chipControl: {
+        display: 'flex',
+        justifyContent: 'left',
+        flexWrap: 'wrap',
+        listStyle: 'none',
+        marginTop: 10,
+        maxWidth: 300,
+        padding: 0
+    },
+    chip: {
+        margin: theme.spacing(0.5),
+    },
 }));
 
 const Configuration = (props) => {
@@ -57,32 +74,59 @@ const Configuration = (props) => {
         setAge(event.target.value);
     };
 
+    const handleDelete = chipToDelete => () => {
+        setChipData(chips => chips.filter(chips => chips.key !== chipToDelete.key));
+    };
+
+    const handleSelect = e => {
+        setChipData([...chipData, { key: e.target.value, label: e.target.value }]);
+    };
+
     const id = props.match.params.id;
+
+    const [chipData, setChipData] = React.useState([]);
+
+    const detectionOptions = [
+        { key: 1, label: "Person" },
+        { key: 2, label: "Car" }
+    ];
 
     return (
         <div>
-            <Grid container spacing={3} style={{ margin: '5%' }}>
+            <Grid container spacing={3} style={{ margin: '1%' }}>
                 <Grid item xs={6} >
                     <Typography variant="h3" className={classes.title}>
-                        Configuratie
+                        Configuratie - Camera X
                     </Typography>
-                    <InputLabel className={classes.inputTitle}><b>Selecteer Camera Source</b></InputLabel>
+                    <InputLabel className={classes.inputTitle}><b>Display name:</b></InputLabel>
                     <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-filled-label">Video Source</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-filled-label"
-                            id="demo-simple-select-filled"
-                            value={age}
-                            onChange={handleAge}
-                        >
-                            <MenuItem value={'Default'}>Default</MenuItem>
-                            <MenuItem value={'192.168.1.1'}>OpenRemote</MenuItem>
-                            <MenuItem value={'30.30.30.30'}>Fontys</MenuItem>
-                        </Select>
+                        <TextField id="standard-basic" value="Kruispunt XY" />
                     </FormControl>
+
                     <InputLabel className={classes.inputTitle}><b>Selecteer Detecties</b></InputLabel>
                     <FormControl className={classes.formControl}>
-                        <TextField id="standard-basic" label="Bijv. Person" />
+                        <TextField select value="" onChange={e => handleSelect(e)}>
+                            {detectionOptions.map(option => (
+                                <MenuItem key={option.key} value={option.label}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <ul className={classes.chipControl}>
+                            {
+                                chipData.map((data, index) => {
+                                    return (
+                                        <Chip
+                                            className={classes.chip}
+                                            key={data.key + index}
+                                            label={data.label}
+                                            onDelete={handleDelete(data)}
+                                            color="primary"
+                                        />
+                                    );
+                                })
+                            }
+                        </ul>
                     </FormControl>
                     <InputLabel className={classes.inputTitle}><b>Detectie Opties</b></InputLabel>
                     <FormControl component="fieldset" className={classes.formControl}>
@@ -92,12 +136,6 @@ const Configuration = (props) => {
                                     color: "#4D9D2A",
                                 }} />}
                                 label="Directions"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox checked={jason} onChange={handleChange} name="jason" style={{
-                                    color: "#4D9D2A",
-                                }} />}
-                                label="Total People Count"
                             />
                             <FormControlLabel
                                 control={<Checkbox checked={antoine} onChange={handleChange} name="antoine" style={{

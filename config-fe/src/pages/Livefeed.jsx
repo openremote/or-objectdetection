@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import stompClient from 'rabbitMQ/rabbitMQ'
 import { Client, Message } from '@stomp/stompjs';
 
 import { Container } from '@material-ui/core';
@@ -28,20 +29,8 @@ class Livefeed extends React.Component {
     }
 
     connectToRabbitMQ(id) {
-        //configure stompclient
-        this.stompClient = new Client({
-            brokerURL: 'ws://192.168.99.100:15674/ws',
-            connectHeaders: {
-              login: 'rabbitmq',
-              passcode: 'rabbitmq',
-              durable: 'true',
-              'auto-delete': 'false',
-              'prefetch-count': '1'
-            },
-            reconnectDelay: 5000,
-            heartbeatIncoming: 15000,
-            heartbeatOutgoing: 15000,
-        });
+        //fetch stompclient instance
+        this.stompClient = stompClient;
 
         //attempt to connect to rabbitmq
         this.stompClient.activate();
