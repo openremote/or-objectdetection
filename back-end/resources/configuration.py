@@ -45,7 +45,7 @@ class ConfigurationListAPI(Resource):
         # relationship
         if detectiontypes is not None:
             for item in detectiontypes:
-                dt = DetectionTypes(detectionType=item)
+                dt = DetectionTypes(detectiontype=item)
                 config.detections.append(dt)
 
         # commit the changes
@@ -101,7 +101,7 @@ class ConfigurationAPI(Resource):
                 configuration.detections.clear()
                 for item in detectiontypes:
                     dt = DetectionTypes(detectionType=item)
-                    config.detections.append(dt)
+                    configuration.detections.append(dt)
 
                 configuration.name = json_data['name']
                 configuration.resolution = json_data['resolution']
