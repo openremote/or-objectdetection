@@ -14,8 +14,9 @@ class ConfigurationListAPI(Resource):
 
     def post(self):
         json_data = request.get_json(force=True)
-
         feed_id = json_data['feed_id']
+        name = json_data['name']
+        resolution = json_data['resolution']
         # Fetch detection_types if they exist
         if 'detection_types' in json_data:
             detectiontypes = json_data['detection_types']
@@ -32,7 +33,7 @@ class ConfigurationListAPI(Resource):
         scoped_session = db_session()
 
         # create config and link it to the Feed
-        config = Conf()
+        config = Conf(name=name, resolution=resolution)
         feed = Feed.query.get(feed_id)
         feed.configuration = config
 
@@ -94,6 +95,8 @@ class ConfigurationAPI(Resource):
             else:
                 # Update entity based on JSON data
                 json_data = request.get_json(force=True)
+                configuration.name = json_data['name']
+                configuration.resolution = json_data['resolution']
                 configuration.drawables = json_data['drawables']
 
                 scoped_session.commit()

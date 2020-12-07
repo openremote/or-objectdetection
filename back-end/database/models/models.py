@@ -39,8 +39,8 @@ class DetectionTypes(Base):
     detectionType = Column(String(120), unique=False)
     configuration_id = Column(Integer, ForeignKey('configuration.id'))
 
-    def __init__(self, detectionType):
-        self.detectionType = detectionType
+    def __init__(self, detectiontype=None):
+        self.detectionType = detectiontype
 
     def __repr__(self):
         return '<DetectionTypes %r>' % (self.detectionType)
@@ -49,10 +49,16 @@ class DetectionTypes(Base):
 class Configuration(Base):
     __tablename__ = 'configuration'
     id = Column(Integer, primary_key=True)
+    name = Column(String(60))
+    resolution = Column(String(120))
     drawables = Column(Text, unique=False)
     detections = relationship(DetectionTypes)
     feed_id = Column(Integer, ForeignKey('feed.id'), nullable=True)
     feed = relationship("Feed", back_populates="configuration")
+
+    def __init__(self, name=None, resolution=None):
+        self.name = name
+        self.resolution = resolution
 
     def __repr__(self):
         return '<Configuration %r>' % (self.feed_id)
