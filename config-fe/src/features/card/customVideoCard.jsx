@@ -33,10 +33,10 @@ class customVideoCard extends React.Component {
                 <CardHeader
                     avatar={
                         <Avatar className={classes.avatar}>
-                            <AvatarIcon SourceType={this.props.SourceType}/>
+                            <AvatarIcon SourceType={this.props.SourceType}/> 
                         </Avatar>
                     }
-                    titleTypographyProps={{ variant:'h6' }}
+                    titleTypographyProps={{variant:'h6' }}
                     title={this.props.SourceName}
                     subheader={this.props.SubName}
                 />
