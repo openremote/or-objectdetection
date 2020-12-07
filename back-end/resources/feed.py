@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from flask import abort, request
 from flask_restful import Resource
-from database.models.feed import Feed
+from database.models.models import Feed
 from database.init_db import db_session
 from database.schemas.Schemas import FeedSchema
 
@@ -20,10 +20,13 @@ class VideoFeedListAPI(Resource):
         feed_type = json_data['feed_type']
         url = json_data['url']
 
+        # get a scoped DB session
+        scoped_session = db_session()
+
         # feed can not be created and instantly go active, it needs to be configured first.
         feed = Feed(name=name, location=location, description=description, feed_type=feed_type, url=url, active=False)
-        db_session.add(feed)
-        db_session.commit()
+        scoped_session.add(feed)
+        scoped_session.commit()
 
         feed_schema = FeedSchema()
         return feed_schema.dump(feed)
@@ -45,31 +48,37 @@ class VideoFeedAPI(Resource):
         if feed_ID is None:
             return abort(400, description="missing required parameter")
         else:
+            # get a scoped DB session
+            scoped_session = db_session()
+
             feed = Feed.query.filter_by(id=feed_ID).first()
             if feed is None:
                 abort(404, description=f"Feed {feed_ID} not found")
             else:
-                db_session.delete(feed)
-                db_session.commit()
+                scoped_session.delete(feed)
+                scoped_session.commit()
                 return '', HTTPStatus.NO_CONTENT
 
     def put(self, feed_ID):
         if feed_ID is None:
             return abort(400, description="missing required parameter")
         else:
+            # get a scoped DB session
+            scoped_session = db_session()
+
             feed = Feed.query.filter_by(id=feed_ID).first()
             if feed is None:
                 abort(404, description=f"Feed {feed_ID} not found")
             else:
-                json_data = request.get_json(force=True)
                 # Update entity based on JSON data
+                json_data = request.get_json(force=True)
                 feed.name = json_data['name']
                 feed.description = json_data['description']
                 feed.location = json_data['location']
                 feed.feed_type = json_data['feed_type']
                 feed.url = json_data['url']
 
-                db_session.commit()
+                scoped_session.commit()
                 # convert to JSON and return to user
                 feed_schema = FeedSchema()
                 return feed_schema.dump(feed)

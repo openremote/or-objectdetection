@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from flask import Flask, abort, jsonify, request
 from flask_restful import Resource
-from database.models.configuration import Configuration as Conf
+from database.models.models import Configuration as Conf, Feed, DetectionTypes
 from database.init_db import db_session
 from database.schemas.Schemas import ConfigurationSchema
 
@@ -14,12 +14,42 @@ class ConfigurationListAPI(Resource):
 
     def post(self):
         json_data = request.get_json(force=True)
+        feed_id = json_data['feed_id']
         name = json_data['name']
-        email = json_data['email']
+        resolution = json_data['resolution']
+        # Fetch detection_types if they exist
+        if 'detection_types' in json_data:
+            detectiontypes = json_data['detection_types']
+        else:
+            detectiontypes = None
 
-        config = Conf(name=name, email=email)
-        db_session.add(config)
-        db_session.commit()
+        # Fetch drawables if they exist
+        if 'drawables' in json_data:
+            drawables = json_data['drawables']
+        else:
+            drawables = None
+
+        # get a scoped DB session
+        scoped_session = db_session()
+
+        # create config and link it to the Feed
+        config = Conf(name=name, resolution=resolution)
+        feed = Feed.query.get(feed_id)
+        feed.configuration = config
+
+        # Create drawables object if it was passed and add them to the configuration
+        if drawables is not None:
+            config.drawables = json_data['drawables']
+
+        # create detectiontypes object for each within detectiontypes array and add them to the configuration
+        # relationship
+        if detectiontypes is not None:
+            for item in detectiontypes:
+                dt = DetectionTypes(detectionType=item)
+                config.detections.append(dt)
+
+        # commit the changes
+        scoped_session.commit()
 
         config_schema = ConfigurationSchema()
         return config_schema.dump(config)
@@ -41,27 +71,35 @@ class ConfigurationAPI(Resource):
         if config_ID is None:
             return abort(400, description="missing required parameter")
         else:
+            # get a scoped DB session
+            scoped_session = db_session()
+
             configuration = Conf.query.filter_by(id=config_ID).first()
             if configuration is None:
                 abort(404, description=f"Configuration {config_ID} not found")
             else:
-                db_session.delete(configuration)
-                db_session.commit()
+                scoped_session.delete(configuration)
+                scoped_session.commit()
                 return ('', HTTPStatus.NO_CONTENT)
 
     def put(self, config_ID):
         if config_ID is None:
             return abort(400, description="missing required parameter")
         else:
+            # get a scoped DB session
+            scoped_session = db_session()
+
             configuration = Conf.query.filter_by(id=config_ID).first()
             if configuration is None:
                 abort(404, description=f"Configuration {config_ID} not found")
             else:
-                json_data = request.get_json(force=True)
                 # Update entity based on JSON data
+                json_data = request.get_json(force=True)
                 configuration.name = json_data['name']
-                configuration.email = json_data['email']
-                db_session.commit()
+                configuration.resolution = json_data['resolution']
+                configuration.drawables = json_data['drawables']
+
+                scoped_session.commit()
                 # convert to JSON and return to user
                 config_schema = ConfigurationSchema()
                 return config_schema.dump(configuration)
