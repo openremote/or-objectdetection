@@ -33,6 +33,16 @@ services:
      - BACKEND_PORT=5000
     ports:
       - "5000:5000"
+  object-detection:
+    container_name: or-obj-detection
+    restart: always
+    image: or-obj-detection
+    build: yolo_object_detection/.
+    depends_on: rabbitmq
+networks:
+  internal:
+    
+   
     
 
   
