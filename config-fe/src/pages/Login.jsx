@@ -7,11 +7,13 @@ import {
     Paper,
     Typography,
     Link,
+    Container
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from 'react-router-dom';
 
 import { login } from "../store/modules/auth/authSlice";
+
 
 const useStyles = (theme) => ({
     loginform: {
@@ -60,6 +62,7 @@ class Login extends React.Component {
         const { classes } = this.props;
         return (
             <div>
+
                 <Typography component="h6" variant="h6" align="center">
                     ID: admin@or.com WW: admin
                 </Typography>
@@ -134,7 +137,7 @@ class Login extends React.Component {
                                                     className={classes.buttonblock}
                                                 >
                                                     Inloggen
-                        </Button>
+                                                </Button>
                                             </Grid>
                                         </Grid>
                                     </form>
@@ -142,7 +145,7 @@ class Login extends React.Component {
                                 <Grid item>
                                     <Link href="#" variant="body2">
                                         Wachtwoord vergeten?
-                  </Link>
+                                    </Link>
                                 </Grid>
 
                             </Paper>
