@@ -72,9 +72,8 @@ class Livefeed extends React.Component {
     render() {
         const { classes } = this.props;
         return(
-            <Container disableGutters maxWidth={false} style={{position: 'relative'}}>
-                {/*<canvas className={clsx(classes.videoPlayer)} ref={this.imageRef}/> */}
-                <img id="image" className={clsx(classes.videoPlayer)} ref={this.imageRef}/> 
+            <Container maxWidth={false}>
+                <img id="image" className={clsx(classes.videoPlayer)}/> 
             </Container>
         )
     }
