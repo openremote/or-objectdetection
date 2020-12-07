@@ -28,7 +28,8 @@ const Configuration = (props) => {
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
-
+    
+    //Directions, boundary boxes, calculate line cross, count objects, show object speed, visualize centers
     const { D, BB, CLC, CO, SOS, VC } = state;
 
     const handleDelete = chipToDelete => () => {
