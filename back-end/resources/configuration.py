@@ -14,11 +14,19 @@ class ConfigurationListAPI(Resource):
 
     def post(self):
         json_data = request.get_json(force=True)
+
         feed_id = json_data['feed_id']
+        # Fetch detection_types if they exist
         if 'detection_types' in json_data:
             detectiontypes = json_data['detection_types']
         else:
             detectiontypes = None
+
+        # Fetch drawables if they exist
+        if 'drawables' in json_data:
+            drawables = json_data['drawables']
+        else:
+            drawables = None
 
         # get a scoped DB session
         scoped_session = db_session()
@@ -27,6 +35,10 @@ class ConfigurationListAPI(Resource):
         config = Conf()
         feed = Feed.query.get(feed_id)
         feed.configuration = config
+
+        # Create drawables object if it was passed and add them to the configuration
+        if drawables is not None:
+            config.drawables = json_data['drawables']
 
         # create detectiontypes object for each within detectiontypes array and add them to the configuration
         # relationship
