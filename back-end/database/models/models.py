@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from ..init_db import Base
 
 
-class CamType(enum.Enum):
+class CamType(enum.IntEnum):
     webcam = 1
     ip_cam = 2
     local_file = 3
