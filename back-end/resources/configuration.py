@@ -39,7 +39,7 @@ class ConfigurationListAPI(Resource):
 
         # Create drawables object if it was passed and add them to the configuration
         if drawables is not None:
-            config.drawables = json_data['drawables']
+            config.drawables = drawables
 
         # create detectiontypes object for each within detectiontypes array and add them to the configuration
         # relationship
