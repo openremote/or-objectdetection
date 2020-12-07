@@ -18,7 +18,7 @@ function Routes() {
             <Route path="/feed/:id" exact component={Livefeed} />
             <Route path="/configuration/:id" component={Configuration} />
             <Route path="/Login" component={Login} />
-            <ProtectedRoute path="/yeet" component={NotFound} authed={auth.authenticated}/>
+            <ProtectedRoute path="/yeet" component={NotFound} authed={auth.authenticated} />
             <Route component={NotFound} />
         </Switch>
     )

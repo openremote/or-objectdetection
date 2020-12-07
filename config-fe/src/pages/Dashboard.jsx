@@ -32,21 +32,23 @@ class Dashboard extends React.Component {
                 </Typography>
 
                 <Grid container spacing={1}>
-                    {feeds.map((value, index) => {
-                        return (
-                        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={index}>
-                            <CustomVideoCard
-                                Id={value.id}
-                                SourceName={value.name}
-                                SubName={value.location}
-                                Descripton={value.description}
-                                SourceType={value.feed_type}
-                            />
-                        </Grid>)
-                    })}
                     <Grid item xs={12} sm={6} md={4} lg={3} xl={2} heigth="100%">
                         <Popup />
                     </Grid>
+
+                    {feeds.map((value, index) => {
+                        return (
+                            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={index}>
+                                <CustomVideoCard
+                                    Id={value.id}
+                                    SourceName={value.name}
+                                    SubName={value.location}
+                                    Descripton={value.description}
+                                    SourceType={value.feed_type}
+                                />
+                            </Grid>)
+                    })}
+
                 </Grid>
             </div>
         )

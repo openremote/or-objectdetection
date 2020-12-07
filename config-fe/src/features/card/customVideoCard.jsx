@@ -8,7 +8,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 //icons
 import EditIcon from '@material-ui/icons/Edit';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import logo from 'assets/office.jpg';
 
 //custom component imports
