@@ -34,5 +34,5 @@ export async function createFeed(feed: Feed) {
 export async function deleteFeed(feed: Feed) {
     let response = await axios.delete(`/feeds/${feed.id}`)
 
-    return response.status == 204;
+    return response.status === 204;
 }

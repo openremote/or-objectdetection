@@ -12,12 +12,12 @@ else:
     DATABASE = 'database/dev-db.db'
 
 engine = create_engine(f'sqlite:///{DATABASE}', convert_unicode=True)
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
+session_factory = sessionmaker(autocommit=False,
+                               autoflush=False,
+                               bind=engine)
+db_session = scoped_session(session_factory)
 Base = declarative_base()
 Base.query = db_session.query_property()
-
 
 def init_db():
     # import all modules here that might define models so that
@@ -25,4 +25,3 @@ def init_db():
     # you will have to import them first before calling init_db()
     import database.models
     Base.metadata.create_all(bind=engine)
-
