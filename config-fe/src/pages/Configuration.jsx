@@ -69,16 +69,13 @@ const useStyles = (theme) => ({
     }
 });
 
-const configuration = {
-    id: 12,
-    name: "Jemoeder",
-    resolution: "4k Ultra HD",
-    framerate: "360",
-    detections_types: ["person"],
-    drawables: "",
-    options: [],
-    active: false
-};
+// const configuration = {
+//     feed_id: this.props.id,
+//     name: "jemoeder",
+//     resolution: "8k Mega HD",
+//     detection_types: ["person"],
+//     drawables: ""
+// };
 
 
 const mapStateToProps = state => ({
@@ -94,6 +91,15 @@ class Configuration extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.saveConfiguration = this.saveConfiguration.bind(this);
+
+        this.configuration = {
+            feed_id: this.props.match.params.id,
+            name: "Camera Fontys",
+            resolution: "8k Mega HD",
+            detection_types: ["person"],
+            drawables: ""
+        };
+
         this.state = {
             D: false,
             BB: false,
@@ -118,8 +124,8 @@ class Configuration extends React.Component {
 
     saveConfiguration = (event) => {
         event.preventDefault()
-        this.props.SaveConfig(configuration)
-        console.log(configuration)
+        this.props.SaveConfig(this.configuration)
+        console.log(this.configuration)
     };
 
     render() {
