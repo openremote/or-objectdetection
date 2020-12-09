@@ -3,7 +3,7 @@ from flask import Flask
 from kombu import Connection, Exchange, Queue, Producer, Consumer
 def setup_rabbitMQ():
     # Default RabbitMQ server URI
-    rabbit_url = 'amqp://rabbitmq:rabbitmq@or-rabbitmq:5672//'
+    rabbit_url = 'amqp://rabbitmq:rabbitmq@rabbitmq:5672//'
 
     # Kombu Connection
     conn = Connection(rabbit_url)

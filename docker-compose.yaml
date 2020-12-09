@@ -16,10 +16,6 @@ services:
       - "15674:15674"
     labels:
       NAME: "rabbitmq1"
-    networks: 
-      or-internal-network:
-        aliases:
-          - or-rabbitmq
   frontend:
     container_name: or-frontend
     build: config-fe/.
@@ -40,16 +36,10 @@ services:
   object-detection:
     container_name: or-obj-detection
     restart: always
-    image: or-obj-detection
+    image: or-obj-detection:latest
     build: yolo_object_detection/.
-    depends_on: 
+    environment:
+      DISPLAY: :99
+    links:
       - rabbitmq
-    networks: 
-      - or-internal-network
-networks:
-  or-internal-network:
-    
-   
-    
-
-  
+    privileged: true

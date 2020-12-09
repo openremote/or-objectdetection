@@ -18,6 +18,7 @@ from tensorflow.python.saved_model import tag_constants
 import object_detection_helper as obj_helper
 
 from threadedConsumer import Worker
+import time
 
 #endregion
 #region flags
@@ -46,7 +47,7 @@ infer = None
 encoder = None
 tracker = None
 
-workers = []
+worker = None
 from kombu import Exchange, Queue
 
 feed_exchange = Exchange("feed-exchange", type="direct", delivery_mode=1)
@@ -54,9 +55,8 @@ feed_queue = Queue(name="feed-queue", exchange=feed_exchange, routing_key="feed"
 
 def start_feed_listener():
 	print('starting to fucking listen')
-	global workers
+	global worker
 	worker = Worker(feed_queue, interpreter, input_details, output_details, infer, encoder, tracker)
-	workers.append(worker)
 	worker.start()
 
 def main(_argv):
@@ -87,9 +87,11 @@ def main(_argv):
 			infer = saved_model_loaded.signatures['serving_default']
 
 	start_feed_listener()
-	start_feed_listener()
-
-	hoi = input('Press any key to continue...\n')
+	# start_feed_listener()
+	
+	worker.join()
+	# while True:
+	# 	time.sleep(1)		
 
 if __name__ == '__main__':
 		try:

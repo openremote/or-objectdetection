@@ -108,8 +108,6 @@ def analyse_frame(frame, input_size, interpreter, input_details, output_details,
 		scores = np.delete(scores, deleted_indx, axis=0)
 
 		# return bboxes, frame
-
-		# apply_deepsort(frame) 
 		return frame, bboxes,scores, names
 
 def consume_file(video_path):
@@ -199,7 +197,7 @@ class Worker(ConsumerMixin, threading.Thread):
 			message.ack()
 			body = json.loads(raw_body)		
 			url =  body['url']
-
+			print('Message received!')
 			self.is_busy = True
 				
 			start_analysis(url, self.interpreter, input_details=self.input_details, output_details=self.output_details, infer=self.infer, encoder=self.encoder, tracker=self.tracker)
