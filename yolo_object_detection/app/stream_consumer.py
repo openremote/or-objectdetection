@@ -7,13 +7,24 @@ import re
 import time
 
 def consume_ipcam(url):
+	# -I dummy --dummy-quiet 
+	# instance = vlc.Instance('--no-video --quiet')
+	# player = instance.media_player_new()
+	
+	# player.set_mrl(url)
+	# # player.set_media(media)
+
 	player = vlc.MediaPlayer(url)
 	player.play()
+	i=0
 	while True:
+		i+=1
+		print ('frame '+ str(i))
 		player.video_take_snapshot(0,'file.png',0,0)
 		raw_image = cv2.imread('file.png', 0)
 		width,height = player.video_get_size()
 		if raw_image is not None and width > 0 and height > 0:
+			print('yielded')
 			image = numpy.frombuffer(raw_image, dtype='uint8')
 			image = image.reshape((height, width, 1))
 			yield image

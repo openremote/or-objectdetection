@@ -23,7 +23,6 @@ from kombu.mixins import ConsumerMixin
 import object_detection_helper as obj_helper
 import rabbitmq_helper as rabbit
 from stream_consumer import consume_stream
-from kombu import Exchange, Queue
 
 nms_max_overlap = 1.0
 lock = threading.Lock()
@@ -109,8 +108,6 @@ def analyse_frame(frame, input_size, interpreter, input_details, output_details,
 		scores = np.delete(scores, deleted_indx, axis=0)
 
 		# return bboxes, frame
-
-		# apply_deepsort(frame) 
 		return frame, bboxes,scores, names
 
 def consume_file(video_path):
@@ -167,11 +164,8 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 # Kombu Message Consuming Worker
 class Worker(ConsumerMixin, threading.Thread):
 	is_busy = False
-	def __init__(self, interpreter, input_details, output_details, infer, encoder, tracker):
+	def __init__(self, feed_queue, interpreter, input_details, output_details, infer, encoder, tracker):
 			self.connection = connection
-
-			feed_exchange = Exchange("feed-exchange", type="direct", delivery_mode=1)
-			feed_queue = Queue(name="feed-queue", exchange=feed_exchange, routing_key="feed") 
 
 			self.queues = feed_queue
 			
@@ -203,7 +197,8 @@ class Worker(ConsumerMixin, threading.Thread):
 			message.ack()
 			body = json.loads(raw_body)		
 			url =  body['url']
-
+			print('Message received!')
 			self.is_busy = True
 				
 			start_analysis(url, self.interpreter, input_details=self.input_details, output_details=self.output_details, infer=self.infer, encoder=self.encoder, tracker=self.tracker)
+			self.is_busy = False
