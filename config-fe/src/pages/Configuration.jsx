@@ -7,7 +7,6 @@ import { SaveConfig, LoadConfig } from "../store/modules/configuration/configSli
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-
 const useStyles = (theme) => ({
     formControl: {
         margin: theme.spacing(1),
@@ -69,6 +68,7 @@ const useStyles = (theme) => ({
     }
 });
 
+
 // const configuration = {
 //     feed_id: this.props.id,
 //     name: "jemoeder",
@@ -90,13 +90,14 @@ class Configuration extends React.Component {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.saveConfiguration = this.saveConfiguration.bind(this);
 
         this.configuration = {
             feed_id: this.props.match.params.id,
-            name: "Camera Fontys",
-            resolution: "8k Mega HD",
-            detection_types: ["person"],
+            name: "",
+            resolution: "",
+            detection_types: [],
             drawables: ""
         };
 
@@ -116,11 +117,22 @@ class Configuration extends React.Component {
         this.setState({
             [event.target.name]: event.target.checked
         });
+        this.configuration.detection_types.push(event.target.name)
     };
 
     handleSelect = (e) => {
         this.setChipData([this.state.chipData, { key: e.target.value, label: e.target.value }]);
     };
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(this.configuration.name);
+        console.log(this.configuration.detection_types);
+
+        this.props.SaveConfig(this.configuration)
+        console.log(this.configuration)
+
+    }
 
     saveConfiguration = (event) => {
         event.preventDefault()
@@ -148,7 +160,7 @@ class Configuration extends React.Component {
                         </Typography>
                         <Card className={classes.root}>
                             <CardContent className={classes.cardContent}>
-                                <form onSubmit={this.saveConfiguration}>
+                                <form onSubmit={this.handleSubmit} >
                                     <Box className={classes.box}>
                                         <div style={{ display: "inline-block" }}>
                                             <InputLabel className={classes.inputTitle}>
@@ -162,7 +174,8 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value="Kruispunt XY"
+                                                    value={this.state.value}
+                                                    onInput={e => this.configuration.name = e.target.value}
                                                 />
                                             </Typography>
                                         </div>
@@ -178,7 +191,8 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value="Strijp S"
+                                                    value={this.state.value}
+
                                                 />
                                             </Typography>
                                         </div>
@@ -194,7 +208,8 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value="Camera C920"
+                                                    value={this.state.value}
+                                                    onInput={e => this.configuration.type = e.target.value}
                                                     disabled
                                                 />
                                             </Typography>
@@ -211,7 +226,8 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value="1920x1080"
+                                                    value={this.state.value}
+                                                    onInput={e => this.configuration.resolution = e.target.value}
                                                     disabled
                                                 />
                                             </Typography>
@@ -228,7 +244,8 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value="30fps"
+                                                    value={this.state.value}
+                                                    onChange={this.handleChange}
                                                     disabled
                                                 />
                                             </Typography>
@@ -245,7 +262,8 @@ class Configuration extends React.Component {
                                                 className={classes.textField}
                                                 size="normal"
                                                 id="standard-basic"
-                                                value="https://www.openremote.com/videofeed/kruispunt"
+                                                value={this.state.value}
+                                                onChange={this.handleChange}
                                                 disabled
                                             />
                                         </Typography>
@@ -365,10 +383,10 @@ class Configuration extends React.Component {
                                                     label="Visualize Centers"
                                                 />
                                                 <Button
+                                                    type="submit"
                                                     variant="contained"
                                                     color="primary"
                                                     className={classes.Buttons}
-                                                    onClick={this.saveConfiguration}
                                                 >
                                                     Save
                                         </Button>
@@ -400,3 +418,4 @@ class Configuration extends React.Component {
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatch)(withStyles(useStyles)(Configuration)))
+
