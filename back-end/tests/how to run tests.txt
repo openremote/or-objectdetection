@@ -1,0 +1,4 @@
+pytest needs some help to run properly, 
+use the following command to include base directories so we can import init.py.
+
+python -m pytest tests/

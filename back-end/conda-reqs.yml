@@ -13,3 +13,4 @@ dependencies:
     - kombu
     - eventlet
     - Flask-Cors
+    - pytest
