@@ -1,11 +1,15 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { Grid, Typography, Card, TextField, FormGroup, FormControlLabel, Checkbox, Button, Chip, CardContent, FormControl, MenuItem, InputLabel, Box } from "@material-ui/core";
+import { Grid, Typography, Card, TextField, FormGroup, Chip, FormControlLabel, Checkbox, Button, CardContent, FormControl, MenuItem, InputLabel, Box } from "@material-ui/core";
 import Editor from "../features/custom/Editor";
 import axios from 'api/axios';
 import { SaveConfig, LoadConfig } from "../store/modules/configuration/configSlice";
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Detections from '../Model/Detections';
+import LineReader from 'line-reader';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
 
 const useStyles = (theme) => ({
     formControl: {
@@ -44,6 +48,9 @@ const useStyles = (theme) => ({
         maxWidth: 300,
         padding: 0
     },
+    autoComplete: {
+        marginTop: "20px"
+    },
     chip: {
         margin: theme.spacing(0.5)
     },
@@ -68,16 +75,6 @@ const useStyles = (theme) => ({
     }
 });
 
-
-// const configuration = {
-//     feed_id: this.props.id,
-//     name: "jemoeder",
-//     resolution: "8k Mega HD",
-//     detection_types: ["person"],
-//     drawables: ""
-// };
-
-
 const mapStateToProps = state => ({
     config: state.sources.config
 });
@@ -88,11 +85,10 @@ class Configuration extends React.Component {
 
     constructor(props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
+        //this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.saveConfiguration = this.saveConfiguration.bind(this);
-
+        this.onFormSubmit = this.onFormSubmit.bind(this);
+        // this.saveConfiguration = this.saveConfiguration.bind(this);
         this.configuration = {
             feed_id: this.props.match.params.id,
             name: "",
@@ -101,44 +97,52 @@ class Configuration extends React.Component {
             drawables: ""
         };
 
+        this.fixedOptions = [];
+
         this.state = {
             D: false,
             BB: false,
             CLC: false,
             CO: false,
             SOS: false,
-            VC: false
-            //chipData: [],
-            //setChipData: []
+            VC: false,
+            value: [],
+            detectionArray: []
         }
     }
 
-    handleChange = (event) => {
+    onChange = chips => {
+        this.setState({ chips });
+        this.configuration.detection_types.push(chips)
+        console.log(chips);
+    }
+
+    handleChange = (e) => {
+        e.preventDefault();
         this.setState({
-            [event.target.name]: event.target.checked
+            [e.target.name]: e.target.checked
         });
-        this.configuration.detection_types.push(event.target.name)
+        // this.configuration.detection_types.push(e.target.name)
     };
 
     handleSelect = (e) => {
-        this.setChipData([this.state.chipData, { key: e.target.value, label: e.target.value }]);
+        e.preventDefault();
+        this.state.chipData.push({ key: e.target.value, label: e.target.value });
+        console.log(this.state.chipData)
     };
 
-    handleSubmit = (event) => {
-        event.preventDefault();
+    onFormSubmit = e => {
+        e.preventDefault();
         console.log(this.configuration.name);
         console.log(this.configuration.detection_types);
-
         this.props.SaveConfig(this.configuration)
-        console.log(this.configuration)
-
     }
 
-    saveConfiguration = (event) => {
-        event.preventDefault()
-        this.props.SaveConfig(this.configuration)
-        console.log(this.configuration)
-    };
+    // saveConfiguration = (e) => {
+    //     e.preventDefault()
+    //     this.props.SaveConfig(this.configuration)
+    //     console.log(this.configuration)
+    // };
 
     render() {
         const { classes } = this.props;
@@ -147,10 +151,7 @@ class Configuration extends React.Component {
         const { D, BB, CLC, CO, SOS, VC } = this.state;
 
         const id = this.props.match.params.id;
-        const detectionOptions = [
-            { key: 1, label: "Person" },
-            { key: 2, label: "Car" }
-        ];
+
         return (
             <div>
                 <Grid container spacing={3} style={{ margin: "1%" }}>
@@ -160,7 +161,7 @@ class Configuration extends React.Component {
                         </Typography>
                         <Card className={classes.root}>
                             <CardContent className={classes.cardContent}>
-                                <form onSubmit={this.handleSubmit} >
+                                <form onSubmit={this.onFormSubmit}>
                                     <Box className={classes.box}>
                                         <div style={{ display: "inline-block" }}>
                                             <InputLabel className={classes.inputTitle}>
@@ -270,32 +271,37 @@ class Configuration extends React.Component {
                                         <InputLabel className={classes.inputTitle}>
                                             <b>Selecteer Detecties</b>
                                         </InputLabel>
-                                        <TextField
-                                            className={classes.comboField}
-                                            select
-                                            size="normal"
-                                            value=""
-                                            onChange={(e) => this.handleSelect(e)}
-                                        >
-                                            {detectionOptions.map((option) => (
-                                                <MenuItem key={option.key} value={option.label}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                        {/* <ul className={classes.chipControl}>
-                                            {this.state.chipData.map((data, index) => {
-                                                return (
+                                        <Autocomplete
+                                            multiple
+                                            className={classes.autoComplete}
+                                            id="fixed-tags-demo"
+                                            value={this.value}
+                                            onChange={(event, newValue) => {
+                                                console.log(newValue.filter((option) => this.fixedOptions.indexOf(option) === -1))
+                                                this.state.value.push([
+                                                    this.fixedOptions,
+                                                    newValue.filter((option) => this.fixedOptions.indexOf(option) === -1)
+                                                ]);
+                                                this.configuration.detection_types = newValue.filter((option) => this.fixedOptions.indexOf(option) === -1)
+                                            }
+                                            }
+                                            options={Detections}
+                                            getOptionLabel={(option) => option.detection}
+                                            renderTags={(tagValue, getTagProps) =>
+                                                tagValue.map((option, index) => (
                                                     <Chip
-                                                        className={classes.chip}
-                                                        key={data.key + index}
-                                                        label={data.label}
-                                                        onDelete={this.handleDelete(data)}
                                                         color="primary"
-                                                    />
-                                                );
-                                            })}
-                                        </ul> */}
+                                                        label={option.detection}
+                                                        {...getTagProps({ index })}
+                                                        disabled={this.fixedOptions.indexOf(option) !== -1}
+                                                    >{option.detection}</Chip>
+                                                ))
+                                            }
+                                            style={{ width: 500 }}
+                                            renderInput={(params) => (
+                                                <TextField {...params} variant="standard" />
+                                            )}
+                                        />
                                         <InputLabel className={classes.inputTitle}>
                                             <b>Detectie Opties</b>
                                         </InputLabel>
