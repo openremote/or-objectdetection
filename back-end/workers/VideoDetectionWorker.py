@@ -10,18 +10,23 @@ class VideoDetectionWorker(threading.Thread):
         super(VideoDetectionWorker, self).__init__()
 
     def connect_mqtt(self, broker, port, client_id):
-        def run(self):
-            super(VideoDetectionWorker, self).run()
-
-        def on_connect(self, client, userdata, flags, rc):
+        def on_connect(client, userdata, flags, rc):
             if rc == 0:
                 print("Connected to MQTT Broker!")
             else:
                 print("Failed to connect, return code %d\n", rc)
-    
+
+        # Setup an MQTT client
         client = mqtt_client.Client(client_id)
         client.on_connect = on_connect
-        client.connect(broker, int(port)) # TODO: Add support for brokers with authentication
+
+        # Try to connect to the specified MQTT server
+        try:
+            client.connect(broker, int(port)) # TODO: Add support for brokers with authentication
+        except:
+            print("MQTT Connection failed")
+            exit(1)
+
         return client
 
     def publish(self, client):
