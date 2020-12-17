@@ -1,15 +1,13 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Card, TextField, FormGroup, Chip, FormControlLabel, Checkbox, Button, CardContent, FormControl, MenuItem, InputLabel, Box } from "@material-ui/core";
-import Editor from "../features/custom/Editor";
+import Canvas from "../features/custom/Canvas";
 import axios from 'api/axios';
 import { SaveConfig, LoadConfig } from "../store/modules/configuration/configSlice";
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Detections from '../Model/Detections';
-import LineReader from 'line-reader';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
 
 const useStyles = (theme) => ({
     formControl: {
@@ -77,7 +75,7 @@ const useStyles = (theme) => ({
 
 const mapStateToProps = state => ({
     config: state.sources.config
-});
+})
 
 const mapDispatch = { LoadConfig, SaveConfig }
 
@@ -94,7 +92,7 @@ class Configuration extends React.Component {
             name: "",
             resolution: "",
             detection_types: [],
-            drawables: ""
+            drawables: []
         };
 
         this.fixedOptions = [];
@@ -109,6 +107,10 @@ class Configuration extends React.Component {
             value: [],
             detectionArray: []
         }
+    }
+
+    componentDidMount() {
+        this.props.LoadConfig(this.props.match.params.id);
     }
 
     onChange = chips => {
@@ -133,25 +135,23 @@ class Configuration extends React.Component {
 
     onFormSubmit = e => {
         e.preventDefault();
-        console.log(this.configuration.name);
-        console.log(this.configuration.detection_types);
+        console.log(this.configuration)
         this.props.SaveConfig(this.configuration)
     }
 
-    // saveConfiguration = (e) => {
-    //     e.preventDefault()
-    //     this.props.SaveConfig(this.configuration)
-    //     console.log(this.configuration)
-    // };
+    handleDrawables = (drawables) => {
+        console.log(drawables);
+        this.configuration.drawables = drawables;
+    }
 
     render() {
-        const { classes } = this.props;
+        const { classes, config } = this.props;
 
         //Directions, boundary boxes, calculate line cross, count objects, show object speed, visualize centers
         const { D, BB, CLC, CO, SOS, VC } = this.state;
 
         const id = this.props.match.params.id;
-
+        console.log(config);
         return (
             <div>
                 <Grid container spacing={3} style={{ margin: "1%" }}>
@@ -175,7 +175,7 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value={this.state.value}
+                                                    value={this.configuration.name}
                                                     onInput={e => this.configuration.name = e.target.value}
                                                 />
                                             </Typography>
@@ -193,7 +193,6 @@ class Configuration extends React.Component {
                                                     size="normal"
                                                     id="standard-basic"
                                                     value={this.state.value}
-
                                                 />
                                             </Typography>
                                         </div>
@@ -209,8 +208,7 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value={this.state.value}
-                                                    onInput={e => this.configuration.type = e.target.value}
+                                                    value="Canon 520"
                                                     disabled
                                                 />
                                             </Typography>
@@ -227,7 +225,7 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value={this.state.value}
+                                                    value=""
                                                     onInput={e => this.configuration.resolution = e.target.value}
                                                     disabled
                                                 />
@@ -245,7 +243,7 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     size="normal"
                                                     id="standard-basic"
-                                                    value={this.state.value}
+                                                    value="30fps"
                                                     onChange={this.handleChange}
                                                     disabled
                                                 />
@@ -415,7 +413,7 @@ class Configuration extends React.Component {
                             Camera Preview
                     </Typography>
                         <img src="https://static.dw.com/image/47113704_303.jpg" />
-                        <Editor />
+                        <Canvas width={1280} height={720} onDrawablesRecieve={this.handleDrawables} />
                     </Grid>
                 </Grid>
             </div>
