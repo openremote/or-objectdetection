@@ -1,9 +1,11 @@
 name: Python Package using Conda
 
-on: [push]
+on: 
+  push:
+    paths: ./back-end
 
 jobs:
-  build-linux:
+  test-backend:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
@@ -23,6 +25,7 @@ jobs:
       run: |
         conda env update --file conda-reqs.yml --name base
     - name: Test with pytest
+      working-directory: ./back-end
       run: |
         conda install pytest
         pytest tests/
