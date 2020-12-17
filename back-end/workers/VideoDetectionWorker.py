@@ -21,7 +21,7 @@ class VideoDetectionWorker(threading.Thread):
     
         client = mqtt_client.Client(client_id)
         client.on_connect = on_connect
-        client.connect(broker, port) # TODO: Add support for brokers with authentication
+        client.connect(broker, int(port)) # TODO: Add support for brokers with authentication
         return client
 
     def publish(self, client):
