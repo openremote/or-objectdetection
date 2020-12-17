@@ -65,6 +65,8 @@ export default function Canvas(props) {
     const [newDrawable, setNewDrawables] = useState([]);
     const [newDrawableType, setNewDrawableType] = useState("LineDrawable");
 
+    const [values, onChangeValue] = props;
+
 
     const getNewDrawableBasedOnType = (x, y, type) => {
 
@@ -111,10 +113,15 @@ export default function Canvas(props) {
         }
     };
 
+    handleDrawablesSend = (drawables) => {
+        this.props.onDrawablesRecieve(drawables);
+    }
+
     //combine the drawables and new drawable currently being added so we can display live drawing to the user.
     const visibleDrawables = [...drawables, ...newDrawable];
     return (
         <div>
+
             <Button
                 onClick={e => {
                     setNewDrawableType("LineDrawable");
@@ -131,6 +138,7 @@ export default function Canvas(props) {
             </Button>
             <Button
                 onClick={e => {
+                    handleDrawablesSend(stage.current.toJSON())
                     console.log(stage.current.toJSON());
                     console.log(image.height);
                     console.log(image.width);

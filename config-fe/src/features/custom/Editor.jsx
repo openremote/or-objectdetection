@@ -8,11 +8,8 @@ const useStyles = makeStyles({
     dialog: {
         padding: 0,
         marginLeft: 0,
-
     }
 });
-
-
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -20,6 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function Editor() {
     const [open, setOpen] = React.useState(false);
+    const [drawables, setDrawables] = React.useState();
     const classes = useStyles();
 
     const handleClickOpen = () => {
@@ -30,6 +28,11 @@ export default function Editor() {
         setOpen(false);
     };
 
+    const handleDrawables = (drawables) => {
+        console.log(drawables);
+        this.setDrawables(drawables);
+    }
+
     return (
         <div>
             <Button variant="contained" color="primary" onClick={handleClickOpen}>Open Editor</Button>
@@ -37,7 +40,7 @@ export default function Editor() {
                 <DialogContent>
                     <Container disableGutters maxWidth={false} style={{ position: 'relative' }}>
                         {/* <div className={clsx(classes.test)}/> */}
-                        <Canvas width={1280} height={720} />
+                        <Canvas width={1280} height={720} onDrawablesRecieve={handleDrawables} />
                     </Container>
                     <Button style={{ marginTop: 20, marginRight: 10 }} variant="contained" color="primary">Save</Button>
                     <Button style={{ marginTop: 20 }} onClick={handleClose} variant="contained" color="default">Cancel</Button>
