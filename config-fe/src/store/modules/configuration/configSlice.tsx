@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Config, getConfig, saveConfig } from 'api/ConfigApi';
 
 const configuration: Config = {
-  id: 12,
-  name: "Test",
-  resolution: "4k Ultra HD",
-  framerate: "360",
-  detections_types: ["person"],
+  id: 0,
+  name: "",
+  resolution: "",
+  framerate: "",
+  detections_types: [],
   drawables: "",
   options: [],
   active: false
