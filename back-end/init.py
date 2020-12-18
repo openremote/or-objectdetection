@@ -7,7 +7,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
 
-from workers.init_worker import startVideoDetectionWorker
+from workers.init_worker import startMQTTWorker
 
 # import resources
 from resources.configuration import ConfigurationAPI, ConfigurationListAPI
@@ -25,7 +25,7 @@ def create_app():
 
     cors = CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-    startVideoDetectionWorker()
+    startMQTTWorker()
 
     # init Database
     init_db()

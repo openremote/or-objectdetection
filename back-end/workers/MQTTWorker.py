@@ -3,11 +3,11 @@ import threading
 
 from paho.mqtt import client as mqtt_client
 
-class VideoDetectionWorker(threading.Thread):
+class MQTTWorker(threading.Thread):
     def __init__(self, broker, port, client_id):
         self.connect_mqtt(broker, port, client_id)
 
-        super(VideoDetectionWorker, self).__init__()
+        super(MQTTWorker, self).__init__()
 
     def connect_mqtt(self, broker, port, client_id):
         def on_connect(client, userdata, flags, rc):

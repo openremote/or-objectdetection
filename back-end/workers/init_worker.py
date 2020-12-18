@@ -1,9 +1,9 @@
 import os
 import random
 
-from workers.VideoDetectionWorker import VideoDetectionWorker
+from workers.MQTTWorker import MQTTWorker
 
-def startVideoDetectionWorker():
+def startMQTTWorker():
     broker = os.getenv("MQTT_HOST")
     port = os.getenv("MQTT_PORT", 1883)
     client_id = os.getenv("MQTT_CLIENT_ID", f'python-mqtt-{random.randint(0, 1000)}')
@@ -11,6 +11,6 @@ def startVideoDetectionWorker():
     if not broker:
         print("No MQTT host spcified. MQTT disabled.")
     else:
-        print("Starting videoDetectionWorker.....")
-        worker = VideoDetectionWorker(broker, port, client_id)
+        print("Starting MQTTWorker.....")
+        worker = MQTTWorker(broker, port, client_id)
         worker.start()
