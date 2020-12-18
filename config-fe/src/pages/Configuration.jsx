@@ -73,9 +73,15 @@ const useStyles = (theme) => ({
     }
 });
 
-const mapStateToProps = state => ({
-    config: state.sources.config
-})
+// const mapStateToProps = state => ({
+//     config: state.sources.config
+// })
+
+const mapStateToProps = (state = {}) => {
+    console.log(state.configSource);
+    console.log(state);
+    return state;// state
+}
 
 const mapDispatch = { LoadConfig, SaveConfig }
 
@@ -109,7 +115,7 @@ class Configuration extends React.Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.LoadConfig(this.props.match.params.id);
     }
 
@@ -159,6 +165,7 @@ class Configuration extends React.Component {
                         <Typography variant="h3" className={classes.title}>
                             Configuratie - Camera X
                         </Typography>
+
                         <Card className={classes.root}>
                             <CardContent className={classes.cardContent}>
                                 <form onSubmit={this.onFormSubmit}>

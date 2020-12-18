@@ -3,7 +3,7 @@ import { Config, getConfig, saveConfig } from 'api/ConfigApi';
 
 const configuration: Config = {
   id: 12,
-  name: "Jemoeder",
+  name: "Test",
   resolution: "4k Ultra HD",
   framerate: "360",
   detections_types: ["person"],
@@ -36,10 +36,9 @@ export const { LoadConfigurations, SaveConfigurations } = sourcesSlice.actions;
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectConfigurations = (state: any) => state.sources.configurations;
+export const selectConfigurations = (state: any) => state.configSource;
 
 export default sourcesSlice.reducer;
-
 
 export const LoadConfig = (id: number) => async (dispatch: any) => {
   let config = await getConfig(id);
@@ -47,7 +46,6 @@ export const LoadConfig = (id: number) => async (dispatch: any) => {
 }
 
 export const SaveConfig = (configuration: Config) => async (dispatch: any) => {
-
   let config = await saveConfig(configuration)
   console.log(config)
   dispatch(SaveConfigurations(config));

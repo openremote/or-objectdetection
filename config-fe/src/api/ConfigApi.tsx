@@ -13,7 +13,8 @@ export interface Config {
 
 export async function getConfig(id: number) {
     let { data } = await axios.get<Config>(`/configurations/${id}`)
-    return data
+    console.log(data)
+    return data;
 }
 
 export async function saveConfig(config: Config) {
