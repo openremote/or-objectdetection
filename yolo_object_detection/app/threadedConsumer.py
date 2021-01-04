@@ -132,7 +132,7 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 	if False:
 		video_consumer = consume_file(video_path)
 	else:
-		video_consumer = consume_stream(video_path, framerate = 8, quality='high')
+		video_consumer = consume_stream(video_path, framerate = 20, quality='normal')
 
 	for frame in video_consumer:
 			frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
