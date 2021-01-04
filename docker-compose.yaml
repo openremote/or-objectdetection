@@ -34,6 +34,8 @@ services:
       MQTT_HOST: "localhost"
       MQTT_PORT: "1883"
       MQTT_CLIENT_ID: "or_od_1"
+      MQTT_USERNAME: "CHANGEME"
+      MQTT_PASSWORD: "CHANGEME"
     ports:
       - "5000:5000"
   object-detection:
