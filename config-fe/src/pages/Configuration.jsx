@@ -91,7 +91,7 @@ class Configuration extends React.Component {
             name: "",
             resolution: "",
             detection_types: [],
-            drawables: []
+            drawables: ""
         };
 
         this.state = {
@@ -182,7 +182,6 @@ class Configuration extends React.Component {
                                                     gutterBottom
                                                 >
                                                     <TextField
-                                                        size="normal"
                                                         id="standard-basic"
                                                         defaultValue={config.name}
                                                         onInput={e => this.configuration.name = e.target.value}
@@ -199,7 +198,6 @@ class Configuration extends React.Component {
                                                     gutterBottom
                                                 >
                                                     <TextField
-                                                        size="normal"
                                                         id="standard-basic"
                                                         disabled
                                                     />
@@ -215,7 +213,6 @@ class Configuration extends React.Component {
                                                     gutterBottom
                                                 >
                                                     <TextField
-                                                        size="normal"
                                                         id="standard-basic"
                                                         value="NSA cam"
                                                         disabled
@@ -232,7 +229,6 @@ class Configuration extends React.Component {
                                                     gutterBottom
                                                 >
                                                     <TextField
-                                                        size="normal"
                                                         id="standard-basic"
                                                         value={config.resolution}
                                                         onInput={e => this.configuration.resolution = e.target.value}
@@ -250,7 +246,6 @@ class Configuration extends React.Component {
                                                     gutterBottom
                                                 >
                                                     <TextField
-                                                        size="normal"
                                                         id="standard-basic"
                                                         value="30fps"
                                                         onChange={this.handleChange}
@@ -268,7 +263,6 @@ class Configuration extends React.Component {
                                             >
                                                 <TextField
                                                     className={classes.textField}
-                                                    size="normal"
                                                     id="standard-basic"
                                                     value={this.state.value}
                                                     onChange={this.handleChange}
@@ -291,7 +285,7 @@ class Configuration extends React.Component {
                                                             color="primary"
                                                             label={option}
                                                             {...getTagProps({ index })}
-                                                            disabled={this.state.fixedOptions.indexOf(option) !== -1}
+                                                        // onDelete={this.state.fixedOptions.indexOf(option) !== -1}
                                                         >{option.detection}</Chip>
                                                     ))
                                                 }
