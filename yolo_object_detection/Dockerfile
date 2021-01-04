@@ -16,7 +16,7 @@ RUN source /conda/bin/activate \
 	&& conda init bash \
 	&& conda env create -f conda-or-obj-detection.yml
 
-COPY yolov4.weights ./app/data/yolov4.weights
+COPY ./weights ./app/data/
 
 COPY ./app /app
 
