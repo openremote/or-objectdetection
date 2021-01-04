@@ -7,9 +7,11 @@ dependencies:
   - opencv
   - cudnn
   - cudatoolkit==10.1.243
+  - kombu
+  - flask
   - pip:
     - tensorflow-gpu==2.3.0rc0
-    - opencv-python==4.1.1.26
+    - opencv-python-headless==4.1.1.26
     - lxml
     - tqdm
     - absl-py
@@ -17,3 +19,5 @@ dependencies:
     - pillow
     - youtube-dl
     - pafy
+    - python-vlc
+

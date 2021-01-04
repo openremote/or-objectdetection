@@ -1,6 +1,0 @@
-*.mp4
-*.avi
-*.weights
-outputs/**
-detections/**
-checkpoints/**
