@@ -16,20 +16,14 @@ RUN source /conda/bin/activate \
 	&& conda init bash \
 	&& conda env create -f conda-or-obj-detection.yml
 
-COPY ./weights ./app/data/
+COPY ./weights/ ./app/data/
 
 COPY ./app /app
 
 RUN mkdir /scripts
 COPY docker-start-command.sh /scripts/docker-start-command.sh
 
-# RUN Xvfb -ac :99 -screen 0 800x600x16 +extension RANDR
-
 RUN ["chmod", "a+x", "/scripts/docker-start-command.sh"]
-
-# virtual display used by vlc to make snapshots
 
 # ENTRYPOINT
 ENTRYPOINT bash ./scripts/docker-start-command.sh
-# CMD ['object_tracker.py']
-	
