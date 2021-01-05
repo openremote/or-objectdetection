@@ -28,6 +28,7 @@ export async function getFeedDetails(id: number) {
 
 export async function createFeed(feed: Feed) {
     let { data } = await axios.post<Feed>("/feeds", feed);
+    console.log(data);
     return data;
 }
 

@@ -1,31 +1,12 @@
 import React from "react";
+import { connect } from 'react-redux'
 import { makeStyles } from "@material-ui/core/styles";
-import {
-    Button,
-    CardHeader,
-    CardMedia,
-    Grid,
-    Typography,
-    CardActions,
-    Card,
-    CardContent,
-    Box,
-    TextField,
-    Avatar
-} from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Slide from "@material-ui/core/Slide";
+import { Button, CardHeader, CardMedia, Grid, Typography, CardActions, Card, CardContent, Box, TextField, Avatar, Dialog, Slide, Tab, Tabs } from "@material-ui/core";
 import Image from "../../Images/CamPlaceholder.PNG";
-import { grey } from "@material-ui/core/colors";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import plusIcon from "assets/plusicon.png";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import PropTypes from "prop-types";
+import { LoadVideoSources, AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
 
 const useStyles = makeStyles({
     title: {
@@ -34,9 +15,14 @@ const useStyles = makeStyles({
     title1: {
         fontWeight: 600,
         margin: 45,
-        textAlign: "left"
+        textAlign: "center"
     },
     title2: {
+        marginBottom: 15,
+        textAlign: "left"
+    },
+    title3: {
+        fontSize: 18,
         marginBottom: 15,
         textAlign: "left"
     },
@@ -51,42 +37,25 @@ const useStyles = makeStyles({
         marginBottom: 30,
     },
     textField: {
+        width: "30%",
+        marginRight: 20,
         marginBottom: 20,
-        fontWeight: 500,
-        width: "70%",
-        minWidth: 280,
-        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#4D9D2A"
-        },
-        "& .MuiInputLabel-outlined": {
-            color: "#4D9D2A"
-        }
     },
     urlField: {
         width: "100%",
+        marginBottom: 20,
     },
     credentialsField: {
         width: "30%",
         marginRight: 20,
-        marginTop: 20,
-        marginBottom: 30
+        marginBottom: 50,
     },
-
     paper: {
         borderRadius: 15,
-        padding: 20
+        padding: 20,
+        alignContent: "center",
+        alignItems: "center"
     },
-    tab: {
-        width: "100%",
-        "& .MuiTab-root": {
-            maxWidth: 1000,
-        }
-        ,
-        textAlign: "left"
-    },
-    tabs: {
-        marginLeft: "45px"
-    }
 });
 
 const pulseStyles = makeStyles((theme) => ({
@@ -116,12 +85,16 @@ const pulseStyles = makeStyles((theme) => ({
         justifyContent: "center",
         alignItems: "center"
     },
-
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const mapStateToProps = state => ({
+    feeds: state.sources.videoSources
+});
+const mapDispatch = { LoadVideoSources, AddVideoSource }
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -156,11 +129,35 @@ function a11yProps(index) {
     };
 }
 
-export default function Popup(props) {
+function Popup(props) {
     const classes = useStyles();
     const pulseclasses = pulseStyles();
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = React.useState(false);
+    const [newFeed, setNewFeed] = React.useState({
+        name: "",
+        location: "",
+        description: "",
+        url: "",
+        feed_type: 1,
+        active: false
+    });
+
+    const editName = target => {
+        setNewFeed(prev => ({ ...prev, name: target.value }))
+    };
+
+    const editLocation = target => {
+        setNewFeed(prev => ({ ...prev, location: target.value }))
+    };
+
+    const editDescription = target => {
+        setNewFeed(prev => ({ ...prev, description: target.value }))
+    };
+
+    const editUrl = target => {
+        setNewFeed(prev => ({ ...prev, url: target.value }))
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -173,6 +170,13 @@ export default function Popup(props) {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const onFormSubmit = e => {
+        e.preventDefault();
+        console.log(newFeed)
+        props.AddVideoSource(newFeed)
+
+    }
 
     return (
         <div>
@@ -234,8 +238,8 @@ export default function Popup(props) {
                     aria-label="simple tabs example"
                     className={classes.tabs}
                 >
-                    <Tab label="Simpele Configuratie" {...a11yProps(0)} className={classes.tab} />
-                    <Tab label="Geavanceerde Configuratie" {...a11yProps(1)} className={classes.tab} />
+                    <Tab label="Quick ADD" {...a11yProps(0)} className={classes.tab} />
+                    <Tab label="Manual config" {...a11yProps(1)} className={classes.tab} />
                 </Tabs>
 
                 <TabPanel value={value} index={0}>
@@ -265,35 +269,57 @@ export default function Popup(props) {
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Typography className={classes.title2} variant="h6">
-                        Via Stream URL:
-          </Typography>
-
-                    <Box>
-                        <TextField
-                            className={classes.textField, classes.urlField}
-                            id="outlined-basic"
-                            label="URL"
-                            placeholder="https://www.openremote.com/media/street.mp4"
-                        />
-                        <TextField
-                            className={classes.textField, classes.credentialsField}
-                            id="outlined-basic"
-                            label="Username"
-                        />
-                        <TextField
-                            className={classes.textField, classes.credentialsField}
-                            id="outlined-basic"
-                            label="Password"
-                        />
-                    </Box>
-                    <Box>
-                        <Button variant="contained" color="primary" size="large">
-                            Toevoegen
-                        </Button>
-                    </Box>
+                    <Typography className={classes.title3} >
+                        New feed config:
+                    </Typography>
+                    <form onSubmit={onFormSubmit}>
+                        <Box>
+                            <TextField
+                                className={classes.textField}
+                                id="outlined-basic"
+                                label="Name"
+                                onInput={e => editName(e.target)}
+                            />
+                            <TextField
+                                className={classes.textField}
+                                id="outlined-basic"
+                                label="Location"
+                                onInput={e => editLocation(e.target)}
+                            />
+                            <TextField
+                                className={classes.urlField}
+                                id="outlined-basic"
+                                label="Description"
+                                onInput={e => editDescription(e.target)}
+                            />
+                            <TextField
+                                className={classes.urlField}
+                                id="outlined-basic"
+                                label="URL"
+                                placeholder="https://www.openremote.com/media/street.mp4"
+                                onInput={e => editUrl(e.target)}
+                            />
+                            <TextField
+                                className={classes.credentialsField}
+                                id="outlined-basic"
+                                label="Username"
+                            />
+                            <TextField
+                                className={classes.credentialsField}
+                                id="outlined-basic"
+                                label="Password"
+                            />
+                        </Box>
+                        <Box>
+                            <Button type="submit" variant="contained" color="primary" size="large">
+                                ADD
+                            </Button>
+                        </Box>
+                    </form>
                 </TabPanel>
             </Dialog>
         </div>
     );
 }
+
+export default connect(mapStateToProps, mapDispatch)(Popup);
