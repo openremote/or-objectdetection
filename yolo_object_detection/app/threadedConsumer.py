@@ -128,7 +128,6 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 	outputFrame = None
 	# while video is running
 
-	#video_path is int or "youtube." not in video_path
 	if False:
 		video_consumer = consume_file(video_path)
 	else:

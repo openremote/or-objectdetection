@@ -12,9 +12,6 @@ def consume_ipcam(url):
 	player = instance.media_player_new()
 	
 	player.set_mrl(url)
-	# player.set_media(media)
-
-	# player = vlc.MediaPlayer(url)
 	player.play()
 	i=0
 	while True:
