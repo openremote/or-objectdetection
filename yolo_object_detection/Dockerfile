@@ -16,11 +16,10 @@ RUN source /conda/bin/activate \
 	&& conda init bash \
 	&& conda env create -f conda-or-obj-detection.yml
 
-# COPY ./weights/ ./app/data/
-
 COPY ./app /app
 
 RUN wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights -O ./app/data/yolov4.weights
+
 RUN mkdir /scripts
 COPY docker-start-command.sh /scripts/docker-start-command.sh
 
