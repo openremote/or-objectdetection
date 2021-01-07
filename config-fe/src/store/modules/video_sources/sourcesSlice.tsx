@@ -1,8 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Feed, getFeeds, getFeedDetails, createFeed, deleteFeed } from 'api/FeedApi';
+import { Feed, getFeeds, getFeedDetails, createFeed, deleteFeed, Snapshot } from 'api/FeedApi';
+import stompClient from 'rabbitMQ/rabbitMQ'
+import store from 'store/store';
 
-const initialState: { videoSources: Feed[] } = {
-  videoSources: []
+const initialState: { videoSources: Feed[], snapshots: Snapshot[] } = {
+  videoSources: [],
+  snapshots: []
 };
 
 export const sourcesSlice = createSlice({
@@ -18,16 +21,17 @@ export const sourcesSlice = createSlice({
         state.videoSources.push(action.payload);
       },
       RemoveSource: (state, action : PayloadAction<Feed>) => {
-        //make api call
-
         //delete from local state array.
         var indexOfVideoToDelete = state.videoSources.indexOf(action.payload);
         state.videoSources.splice(indexOfVideoToDelete, 1);
+      },
+      LoadSnapshots: (state, action: PayloadAction<Snapshot[]>) => {
+        state.snapshots = action.payload;
       }
     },
   });
   
-export const { LoadSources, AddSource, RemoveSource } = sourcesSlice.actions;
+export const { LoadSources, AddSource, RemoveSource, LoadSnapshots } = sourcesSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
@@ -55,4 +59,41 @@ export const RemoveVideoSource = (videoSource: Feed) => async (dispatch : any) =
   } else {
     console.log("FAILED TO DELETE VIDEO FEED");
   }
+}
+
+export const FetchSnapshots = () => async (dispatch : any) => {
+  let tempSnapshots = [] as Snapshot[];
+
+  //fetch stompclient instance
+  let client = stompClient;
+
+  //attempt to connect to rabbitmq
+  client.activate();
+
+  client.onConnect =  (frame) => {
+
+    for(let feed of store.getState().sources.videoSources) {
+      //only fetch for active feeds.
+      if(feed.active) {
+        //subscribe to the queue for messages.
+        var sub = client.subscribe("/queue/video-queue/", (message) => {
+
+          let blob = new Blob([message.binaryBody]);
+          let snapshot: Snapshot = { feed_id: feed.id, snapshot: blob};
+          tempSnapshots.push(snapshot);
+
+          //if we got a message unsubscribe
+          sub.unsubscribe();
+        });
+      }
+    }
+  };
+
+  //wait 3 seconds then deactivate the client to give the client time to receive a single frame.
+  setTimeout(function() {
+    client.deactivate();
+  }, 3000);
+
+  //in the end, pass all the results to the snapshot state.
+  dispatch(LoadSnapshots(tempSnapshots));
 }

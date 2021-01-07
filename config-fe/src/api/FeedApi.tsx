@@ -18,6 +18,11 @@ export interface Feed {
     configuration: Config
 }
 
+export interface Snapshot {
+    feed_id: number
+    snapshot: Blob
+}
+
 export async function getFeeds() {
     let { data } = await axios.get<Feed[]>("/feeds")
     return data
