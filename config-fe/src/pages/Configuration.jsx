@@ -2,8 +2,8 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Card, TextField, FormGroup, Chip, FormControlLabel, Checkbox, Button, CardContent, FormControl, MenuItem, InputLabel, Box } from "@material-ui/core";
 import Canvas from "../features/custom/Canvas";
-import { SaveConfig, LoadConfig } from "../store/modules/configuration/configSlice";
-import { withRouter } from 'react-router-dom';
+import { SaveConfig, LoadConfig, UpdateConfig } from "../store/modules/configuration/configSlice";
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Detections from '../Model/Detections';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -73,12 +73,10 @@ const useStyles = (theme) => ({
 });
 
 const mapStateToProps = (state) => {
-    console.log("retreived config:");
-    console.log(state.config.configSource);
     return { config: state.config.configSource };
 }
 
-const mapDispatch = { LoadConfig, SaveConfig }
+const mapDispatch = { LoadConfig, SaveConfig, UpdateConfig }
 
 class Configuration extends React.Component {
 
@@ -88,7 +86,7 @@ class Configuration extends React.Component {
 
         this.configuration = {
             feed_id: this.props.match.params.id,
-            name: "",
+            name: "test",
             resolution: "",
             detection_types: [],
             drawables: ""
@@ -96,6 +94,7 @@ class Configuration extends React.Component {
 
         this.state = {
             isLoading: true,
+            existingConfig: false,
             D: false,
             BB: false,
             CLC: false,
@@ -110,20 +109,21 @@ class Configuration extends React.Component {
 
     async componentDidMount() {
         await this.props.LoadConfig(this.props.match.params.id);
+        if(this.props.config != null) {
+            this.setState({ existingConfig: true });
+            this.configuration.name = this.props.config.name;
+            this.configuration.resolution = this.props.config.resolution;
 
-        this.configuration.name = this.props.config.name;
-        this.configuration.resolution = this.props.config.resolution;
-
-        this.props.config.detections.map(object => {
-            this.state.fixedOptions.push(object.detectionType);
-        });
+            this.props.config.detections.map(object => {
+                this.state.fixedOptions.push(object.detectionType);
+            });
+        }
 
         this.setState({ isLoading: false });
     }
 
     onChange = (event, value) => {
         this.configuration.detection_types = value;
-        console.log(this.configuration.detection_types)
     }
 
     handleChange = (e) => {
@@ -136,8 +136,14 @@ class Configuration extends React.Component {
 
     onFormSubmit = e => {
         e.preventDefault();
-        console.log(this.configuration)
-        this.props.SaveConfig(this.configuration)
+
+        //check if we are updating an existing config or creating a new one.
+        if(this.state.existingConfig) {
+            this.configuration.id = this.props.config.id;
+            this.props.UpdateConfig(this.configuration)
+        } else {
+            this.props.SaveConfig(this.configuration)
+        }
 
         this.configuration.detection_types.map(object => {
             this.state.fixedOptions.push(object);
@@ -145,7 +151,6 @@ class Configuration extends React.Component {
     }
 
     handleDrawables = (drawables) => {
-        console.log(drawables);
         this.configuration.drawables = drawables;
     }
 
@@ -183,7 +188,7 @@ class Configuration extends React.Component {
                                                 >
                                                     <TextField
                                                         id="standard-basic"
-                                                        defaultValue={config.name}
+                                                        defaultValue={config?.name}
                                                         onInput={e => this.configuration.name = e.target.value}
                                                     />
                                                 </Typography>
@@ -230,7 +235,7 @@ class Configuration extends React.Component {
                                                 >
                                                     <TextField
                                                         id="standard-basic"
-                                                        value={config.resolution}
+                                                        value={config?.resolution}
                                                         onInput={e => this.configuration.resolution = e.target.value}
                                                         disabled
                                                     />
@@ -388,13 +393,16 @@ class Configuration extends React.Component {
                                                     >
                                                         Save
                                                     </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="default"
-                                                        className={classes.Buttons}
-                                                    >
-                                                        Cancel
-                                                    </Button>
+                                                    <Link to="/" style={{ textDecoration: 'none' }}>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="default"
+                                                            className={classes.Buttons}
+                                                            
+                                                        >
+                                                            Cancel
+                                                        </Button>
+                                                    </Link>
                                                 </FormGroup>
                                             </FormControl>
                                         </Box>

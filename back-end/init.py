@@ -8,7 +8,7 @@ from flask_restful import Api
 from flask_cors import CORS
 
 # import resources
-from resources.configuration import ConfigurationAPI, ConfigurationListAPI
+from resources.configuration import ConfigurationAPI, ConfigurationListAPI, ConfigurationByFeedAPI
 from resources.feed import VideoFeedAPI, VideoFeedListAPI, VideoFeedStreamAPI
 
 # import database
@@ -29,6 +29,7 @@ def create_app():
     # add resources
     api.add_resource(ConfigurationListAPI, '/configurations',   endpoint='configs')
     api.add_resource(ConfigurationAPI, '/configurations/<int:config_ID>', endpoint='config')
+    api.add_resource(ConfigurationByFeedAPI, '/configurations/feed/<int:feed_ID>', endpoint='configfeed')
     api.add_resource(VideoFeedListAPI, '/feeds', endpoint='feeds')
     api.add_resource(VideoFeedAPI, '/feeds/<int:feed_ID>', endpoint='feed')
     api.add_resource(VideoFeedStreamAPI, '/feeds/start/<int:feed_ID>', endpoint='start_feed')

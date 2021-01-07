@@ -55,6 +55,67 @@ class ConfigurationListAPI(Resource):
         return config_schema.dump(config)
 
 
+class ConfigurationByFeedAPI(Resource):
+    def get(self, feed_ID):
+        if feed_ID is None:
+            return abort(400, description="missing required parameter")
+        else:
+            configuration = Conf.query.filter_by(feed_id=feed_ID).first()
+            if configuration is None:
+                abort(404, description=f"Configuration with feed id: {feed_ID} not found")
+            else:
+                config_schema = ConfigurationSchema()
+                return config_schema.dump(configuration)
+
+    def put(self, feed_ID):
+        if feed_ID is None:
+            return abort(400, description="missing required parameter")
+        else:
+            # get a scoped DB session
+            scoped_session = db_session()
+
+            configuration = Conf.query.filter_by(feed_id=feed_ID).first()
+            if configuration is None:
+                abort(404, description=f"Configuration with feed id: {feed_ID} not found")
+            else:
+                # Update entity based on JSON data
+                json_data = request.get_json(force=True)
+
+                if 'detection_types' in json_data:
+                    detectiontypes = json_data['detection_types']
+                    # Wipe detection types and re set them based on the given detectiontypes
+                    configuration.detections.clear()
+                    for item in detectiontypes:
+                        dt = DetectionTypes(detectiontype=item)
+                        configuration.detections.append(dt)
+
+                configuration.name = json_data['name']
+                configuration.resolution = json_data['resolution']
+                # Fetch drawables if they exist
+                if 'drawables' in json_data:
+                    configuration.drawables = json_data['drawables']
+
+                scoped_session.commit()
+                # convert to JSON and return to user
+                config_schema = ConfigurationSchema()
+                return config_schema.dump(configuration)
+
+    def delete(self, feed_ID):
+        if feed_ID is None:
+            return abort(400, description="missing required parameter")
+        else:
+            # get a scoped DB session
+            scoped_session = db_session()
+
+            configuration = Conf.query.filter_by(feed_id=feed_ID).first()
+            if configuration is None:
+                abort(404, description=f"Configuration with feed id: {feed_ID} not found")
+            else:
+                scoped_session.delete(configuration)
+                scoped_session.commit()
+                return ('', HTTPStatus.NO_CONTENT)
+
+
 class ConfigurationAPI(Resource):
     def get(self, config_ID):
         if config_ID is None:
