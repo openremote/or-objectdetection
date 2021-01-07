@@ -1,4 +1,5 @@
 import axios from 'api/axios';
+import { Config } from './ConfigApi';
 
 enum CamType {
     webcam = 1,
@@ -14,6 +15,7 @@ export interface Feed {
     feed_type: CamType
     url: string
     active: boolean
+    configuration: Config
 }
 
 export async function getFeeds() {
