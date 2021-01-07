@@ -8,7 +8,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 //icons
 import EditIcon from '@material-ui/icons/Edit';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import logo from 'assets/office.jpg';
 
 //custom component imports
@@ -23,13 +22,14 @@ const styles = theme => ({
     avatar: {
         backgroundColor: green[500],
     },
+
 });
 
 class customVideoCard extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
-            <Card>
+            <Card className={classes.card}>
                 <CardHeader
                     avatar={
                         <Avatar className={classes.avatar}>

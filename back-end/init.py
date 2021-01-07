@@ -8,35 +8,40 @@ from flask_restful import Api
 from flask_cors import CORS
 
 # import resources
-from resources.configuration import ConfigurationAPI, ConfigurationListAPI
+from resources.configuration import ConfigurationAPI, ConfigurationListAPI, ConfigurationByFeedAPI
 from resources.feed import VideoFeedAPI, VideoFeedListAPI, VideoFeedStreamAPI
 
 # import database
 from database.init_db import db_session, init_db
 
-# init Database
-init_db()
 
-# init API
-app = Flask(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
-api = Api(app)
+def create_app():
+    # init API
+    app = Flask(__name__)
+    app.config['CORS_HEADERS'] = 'Content-Type'
+    api = Api(app)
 
-cors = CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+    cors = CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-# add resources
-api.add_resource(ConfigurationListAPI, '/configurations',   endpoint='configs')
-api.add_resource(ConfigurationAPI, '/configurations/<int:config_ID>', endpoint='config')
-api.add_resource(VideoFeedListAPI, '/feeds', endpoint='feeds')
-api.add_resource(VideoFeedAPI, '/feeds/<int:feed_ID>', endpoint='feed')
-api.add_resource(VideoFeedStreamAPI, '/feeds/start/<int:feed_ID>', endpoint='start_feed')
+    # init Database
+    init_db()
 
+    # add resources
+    api.add_resource(ConfigurationListAPI, '/configurations',   endpoint='configs')
+    api.add_resource(ConfigurationAPI, '/configurations/<int:config_ID>', endpoint='config')
+    api.add_resource(ConfigurationByFeedAPI, '/configurations/feed/<int:feed_ID>', endpoint='configfeed')
+    api.add_resource(VideoFeedListAPI, '/feeds', endpoint='feeds')
+    api.add_resource(VideoFeedAPI, '/feeds/<int:feed_ID>', endpoint='feed')
+    api.add_resource(VideoFeedStreamAPI, '/feeds/start/<int:feed_ID>', endpoint='start_feed')
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db_session.remove()
+
+    return app
 
 
 if __name__ == '__main__':
+    app = create_app()
     app.run(host=os.getenv("BACKEND_HOST", "localhost"), port=os.getenv("BACKEND_PORT", "5050"), debug=True)
 

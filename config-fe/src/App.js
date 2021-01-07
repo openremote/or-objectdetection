@@ -13,12 +13,11 @@ import { checkIsUserAuthenticated } from "./store/modules/auth/authSlice";
 const App = () => {
   const dispatch = useDispatch();
   const authSelect = useSelector(state => state.auth);
-
   useEffect(() => {
     dispatch(checkIsUserAuthenticated());
   }, []);
 
-  if(!authSelect.loading) {
+  if (!authSelect.loading) {
     return (
       <Container maxWidth={false} disableGutters>
         <Box display="flex" flexDirection="row">

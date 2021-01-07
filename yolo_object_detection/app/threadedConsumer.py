@@ -128,7 +128,6 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 	outputFrame = None
 	# while video is running
 
-	#video_path is int or "youtube." not in video_path
 	if False:
 		video_consumer = consume_file(video_path)
 	else:
@@ -176,14 +175,6 @@ class Worker(ConsumerMixin, threading.Thread):
 			self.encoder = encoder
 			self.tracker = tracker
 			super(Worker, self).__init__(daemon=True)
-
-			# url = './data/video/cars.mp4'
-			# url = 'https://www.youtube.com/watch?v=eJ7ZkQ5TC08'
-			# url = 'https://www.youtube.com/watch?v=yz5sty-eeNg'
-			# url = 'rtsp://213.193.89.202/view/viewer_index.shtml?id=39515'
-			# url = 'https://www.youtube.com/watch?v=lkIJYc4UH60'
-			# url = 'http://86.83.75.11:8082/video'
-			# start_analysis(url, self.interpreter, input_details=self.input_details, output_details=self.output_details, infer=self.infer, encoder=self.encoder, tracker=tracker)
 
 	def run(self):
 			super(Worker, self).run()

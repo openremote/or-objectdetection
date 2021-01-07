@@ -1,4 +1,5 @@
 import axios from 'api/axios';
+import { Config } from './ConfigApi';
 
 enum CamType {
     webcam = 1,
@@ -14,6 +15,7 @@ export interface Feed {
     feed_type: CamType
     url: string
     active: boolean
+    configuration: Config
 }
 
 export async function getFeeds() {
@@ -28,11 +30,12 @@ export async function getFeedDetails(id: number) {
 
 export async function createFeed(feed: Feed) {
     let { data } = await axios.post<Feed>("/feeds", feed);
+    console.log(data);
     return data;
 }
 
 export async function deleteFeed(feed: Feed) {
     let response = await axios.delete(`/feeds/${feed.id}`)
 
-    return response.status == 204;
+    return response.status === 204;
 }
