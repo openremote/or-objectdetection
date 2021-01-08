@@ -22,6 +22,7 @@
     "clsx": "^1.1.1",
     "cors": "^2.8.5",
     "fontsource-roboto": "^3.0.3",
+    "get-video-dimensions": "^1.0.0",
     "konva": "^7.2.0",
     "line-reader": "^0.4.0",
     "prop-types": "^15.7.2",

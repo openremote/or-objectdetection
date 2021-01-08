@@ -4,7 +4,7 @@ import stompClient from 'rabbitMQ/rabbitMQ'
 import { Client, Message } from '@stomp/stompjs';
 
 import { Container } from '@material-ui/core';
-import { withStyles  } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
     videoPlayer: {
@@ -35,7 +35,7 @@ class Livefeed extends React.Component {
         //attempt to connect to rabbitmq
         this.stompClient.activate();
 
-        this.stompClient.onConnect =  (frame) => {
+        this.stompClient.onConnect = (frame) => {
             console.log("CONNECTED TO RABBITMQ")
 
             var subscription = this.stompClient.subscribe("/queue/video-queue", onQueueMessage);
@@ -47,6 +47,7 @@ class Livefeed extends React.Component {
             let image = new Image();
             let blob = new Blob([message.binaryBody]);
             let url = URL.createObjectURL(blob);
+            console.log(url)
             document.querySelector("#image").src = url;
             /*image.onload = () => {
 
@@ -71,13 +72,13 @@ class Livefeed extends React.Component {
 
     render() {
         const { classes } = this.props;
-        return(
+        return (
             <Container maxWidth={false}>
-                <img id="image" className={clsx(classes.videoPlayer)}/>
+                <img id="image" className={clsx(classes.videoPlayer)} />
                 {/*<canvas className={clsx(classes.videoPlayer)} ref={this.imageRef}/> */}
             </Container>
         )
     }
 }
 
-export default withStyles(styles, {withTheme: true})(Livefeed);
+export default withStyles(styles, { withTheme: true })(Livefeed);

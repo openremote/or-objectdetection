@@ -7,6 +7,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import plusIcon from "assets/plusicon.png";
 import PropTypes from "prop-types";
 import { LoadVideoSources, AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
+import getDimensions from 'get-video-dimensions';
 
 const useStyles = makeStyles({
     title: {
@@ -25,6 +26,18 @@ const useStyles = makeStyles({
         fontSize: 18,
         marginBottom: 15,
         textAlign: "left"
+    },
+    successMessage: {
+        fontSize: 14,
+        fontWeight: 400,
+        marginBottom: 15,
+        paddingLeft: 10,
+        textAlign: "left",
+        backgroundColor: "#57c22d",
+        color: "white",
+        borderRadius: 5,
+        lineHeight: 3,
+
     },
     pos: {
         marginBottom: 12
@@ -134,6 +147,7 @@ function Popup(props) {
     const pulseclasses = pulseStyles();
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
     const [newFeed, setNewFeed] = React.useState({
         name: "",
         location: "",
@@ -174,8 +188,39 @@ function Popup(props) {
     const onFormSubmit = e => {
         e.preventDefault();
         console.log(newFeed)
-        props.AddVideoSource(newFeed)
 
+        //get video resolution
+        getVideoDimensionsOf(newFeed.url)
+            .then(({ width, height }) => {
+                console.log("Video width: " + width);
+                console.log("Video height: " + height);
+            });
+
+        //props.AddVideoSource(newFeed);
+
+        setSuccess(true);
+    }
+
+    function getVideoDimensionsOf(url) {
+        return new Promise(function (resolve) {
+            // create the video element
+            let video = document.createElement('video');
+
+            // place a listener on it
+            video.addEventListener("loadedmetadata", function () {
+                // retrieve dimensions
+                let height = this.videoHeight;
+                let width = this.videoWidth;
+                // send back result
+                resolve({
+                    height: height,
+                    width: width
+                });
+            }, false);
+
+            // start download meta-datas
+            video.src = url;
+        });
     }
 
     return (
@@ -269,6 +314,12 @@ function Popup(props) {
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
+
+
+                    {success ? <Typography className={classes.successMessage}>
+                        Video successfully added!
+                    </Typography> : null}
+
                     <Typography className={classes.title3} >
                         New feed config:
                     </Typography>
@@ -277,6 +328,7 @@ function Popup(props) {
                             <TextField
                                 className={classes.textField}
                                 id="outlined-basic"
+                                required="Required"
                                 label="Name"
                                 onInput={e => editName(e.target)}
                             />
@@ -290,12 +342,14 @@ function Popup(props) {
                                 className={classes.urlField}
                                 id="outlined-basic"
                                 label="Description"
+                                required="Required"
                                 onInput={e => editDescription(e.target)}
                             />
                             <TextField
                                 className={classes.urlField}
                                 id="outlined-basic"
                                 label="URL"
+                                required="Required"
                                 placeholder="https://www.openremote.com/media/street.mp4"
                                 onInput={e => editUrl(e.target)}
                             />
