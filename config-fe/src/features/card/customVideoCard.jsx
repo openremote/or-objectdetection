@@ -24,6 +24,7 @@ const styles = theme => ({
     avatar: {
         backgroundColor: green[500],
     },
+
 });
 
 class customVideoCard extends React.Component {
@@ -39,7 +40,7 @@ class customVideoCard extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
-            <Card>
+            <Card className={classes.card}>
                 <CardHeader
                     avatar={
                         <Avatar className={classes.avatar}>
