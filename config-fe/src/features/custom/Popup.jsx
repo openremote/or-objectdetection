@@ -6,8 +6,7 @@ import Image from "../../Images/CamPlaceholder.PNG";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import plusIcon from "assets/plusicon.png";
 import PropTypes from "prop-types";
-import { LoadVideoSources, AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
-import getDimensions from 'get-video-dimensions';
+import { AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
 
 const useStyles = makeStyles({
     title: {
@@ -196,7 +195,7 @@ function Popup(props) {
                 console.log("Video height: " + height);
             });
 
-        //props.AddVideoSource(newFeed);
+        props.AddVideoSource(newFeed);
 
         setSuccess(true);
     }
@@ -314,7 +313,6 @@ function Popup(props) {
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-
 
                     {success ? <Typography className={classes.successMessage}>
                         Video successfully added!
