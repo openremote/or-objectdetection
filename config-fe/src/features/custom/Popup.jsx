@@ -6,8 +6,12 @@ import Image from "../../Images/CamPlaceholder.PNG";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import plusIcon from "assets/plusicon.png";
 import PropTypes from "prop-types";
+<<<<<<< HEAD
 import { LoadVideoSources, AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
 import getDimensions from 'get-video-dimensions';
+=======
+import { AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
+>>>>>>> 3aecaf0bcdf3d62007147b2f890845a002341ef4
 
 const useStyles = makeStyles({
     title: {
@@ -107,7 +111,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const mapStateToProps = state => ({
     feeds: state.sources.videoSources
 });
-const mapDispatch = { LoadVideoSources, AddVideoSource }
+const mapDispatch = { AddVideoSource }
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
