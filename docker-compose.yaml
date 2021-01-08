@@ -43,6 +43,9 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_MIG_CONFIG_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=:0.0
+    devices:
+      - /dev/snd
     links:
       - rabbitmq
     privileged: true

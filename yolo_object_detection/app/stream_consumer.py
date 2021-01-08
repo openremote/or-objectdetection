@@ -8,7 +8,7 @@ import time
 
 def consume_ipcam(url):
 	# -I dummy --dummy-quiet --no-video
-	instance = vlc.Instance('--intf dummy --vout dummy')
+	instance = vlc.Instance('--intf dummy --vout dummy --no-audio --no-sout-audio --no-ts-trust-pcr --ts-seek-percent')
 	player = instance.media_player_new()
 	
 	player.set_mrl(url)
@@ -62,7 +62,7 @@ def consume_youtube(youtube_url, quality = 'normal'):
 		stream_url = info_dict['url']
 
 
-		i = vlc.Instance("--vout=dummy")
+		i = vlc.Instance("--intf dummy --vout=dummy --no-audio --no-sout-audio --no-ts-trust-pcr --ts-seek-percent")
 
 		p = i.media_player_new()
 		p.set_mrl(stream_url)
