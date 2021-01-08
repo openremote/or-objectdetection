@@ -1,9 +1,12 @@
-FROM tensorflow/tensorflow:latest-gpu
+FROM tensorflow/tensorflow:2.2.2-gpu
+# nvidia/cuda:11.1-runtime
+#
+#latest-gpu  nvidia/cuda:11.1-runtime
 
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y curl wget vlc xvfb
-
+# libgtk2.0-dev pkg-config
 WORKDIR /tmp
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh \
 	&& chmod +x miniconda.sh && mkdir /root/.conda \

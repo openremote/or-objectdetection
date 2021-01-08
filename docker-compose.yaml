@@ -39,7 +39,10 @@ services:
     image: or-obj-detection:latest
     build: yolo_object_detection/.
     environment:
-      - RABBITMQ_URL="rabbitmq"
+      - RABBITMQ_URL=rabbitmq
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_MIG_CONFIG_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
     links:
       - rabbitmq
     privileged: true

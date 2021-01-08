@@ -61,7 +61,16 @@ def consume_youtube(youtube_url, quality = 'normal'):
 		info_dict = dloader.extract_info(youtube_url, download=False)
 		stream_url = info_dict['url']
 
-		player = vlc.MediaPlayer(stream_url)
+
+		i = vlc.Instance("--vout=dummy")
+
+		p = i.media_player_new()
+		p.set_mrl(stream_url)
+
+		player = p #vlc.MediaPlayer(stream_url)
+
+
+
 		player.play()
 
 		while True:
