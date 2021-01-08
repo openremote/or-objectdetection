@@ -102,9 +102,6 @@ class VideoFeedStreamAPI(Resource):
             if feed is None:
                 abort(404, description=f"Feed {feed_ID} not found")
             else:
-                json_data = request.get_json(force=True)
-                # TODO : in de toekomst meer waardes sturen naast de id?, bijv coco classes, tenzij we deze ook
-                #  opslaan in de db.
                 with Connection(rabbit_url, heartbeat=4) as conn:
                     # flip boolean
                     feed.active = not feed.active
@@ -124,3 +121,7 @@ class VideoFeedStreamAPI(Resource):
                     scoped_session.commit()
 
                     conn.release()
+
+                # convert to JSON and return to user
+                feed_schema = FeedSchema()
+                return feed_schema.dump(feed)

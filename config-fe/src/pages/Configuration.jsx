@@ -7,6 +7,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Detections from '../Model/Detections';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import OfflinePlaceholder from 'assets/offline.png';
 
 const useStyles = (theme) => ({
     formControl: {
@@ -72,9 +73,10 @@ const useStyles = (theme) => ({
     }
 });
 
-const mapStateToProps = (state) => {
-    return { config: state.config.configSource };
-}
+const mapStateToProps = state => ({
+    config: state.config.configSource,
+    snapshots: state.sources.snapshots
+});
 
 const mapDispatch = { LoadConfig, SaveConfig, UpdateConfig }
 
@@ -120,6 +122,33 @@ class Configuration extends React.Component {
         }
 
         this.setState({ isLoading: false });
+    }
+
+    SnapshotAvailable() {
+        if(this.props.snapshots && this.props.snapshots.length > 0) {
+            let blob = this.props.snapshots.find(x => x.feed_id == this.props.match.params.id)?.snapshot;
+            if(blob) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    FetchBlobPreview() {
+        if(this.props.snapshots && this.props.snapshots.length > 0) {
+            let blob = this.props.snapshots.find(x => x.feed_id == this.props.match.params.id)?.snapshot;
+            if(blob) {
+                let url = URL.createObjectURL(blob);
+                return url;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     onChange = (event, value) => {
@@ -414,7 +443,7 @@ class Configuration extends React.Component {
                             <Typography variant="h3" className={classes.title}>
                                 Camera Preview
                     </Typography>
-                            <img src="https://static.dw.com/image/47113704_303.jpg" />
+                            <img src={(this.SnapshotAvailable()) ? this.FetchBlobPreview() : OfflinePlaceholder}/>
                             <Canvas width={1280} height={720} onDrawablesRecieve={this.handleDrawables} />
                         </Grid>
                     </Grid>
