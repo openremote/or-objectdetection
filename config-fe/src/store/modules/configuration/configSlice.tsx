@@ -1,28 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Config, getConfig, saveConfig } from 'api/ConfigApi';
+import { Config, getConfig, saveConfig, UpdateConf } from 'api/ConfigApi';
 
-const configuration: Config = {
-  id: 0,
-  name: "",
-  resolution: "",
-  framerate: "",
-  detections_types: [],
-  drawables: "",
-  options: [],
-  active: false
-}
+// default configuration state, or state taken when config failed to load.
 
-const initialState: { configSource: Config } = {
-  configSource: configuration
+
+const initialState: { configSource: (null | Config) } = {
+  configSource: null
 };
 
 export const sourcesSlice = createSlice({
   name: 'sources',
   initialState,
   reducers: {
-    LoadConfigurations: (state, action: PayloadAction<Config>) => {
-      //set sources loaded from API to local state.
-      state.configSource = action.payload;
+    LoadConfigurations: (state, action: PayloadAction<Config | undefined>) => {
+      if(action.payload) {
+        //set sources loaded from API to local state.
+        state.configSource = action.payload;
+      } else {
+        state.configSource = null;
+      }
     },
     SaveConfigurations: (state, action: PayloadAction<Config>) => {
       //add video source to local state array
@@ -45,9 +41,14 @@ export const LoadConfig = (id: number) => async (dispatch: any) => {
   dispatch(LoadConfigurations(config));
 }
 
-export const SaveConfig = (configuration: Config) => async (dispatch: any) => {
-  let config = await saveConfig(configuration)
+export const SaveConfig = (newConfig: Config) => async (dispatch: any) => {
+  let config = await saveConfig(newConfig)
   console.log(config)
+  dispatch(SaveConfigurations(config));
+}
+
+export const UpdateConfig = (updatedConfig: Config) => async (dispatch: any) => {
+  let config = await UpdateConf(updatedConfig)
   dispatch(SaveConfigurations(config));
 }
 

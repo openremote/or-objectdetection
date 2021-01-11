@@ -38,31 +38,16 @@ class Livefeed extends React.Component {
         this.stompClient.onConnect = (frame) => {
             console.log("CONNECTED TO RABBITMQ")
 
-            var subscription = this.stompClient.subscribe("/queue/video-queue", onQueueMessage);
+            this.stompClient.subscribe("/queue/video-queue", onQueueMessage);
             // Do something, all subscribes must be done is this callback
             // This is needed because this will be executed after a (re)connect
         };
 
         var onQueueMessage = (message) => {
-            let image = new Image();
             let blob = new Blob([message.binaryBody]);
             let url = URL.createObjectURL(blob);
             console.log(url)
             document.querySelector("#image").src = url;
-            /*image.onload = () => {
-
-                URL.revokeObjectURL(url)
-                var wrh = image.width / image.height;
-                var newWidth = this.imageRef.current.clientWidth;
-                var newHeight = newWidth / wrh;
-                if (newHeight > this.imageRef.current.clientHeight) {
-                    newHeight = this.imageRef.current.clientHeight;
-                    newWidth = newHeight * wrh;
-                }
-
-                this.context.drawImage(image, 0, 0, 200 , 200);
-            }
-            image.src = url;*/
         }
     }
 
@@ -75,7 +60,6 @@ class Livefeed extends React.Component {
         return (
             <Container maxWidth={false}>
                 <img id="image" className={clsx(classes.videoPlayer)} />
-                {/*<canvas className={clsx(classes.videoPlayer)} ref={this.imageRef}/> */}
             </Container>
         )
     }

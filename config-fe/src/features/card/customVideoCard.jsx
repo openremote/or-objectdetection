@@ -8,7 +8,9 @@ import { withStyles } from '@material-ui/core/styles';
 
 //icons
 import EditIcon from '@material-ui/icons/Edit';
-import logo from 'assets/office.jpg';
+import PlayIcon from '@material-ui/icons/PlayArrow';
+import StopIcon from '@material-ui/icons/Stop';
+import OfflinePlaceholder from 'assets/offline.png';
 
 //custom component imports
 import AvatarIcon from './avatarIcon';
@@ -26,6 +28,15 @@ const styles = theme => ({
 });
 
 class customVideoCard extends React.Component {
+    FetchUrlObjectForBlob(blob) {
+        if(blob) {
+            let url = URL.createObjectURL(blob);
+            return url;
+        } else {
+            return OfflinePlaceholder;
+        }
+    }
+
     render() {
         const classes = this.props.classes;
         return (
@@ -43,7 +54,7 @@ class customVideoCard extends React.Component {
                 <Link to={'/feed/' + this.props.Id}>
                     <CardMedia
                         className={classes.media}
-                        image={logo}
+                        image={(this.props.Active) ? this.FetchUrlObjectForBlob(this.props.Snapshot) : OfflinePlaceholder}
                         title="Paella dish"
                     />
                 </Link>
@@ -59,6 +70,15 @@ class customVideoCard extends React.Component {
                             <EditIcon color="primary" />
                         </Link>
                     </IconButton>
+                    {(this.props.Active) ?
+                    <IconButton aria-label="Start" onClick={() => this.props.OnStartStop(this.props.Id)}>
+                         <StopIcon/>
+                    </IconButton>
+                    :
+                    <IconButton aria-label="Stop" onClick={() => this.props.OnStartStop(this.props.Id)}>
+                        <PlayIcon/>
+                    </IconButton>
+                    }
                 </CardActions>
             </Card>
         )
@@ -70,7 +90,10 @@ customVideoCard.propTypes = {
     SourceName: PropTypes.string,
     SubName: PropTypes.string,
     Descripton: PropTypes.string,
-    SourceType: PropTypes.number
+    SourceType: PropTypes.number,
+    Active: PropTypes.bool,
+    Snapshot: PropTypes.any,
+    OnStartStop: PropTypes.func
 };
 
 export default withStyles(styles, { withTheme: true })(customVideoCard);

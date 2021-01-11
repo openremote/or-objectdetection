@@ -1,9 +1,14 @@
 import axios from 'api/axios';
+import { Config } from './ConfigApi';
 
 enum CamType {
     webcam = 1,
     ip_cam = 2,
     local_file = 3
+}
+
+export interface FeedChangeEvent {
+    feed_id: number
 }
 
 export interface Feed {
@@ -14,6 +19,12 @@ export interface Feed {
     feed_type: CamType
     url: string
     active: boolean
+    configuration: Config
+}
+
+export interface Snapshot {
+    feed_id: number
+    snapshot: Blob
 }
 
 export async function getFeeds() {
@@ -36,4 +47,9 @@ export async function deleteFeed(feed: Feed) {
     let response = await axios.delete(`/feeds/${feed.id}`)
 
     return response.status === 204;
+}
+
+export async function ChangeFeed(feed: FeedChangeEvent) {
+    let { data } = await axios.put<Feed>(`/feeds/start/${feed.feed_id}`, null);
+    return data;
 }

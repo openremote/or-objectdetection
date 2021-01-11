@@ -9,12 +9,20 @@ import AppBar from "features/core/Appbar/Appbar";
 
 // Actions
 import { checkIsUserAuthenticated } from "./store/modules/auth/authSlice";
+import { FetchSnapshots } from "./store/modules/video_sources/sourcesSlice"
 
 const App = () => {
   const dispatch = useDispatch();
   const authSelect = useSelector(state => state.auth);
   useEffect(() => {
     dispatch(checkIsUserAuthenticated());
+    //run fetchsnapshots instantly the first time.
+    dispatch(FetchSnapshots());
+
+    //run fetchsnapshots function every minute to retrieve snapshots of feeds.
+    const snapshotInterval = setInterval(() => {
+      dispatch(FetchSnapshots());
+    }, 60000);
   }, []);
 
   if (!authSelect.loading) {
