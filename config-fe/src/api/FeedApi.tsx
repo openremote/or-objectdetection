@@ -7,6 +7,10 @@ enum CamType {
     local_file = 3
 }
 
+export interface FeedChangeEvent {
+    feed_id: number
+}
+
 export interface Feed {
     id: number
     name: string
@@ -16,6 +20,11 @@ export interface Feed {
     url: string
     active: boolean
     configuration: Config
+}
+
+export interface Snapshot {
+    feed_id: number
+    snapshot: Blob
 }
 
 export async function getFeeds() {
@@ -38,4 +47,9 @@ export async function deleteFeed(feed: Feed) {
     let response = await axios.delete(`/feeds/${feed.id}`)
 
     return response.status === 204;
+}
+
+export async function ChangeFeed(feed: FeedChangeEvent) {
+    let { data } = await axios.put<Feed>(`/feeds/start/${feed.feed_id}`, null);
+    return data;
 }

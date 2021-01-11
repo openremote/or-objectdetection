@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { LoadVideoSources, AddVideoSource } from 'store/modules/video_sources/sourcesSlice'
+import { LoadVideoSources, AddVideoSource, StartStopVideoSource } from 'store/modules/video_sources/sourcesSlice'
+import { FeedChangeEvent } from 'api/FeedApi';
 
 import { Grid, Typography } from '@material-ui/core';
 import Popup from 'features/custom/Popup'
@@ -8,9 +9,10 @@ import CustomVideoCard from 'features/card/customVideoCard';
 import { withStyles } from '@material-ui/core/styles';
 
 const mapStateToProps = state => ({
-    feeds: state.sources.videoSources
+    feeds: state.sources.videoSources,
+    snapshots: state.sources.snapshots
 });
-const mapDispatch = { LoadVideoSources, AddVideoSource }
+const mapDispatch = { LoadVideoSources, AddVideoSource, StartStopVideoSource }
 
 const useStyles = (theme) => ({
     title: {
@@ -19,6 +21,14 @@ const useStyles = (theme) => ({
 });
 
 class Dashboard extends React.Component {
+    OnChangeFeedActive = (id) => {
+        let tempFeedStartChangeEvent = {
+            feed_id: id
+        };
+
+        this.props.StartStopVideoSource(tempFeedStartChangeEvent);
+    }
+
     componentDidMount() {
         this.props.LoadVideoSources();
     }
@@ -45,6 +55,9 @@ class Dashboard extends React.Component {
                                     SubName={value.location}
                                     Descripton={value.description}
                                     SourceType={value.feed_type}
+                                    Active={value.active}
+                                    Snapshot={(this.props.snapshots && this.props.snapshots.length > 0) ? this.props.snapshots.find(x => x.feed_id == value.id)?.snapshot : null}
+                                    OnStartStop={this.OnChangeFeedActive}
                                 />
                             </Grid>)
                     })}
