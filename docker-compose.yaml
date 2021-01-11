@@ -39,7 +39,7 @@ services:
     image: or-obj-detection:latest
     build: yolo_object_detection/.
     environment:
-      DISPLAY: :99
+      - RABBITMQ_URL="rabbitmq"
     links:
       - rabbitmq
     privileged: true

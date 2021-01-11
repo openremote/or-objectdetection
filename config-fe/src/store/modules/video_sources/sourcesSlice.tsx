@@ -40,25 +40,25 @@ export const { LoadSources, AddSource, RemoveSource, LoadSnapshots, ChangeFeedAc
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectSources = (state : any) => state.sources.videoSources;
+export const selectSources = (state: any) => state.sources.videoSources;
 
 export default sourcesSlice.reducer;
 
-  
-export const LoadVideoSources = () => async (dispatch : any) => {
+
+export const LoadVideoSources = () => async (dispatch: any) => {
   let feeds = await getFeeds();
   dispatch(LoadSources(feeds));
 }
 
-export const AddVideoSource = (videoSource: Feed) => async (dispatch : any) => {
+export const AddVideoSource = (videoSource: Feed) => async (dispatch: any) => {
   let feed = await createFeed(videoSource);
   dispatch(AddSource(feed));
 }
 
-export const RemoveVideoSource = (videoSource: Feed) => async (dispatch : any) => {
+export const RemoveVideoSource = (videoSource: Feed) => async (dispatch: any) => {
   let deleted = await deleteFeed(videoSource);
 
-  if(deleted) {
+  if (deleted) {
     dispatch(RemoveSource(videoSource));
   } else {
     console.log("FAILED TO DELETE VIDEO FEED");
