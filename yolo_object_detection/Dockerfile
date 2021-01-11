@@ -8,11 +8,11 @@ SHELL ["/bin/bash", "-c"]
 # ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata \
- && apt-get install -y curl wget vlc xvfb libglu1-mesa-dev freeglut3-dev mesa-common-dev \
+ && apt-get install -y curl wget vlc xvfb \
  libopencv-dev \
  libgtk2.0-dev \
  pkg-config alsa-base pulseaudio
-# libgtk2.0-dev pkg-config
+# libgtk2.0-dev pkg-config libglu1-mesa-dev freeglut3-dev mesa-common-dev
 WORKDIR /tmp
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh \
 	&& chmod +x miniconda.sh && mkdir /root/.conda \

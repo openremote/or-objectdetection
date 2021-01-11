@@ -62,8 +62,8 @@ def consume_youtube(youtube_url, quality = 'normal'):
 		stream_url = info_dict['url']
 
 
-#  --no-ts-trust-pcr --ts-seek-percent :avcodec-hw=none --no-sout-audio
-		i = vlc.Instance("--intf dummy --vout=dummy --no-audio --no-sout-audio")
+#   :avcodec-hw=none --no-sout-audio
+		i = vlc.Instance("--intf dummy --vout=dummy --no-audio --no-sout-audio --no-ts-trust-pcr --ts-seek-percent")
 
 		p = i.media_player_new()
 		p.set_mrl(stream_url)
