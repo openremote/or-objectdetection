@@ -156,8 +156,7 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 			#publish frame to rabbitMQ
 			(_, encodedImage) = cv2.imencode(".jpg", outputFrame)
 			producer.publish(encodedImage.tobytes(), content_type='image/jpeg', content_encoding='binary',expiration=10)
-
-			if cv2.waitKey(1) & 0xFF == ord('q'): break
+			# if cv2.waitKey(1) & 0xFF == ord('q'): break
 	cv2.destroyAllWindows()
 
 # Kombu Message Consuming Worker

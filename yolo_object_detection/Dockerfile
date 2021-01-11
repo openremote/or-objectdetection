@@ -8,7 +8,7 @@ SHELL ["/bin/bash", "-c"]
 # ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata \
- && apt-get install -y curl wget vlc xvfb \
+ && apt-get install -y curl wget vlc xvfb libglu1-mesa-dev freeglut3-dev mesa-common-dev \
  libopencv-dev \
  libgtk2.0-dev \
  pkg-config alsa-base pulseaudio
@@ -26,12 +26,14 @@ RUN source /conda/bin/activate \
 
 COPY ./app /app
 
-RUN wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights -O /app/data/yolov4.weights
+RUN wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights -O /app/data/yolov4.weights -q
 
 RUN mkdir /scripts
 COPY docker-start-command.sh /scripts/docker-start-command.sh
 
 RUN ["chmod", "a+x", "/scripts/docker-start-command.sh"]
+
+RUN mkdir -p /tmp/runtime-circleci 
 
 # ENTRYPOINT
 ENTRYPOINT bash ./scripts/docker-start-command.sh
