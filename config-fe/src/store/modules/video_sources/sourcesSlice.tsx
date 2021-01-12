@@ -3,8 +3,9 @@ import { Feed, getFeeds, getFeedDetails, createFeed, updateFeed, deleteFeed, Sna
 import stompClient from 'rabbitMQ/rabbitMQ'
 import store from 'store/store';
 
-const initialState: { videoSources: Feed[], snapshots: Snapshot[] } = {
+const initialState: { videoSources: Feed[], singleVideoSource: (null | Feed), snapshots: Snapshot[] } = {
   videoSources: [],
+  singleVideoSource: null,
   snapshots: []
 };
 
@@ -15,6 +16,10 @@ export const sourcesSlice = createSlice({
     LoadSources: (state, action: PayloadAction<Feed[]>) => {
       //set sources loaded from API to local state.
       state.videoSources = action.payload;
+    },
+    GetSource: (state, action: PayloadAction<Feed>) => {
+      //set sources loaded from API to local state.
+      state.singleVideoSource = action.payload;
     },
     AddSource: (state, action: PayloadAction<Feed>) => {
       //add video source to local state array
@@ -35,7 +40,7 @@ export const sourcesSlice = createSlice({
   },
 });
 
-export const { LoadSources, AddSource, RemoveSource, LoadSnapshots, ChangeFeedActive } = sourcesSlice.actions;
+export const { LoadSources, GetSource, AddSource, RemoveSource, LoadSnapshots, ChangeFeedActive } = sourcesSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
@@ -48,6 +53,11 @@ export default sourcesSlice.reducer;
 export const LoadVideoSources = () => async (dispatch: any) => {
   let feeds = await getFeeds();
   dispatch(LoadSources(feeds));
+}
+
+export const GetVideoSource = (id: number) => async (dispatch: any) => {
+  let feed = await getFeedDetails(id);
+  dispatch(GetSource(feed));
 }
 
 export const AddVideoSource = (videoSource: Feed) => async (dispatch: any) => {

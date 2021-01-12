@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Card, TextField, FormGroup, Chip, FormControlLabel, Checkbox, Button, CardContent, FormControl, MenuItem, InputLabel, Box } from "@material-ui/core";
 import Canvas from "../features/custom/Canvas";
 import { SaveConfig, LoadConfig, UpdateConfig } from "../store/modules/configuration/configSlice";
-import { UpdateVideoSource } from "../store/modules/video_sources/sourcesSlice";
+import { UpdateVideoSource, GetVideoSource } from "../store/modules/video_sources/sourcesSlice";
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Detections from '../Model/Detections';
@@ -76,10 +76,11 @@ const useStyles = (theme) => ({
 
 const mapStateToProps = state => ({
     config: state.config.configSource,
+    feed: state.sources.singleVideoSource,
     snapshots: state.sources.snapshots
 });
 
-const mapDispatch = { LoadConfig, SaveConfig, UpdateConfig, UpdateVideoSource }
+const mapDispatch = { LoadConfig, SaveConfig, UpdateConfig, UpdateVideoSource, GetVideoSource }
 
 class Configuration extends React.Component {
 
@@ -95,18 +96,6 @@ class Configuration extends React.Component {
             drawables: ""
         };
 
-        this.feed = {
-            id: this.props.location.state.feed.id,
-            name: this.props.location.state.feed.name,
-            description: this.props.location.state.feed.description,
-            location: this.props.location.state.feed.location,
-            feed_type: this.props.location.state.feed.feed_type,
-            url: this.props.location.state.feed.url,
-            active: this.props.location.state.feed.active,
-            configuration: this.props.location.state.feed.configuration,
-        }
-        console.log(this.feed);
-
         this.state = {
             isLoading: true,
             existingConfig: false,
@@ -119,11 +108,14 @@ class Configuration extends React.Component {
             value: [],
             detectionArray: [],
             fixedOptions: [],
+            feed: "",
         }
     }
 
     async componentDidMount() {
         await this.props.LoadConfig(this.props.match.params.id);
+        await this.props.GetVideoSource(this.props.match.params.id);
+        console.log(this.props.feed);
         if (this.props.config != null) {
             this.setState({ existingConfig: true });
             this.configuration.name = this.props.config.name;
@@ -132,6 +124,10 @@ class Configuration extends React.Component {
             this.props.config.detections.map(object => {
                 this.state.fixedOptions.push(object.detectionType);
             });
+        }
+        if (this.props.feed != null) {
+            this.setState({ feed: this.props.feed });
+
         }
 
         this.setState({ isLoading: false });
@@ -182,13 +178,15 @@ class Configuration extends React.Component {
         //check if we are updating an existing config or creating a new one.
         if (this.state.existingConfig) {
             this.configuration.id = this.props.config.id;
-            this.feed.name = this.configuration.name;
+            const feed = { ...this.state.feed, name: this.configuration.name }
+            this.setState(() => ({ feed }))
             this.props.UpdateConfig(this.configuration)
-            this.props.UpdateVideoSource(this.feed);
+            this.props.UpdateVideoSource(feed);
         } else {
-            this.feed.name = this.configuration.name;
+            const feed = { ...this.state.feed, name: this.configuration.name }
+            this.setState(() => ({ feed }))
             this.props.SaveConfig(this.configuration)
-            this.props.UpdateVideoSource(this.feed);
+            this.props.UpdateVideoSource(feed);
         }
 
         this.configuration.detection_types.map(object => {
@@ -216,7 +214,7 @@ class Configuration extends React.Component {
                     <Grid container spacing={3} style={{ margin: "1%" }}>
                         <Grid item xs={6}>
                             <Typography variant="h3" className={classes.title}>
-                                Configuratie - {this.feed.name}
+                                Configuratie - {this.state.feed.name}
                             </Typography>
 
                             <Card className={classes.root}>
@@ -234,7 +232,7 @@ class Configuration extends React.Component {
                                                 >
                                                     <TextField
                                                         id="standard-basic"
-                                                        defaultValue={this.feed.name}
+                                                        defaultValue={this.state.feed.name}
                                                         onInput={e => this.configuration.name = e.target.value}
                                                     />
                                                 </Typography>
@@ -250,7 +248,7 @@ class Configuration extends React.Component {
                                                 >
                                                     <TextField
                                                         id="standard-basic"
-                                                        defaultValue={this.feed.location}
+                                                        defaultValue={this.state.feed.location}
                                                         disabled
                                                     />
                                                 </Typography>
@@ -317,7 +315,7 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     className={classes.textField}
                                                     id="standard-basic"
-                                                    defaultValue={this.feed.url}
+                                                    defaultValue={this.props.feed.name}
                                                     onChange={this.handleChange}
                                                     disabled
                                                 />
