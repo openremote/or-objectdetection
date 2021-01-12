@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import stompClient from 'rabbitMQ/rabbitMQ'
+import { fetchNewStompClient } from 'rabbitMQ/rabbitMQ'
 import { connect } from 'react-redux'
 import OfflinePlaceholder from 'assets/offline.png';
 import { Container } from '@material-ui/core';
@@ -38,7 +38,7 @@ class Livefeed extends React.Component {
         let active = this.props.feeds?.find(x => x.id == this.id)?.active;
         if(active && active === true) {
             //fetch stompclient instance
-            this.stompClient = stompClient;
+            this.stompClient = fetchNewStompClient();
 
             //attempt to connect to rabbitmq
             this.stompClient.activate();

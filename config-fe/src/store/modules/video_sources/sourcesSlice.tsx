@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Feed, getFeeds, getFeedDetails, createFeed, deleteFeed, Snapshot, FeedChangeEvent, ChangeFeed } from 'api/FeedApi';
-import stompClient from 'rabbitMQ/rabbitMQ'
+import { fetchNewStompClient } from 'rabbitMQ/rabbitMQ'
 import store from 'store/store';
 
 const initialState: { videoSources: Feed[], snapshots: Snapshot[] } = {
@@ -96,8 +96,8 @@ export const FetchSnapshots = () => async (dispatch : any) => {
     message.ack();
   }
 
-  //fetch stompclient instance
-  let client = stompClient;
+  //create fresh stompclient instance
+  let client = fetchNewStompClient();
 
   //attempt to connect to rabbitmq
   client.activate();

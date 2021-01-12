@@ -56,6 +56,8 @@ class RectDrawable extends Drawable {
         return <Rect stroke="#ccff00"
             fill="rgb(204,255,0,0.1)"
             strokeWidth={3}
+            endx={this.x}
+            endy={this.y}
             x={this.startx}
             y={this.starty}
             width={width}
@@ -88,6 +90,8 @@ class Canvas extends React.Component {
             open: false,
             placeholder: tempImage
         }
+
+        this.importDrawables(this.props.drawables);
     }
 
     componentDidUpdate(prevProps) {
@@ -97,7 +101,39 @@ class Canvas extends React.Component {
             tempImage.src = url;
             this.setState({ placeholder: tempImage })
         }
-      }
+    }
+
+    importDrawables = (drawables) => {
+        console.log(this);
+        if(drawables && drawables?.length > 0) {
+            let obj = JSON.parse(drawables);
+            let LineLayer = obj.children[1];
+            LineLayer.children.forEach(drawable => {
+                console.log(drawable);
+                if(drawable.className === "Line") {
+                    //line
+                    const importedDrawable = this.getNewDrawableBasedOnType(
+                        drawable.attrs.points[0],
+                        drawable.attrs.points[1],
+                        "LineDrawable"
+                    );
+
+                    importedDrawable.registerMovement(drawable.attrs.points[2], drawable.attrs.points[3]);
+                    this.state.drawables.push(importedDrawable);
+                } else {
+                    //rect
+                    const importedDrawable = this.getNewDrawableBasedOnType(
+                        drawable.attrs.x,
+                        drawable.attrs.y,
+                        "RectDrawable"
+                    );
+
+                    importedDrawable.registerMovement(drawable.attrs.endx, drawable.attrs.endy);
+                    this.state.drawables.push(importedDrawable);
+                }
+            });
+        }
+    }
 
     getNewDrawableBasedOnType = (x, y, type) => {
         const drawableClasses = {
@@ -180,7 +216,6 @@ class Canvas extends React.Component {
                             </Button>
                             <Button
                                 onClick={e => {
-
                                     console.log(this.stage.current.toJSON());
                                     console.log(this.state.placeholder?.height);
                                     console.log(this.state.placeholder?.width);
@@ -192,7 +227,7 @@ class Canvas extends React.Component {
                                 <Layer>
                                     <KonvaImage width={this.props.width} height={this.props.height} fillPatternImage={this.state.placeholder} fillPatternScaleX={this.props.width / this.state.placeholder?.width} fillPatternScaleY={this.props.height / this.state.placeholder?.height} />
                                 </Layer>
-                                <Layer >
+                                <Layer>
                                     {/* Om image te scalen | fillPatternScaleX = requiredWidth / imageWidth -- zelfde met Heigth/Y */}
                                     {visibleDrawables.map(drawable => {
                                         return drawable.render();

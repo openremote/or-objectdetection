@@ -20,4 +20,22 @@ let stompClient = new Client({
     heartbeatOutgoing: 15000,
 });
 
+export function fetchNewStompClient() {
+  let temp = new Client({
+    brokerURL: rabbitMQUrl,
+    connectHeaders: {
+      login: rabbitMQUser,
+      passcode: rabbitMQPass,
+      durable: 'true',
+      'auto-delete': 'false',
+      'prefetch-count': '1'
+    },
+    reconnectDelay: 5000,
+    heartbeatIncoming: 15000,
+    heartbeatOutgoing: 15000,
+  });
+
+  return temp;
+}
+
 export default stompClient;

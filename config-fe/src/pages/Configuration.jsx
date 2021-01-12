@@ -444,7 +444,7 @@ class Configuration extends React.Component {
                                 Camera Preview
                     </Typography>
                             <img src={(this.SnapshotAvailable()) ? this.FetchBlobPreview() : OfflinePlaceholder}/>
-                            <Canvas width={1280} height={720} onDrawablesRecieve={this.handleDrawables} snapshot={this.props.snapshots.find(x => x.feed_id == this.props.match.params.id)?.snapshot}/>
+                            <Canvas width={1280} height={720} onDrawablesRecieve={this.handleDrawables} snapshot={this.props.snapshots.find(x => x.feed_id == this.props.match.params.id)?.snapshot} drawables={this.props.config?.drawables}/>
                         </Grid>
                     </Grid>
                 }
