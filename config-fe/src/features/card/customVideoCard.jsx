@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 //icons
 import EditIcon from '@material-ui/icons/Edit';
 import PlayIcon from '@material-ui/icons/PlayArrow';
+import DeleteIcon from '@material-ui/icons/Delete';
 import StopIcon from '@material-ui/icons/Stop';
 import OfflinePlaceholder from 'assets/offline.png';
 
@@ -79,6 +80,9 @@ class customVideoCard extends React.Component {
                         <PlayIcon/>
                     </IconButton>
                     }
+                    <IconButton aria-label="Delete" onClick={() => this.props.DeleteFeed(this.props.Id)}>
+                        <DeleteIcon/>
+                    </IconButton>
                 </CardActions>
             </Card>
         )
