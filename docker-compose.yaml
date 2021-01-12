@@ -2,7 +2,8 @@ version: "3.7"
 
 services:
   rabbitmq:
-    build: RabbitMQ/. 
+    build: RabbitMQ/.
+    image: or-rabbitmq:latest
     hostname: "rabbitmq"
     container_name: rabbitmq
     environment:
@@ -18,6 +19,8 @@ services:
       NAME: "rabbitmq1"
   frontend:
     container_name: or-frontend
+    image: or-frontend:latest
+    restart: always
     build: config-fe/.
     stdin_open: true
     volumes:
@@ -26,8 +29,9 @@ services:
     ports:
       - 3000:3000
   backend:
-    container_name: or-backend
+    container_name: backend
     build: back-end/.
+    hostname: backend
     environment:
      - BACKEND_HOST=0.0.0.0
      - BACKEND_PORT=5000
@@ -39,7 +43,13 @@ services:
     image: or-obj-detection:latest
     build: yolo_object_detection/.
     environment:
-      DISPLAY: :99
+      - RABBITMQ_URL=rabbitmq
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_MIG_CONFIG_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=:0.0
+    devices:
+      - /dev/snd
     links:
       - rabbitmq
     privileged: true

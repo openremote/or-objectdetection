@@ -7,14 +7,11 @@ import re
 import time
 
 def consume_ipcam(url):
-	# -I dummy --dummy-quiet 
-	# instance = vlc.Instance('--no-video --quiet')
-	# player = instance.media_player_new()
+	# -I dummy --dummy-quiet --no-video
+	instance = vlc.Instance('--intf dummy --vout dummy --no-audio --no-sout-audio --no-ts-trust-pcr --ts-seek-percent :avcodec-hw=none --no-sout-audio')
+	player = instance.media_player_new()
 	
-	# player.set_mrl(url)
-	# # player.set_media(media)
-
-	player = vlc.MediaPlayer(url)
+	player.set_mrl(url)
 	player.play()
 	i=0
 	while True:
@@ -64,13 +61,24 @@ def consume_youtube(youtube_url, quality = 'normal'):
 		info_dict = dloader.extract_info(youtube_url, download=False)
 		stream_url = info_dict['url']
 
-		player = vlc.MediaPlayer(stream_url)
+
+#   :avcodec-hw=none --no-sout-audio
+		i = vlc.Instance("--intf dummy --vout=dummy --no-audio --no-sout-audio --no-ts-trust-pcr --ts-seek-percent")
+
+		p = i.media_player_new()
+		p.set_mrl(stream_url)
+
+		player = p #vlc.MediaPlayer(stream_url)
+
+
+
 		player.play()
 
 		while True:
 			player.video_take_snapshot(0,'file.png',0,0)
 			raw_image = cv2.imread('file.png', 0)
-			if raw_image is not None:
+			width, height = player.video_get_size()
+			if raw_image is not None and width > 0 and height > 0 :
 				image = numpy.frombuffer(raw_image, dtype='uint8')
 				image = image.reshape((format.get('height'), format.get('width'), 1))
 				yield image

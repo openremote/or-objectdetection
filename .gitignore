@@ -11,3 +11,6 @@ command.txt
 yolo_object_detection/file.png
 
 yolo_object_detection/img.png
+
+yolo_object_detection/yolov4.weights
+yolo_object_detection/weights/

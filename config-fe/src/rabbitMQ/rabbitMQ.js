@@ -1,7 +1,7 @@
 import { Client } from '@stomp/stompjs';
 
 //fetch environment variables
-let rabbitMQUrl = process.env.RABBIT_URL || "ws://192.168.99.100:15674/ws";
+let rabbitMQUrl = process.env.RABBIT_URL || "ws://localhost:15674/ws";
 let rabbitMQUser = process.env.RABBIT_USER || "rabbitmq";
 let rabbitMQPass = process.env.RABBIT_PASS || "rabbitmq";
 
