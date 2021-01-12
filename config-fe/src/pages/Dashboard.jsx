@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { LoadVideoSources, AddVideoSource, StartStopVideoSource } from 'store/modules/video_sources/sourcesSlice'
+import { LoadVideoSources, AddVideoSource, StartStopVideoSource, RemoveVideoSource } from 'store/modules/video_sources/sourcesSlice'
 import { FeedChangeEvent } from 'api/FeedApi';
 
 import { Grid, Typography } from '@material-ui/core';
@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
     feeds: state.sources.videoSources,
     snapshots: state.sources.snapshots
 });
-const mapDispatch = { LoadVideoSources, AddVideoSource, StartStopVideoSource }
+const mapDispatch = { LoadVideoSources, AddVideoSource, StartStopVideoSource, RemoveVideoSource }
 
 const useStyles = (theme) => ({
     title: {
@@ -28,6 +28,13 @@ class Dashboard extends React.Component {
 
         this.props.StartStopVideoSource(tempFeedStartChangeEvent);
     }
+
+    OnDeleteFeed = (id) => {
+        let feed = this.props.feeds.find(x => x.id == id);
+        if(feed) {
+            this.props.RemoveVideoSource(feed);
+        }
+    }   
 
     componentDidMount() {
         this.props.LoadVideoSources();
@@ -58,6 +65,7 @@ class Dashboard extends React.Component {
                                     Active={value.active}
                                     Snapshot={(this.props.snapshots && this.props.snapshots.length > 0) ? this.props.snapshots.find(x => x.feed_id == value.id)?.snapshot : null}
                                     OnStartStop={this.OnChangeFeedActive}
+                                    DeleteFeed={this.OnDeleteFeed}
                                 />
                             </Grid>)
                     })}

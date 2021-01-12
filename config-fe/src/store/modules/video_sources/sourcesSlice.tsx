@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Feed, getFeeds, getFeedDetails, createFeed, deleteFeed, Snapshot, FeedChangeEvent, ChangeFeed } from 'api/FeedApi';
-import stompClient from 'rabbitMQ/rabbitMQ'
+import { fetchNewStompClient } from 'rabbitMQ/rabbitMQ'
 import store from 'store/store';
 
 const initialState: { videoSources: Feed[], snapshots: Snapshot[] } = {
@@ -22,8 +22,11 @@ export const sourcesSlice = createSlice({
       },
       RemoveSource: (state, action : PayloadAction<Feed>) => {
         //delete from local state array.
-        var indexOfVideoToDelete = state.videoSources.indexOf(action.payload);
-        state.videoSources.splice(indexOfVideoToDelete, 1);
+        let feed = state.videoSources.findIndex(x => x.id === action.payload?.id);
+        if(feed !== -1) {
+          console.log(feed);
+          state.videoSources.splice(feed, 1);
+        }
       },
       ChangeFeedActive: (state, action : PayloadAction<Feed>) => {
         var foundIndex = state.videoSources.findIndex(x => x.id == action.payload.id);
@@ -93,8 +96,8 @@ export const FetchSnapshots = () => async (dispatch : any) => {
     message.ack();
   }
 
-  //fetch stompclient instance
-  let client = stompClient;
+  //create fresh stompclient instance
+  let client = fetchNewStompClient();
 
   //attempt to connect to rabbitmq
   client.activate();
