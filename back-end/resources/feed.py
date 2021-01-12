@@ -110,8 +110,12 @@ class VideoFeedStreamAPI(Resource):
                     # Produce a message to RabbitMQ so detection manager can consume and start the approriate feed
                     # with the given data.
                     producer = conn.Producer(serializer='json')
+
+                    detections = None if feed.configuration is None else feed.configuration.detections
+                    drawables = None if feed.configuration is None else feed.configuration.drawables
+
                     producer.publish(
-                        {'id': feed.id, 'feed_type': json.dumps(feed.feed_type), 'url': feed.url, 'active': feed.active, 'detections': dt_schema.dump(feed.configuration.detections, many=True), 'drawables': feed.configuration.drawables},
+                        {'id': feed.id, 'feed_type': json.dumps(feed.feed_type), 'url': feed.url, 'active': feed.active, 'detections': dt_schema.dump(detections, many=True), 'drawables': drawables},
                         retry=True,
                         exchange=feed_queue.exchange,
                         routing_key=feed_queue.routing_key,
