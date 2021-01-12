@@ -21,6 +21,7 @@ class Livefeed extends React.Component {
         this.imageRef = React.createRef();
         this.context = null;
         this.stompClient = null;
+        this.subscription = null;
     }
 
     componentDidMount() {
@@ -38,7 +39,7 @@ class Livefeed extends React.Component {
         this.stompClient.onConnect =  (frame) => {
             console.log("CONNECTED TO RABBITMQ")
 
-            this.stompClient.subscribe("/queue/video-queue", onQueueMessage);
+            this.subscription = this.stompClient.subscribe("/queue/video-queue", onQueueMessage);
             // Do something, all subscribes must be done is this callback
             // This is needed because this will be executed after a (re)connect
         };
@@ -51,6 +52,7 @@ class Livefeed extends React.Component {
     }
 
     componentWillUnmount() {
+        this.subscription.unsubscribe();
         this.stompClient.deactivate();
     }
 

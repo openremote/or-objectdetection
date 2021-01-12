@@ -1,7 +1,10 @@
-import React, { useRef, useState } from "react";
-import { Stage, Layer, Line, Rect } from 'react-konva';
+import React, { useRef, useState, useEffect } from "react";
+import { Stage, Layer, Line, Rect, Image } from 'react-konva';
+import { useSelector } from "react-redux";
 import useImage from 'use-image';
+import OfflinePlaceholder from 'assets/offline.png';
 import { Container, Dialog, DialogContent, DialogTitle, Button, Slide, makeStyles } from "@material-ui/core";
+import { URL } from "url";
 
 
 const useStyles = makeStyles({
@@ -71,7 +74,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function Canvas(props) {
     const stage = useRef();
 
-    const [image] = useImage("https://static.dw.com/image/47113704_303.jpg");
+    const snapshots = useSelector(state => state.sources.snapshots);
+
+    let imageUrl;
+    useEffect(() => {
+        //fetch a blob if present for this feed
+        var blob = snapshots?.find(x => x.feed_id == props.feed_id)?.snapshot;
+        if(blob) {
+            imageUrl = window.URL.createObjectURL(blob)
+        }
+    }, []);
+
+      
+    const [snapshot] = useImage(imageUrl);
+    const [placeholder] = useImage(OfflinePlaceholder);
+
+
+    console.log(snapshot);
 
     const [drawables, setDrawables] = useState([]);
     const [newDrawable, setNewDrawables] = useState([]);
@@ -165,19 +184,22 @@ export default function Canvas(props) {
                             onClick={e => {
 
                                 console.log(stage.current.toJSON());
-                                console.log(image.height);
-                                console.log(image.width);
+                                console.log(placeholder.height);
+                                console.log(placeholder.width);
                             }}
                         >
                             log to JSON
             </Button>
                         <Stage width={props.width} height={props.height} ref={stage} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} >
+
                             <Layer >
                                 {/* Om image te scalen | fillPatternScaleX = requiredWidth / imageWidth -- zelfde met Heigth/Y */}
-                                <Rect width={props.width} height={props.height} fillPatternImage={image} fillPatternScaleX={props.width / 700} fillPatternScaleY={props.height / 394} />
                                 {visibleDrawables.map(drawable => {
                                     return drawable.render();
                                 })}
+                            </Layer>
+                            <Layer>
+                                <Image width={props.width} height={props.height} fillPatternImage={placeholder} fillPatternScaleX={props.width / placeholder?.height} fillPatternScaleY={props.height / placeholder?.height} />
                             </Layer>
                         </Stage>
 
