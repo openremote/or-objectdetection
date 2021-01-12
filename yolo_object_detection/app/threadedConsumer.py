@@ -155,7 +155,7 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 
 			#publish frame to rabbitMQ
 			(_, encodedImage) = cv2.imencode(".jpg", outputFrame)
-			producer.publish(encodedImage.tobytes(), content_type='image/jpeg', content_encoding='binary',expiration=10, headers={feed_id: feed_id})
+			producer.publish(encodedImage.tobytes(), content_type='image/jpeg', content_encoding='binary',expiration=10, properties={"correlation_id": feed_id})
 			# if cv2.waitKey(1) & 0xFF == ord('q'): break
 	cv2.destroyAllWindows()
 
@@ -182,15 +182,25 @@ class Worker(ConsumerMixin, threading.Thread):
 			return [Consumer(queues=self.queues, callbacks=[self.on_message], accept=['application/json'])]
 
 	def on_message(self, raw_body, message):
-		print(raw_body)
-		print(message)
 		print("The body is {}".format(raw_body))
-		if(not self.is_busy):
+		if not raw_body.get('active'):
+			print('this was a stop signal')
+			return
+
+		if not self.is_busy:
 			message.ack()
 			body = raw_body if not isinstance(raw_body,str) else json.loads(isinstance(raw_body,str))	
 			url =  body['url']
-			id = message['properties']['correlation_id']
-			print('corr id is'+ id)
+
+
+			id = message.properties.get('correlation_id')
+			if id is not None:
+				try:
+					id =  int(id)
+					print("id is set to: "+str(id))
+				except ValueError:
+					print('receive id is not integer')
+
 			print('Message received!')
 			self.is_busy = True
 				
