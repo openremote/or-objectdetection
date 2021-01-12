@@ -43,6 +43,12 @@ export async function createFeed(feed: Feed) {
     return data;
 }
 
+export async function updateFeed(feed: Feed) {
+    let { data } = await axios.put<Feed>(`/feeds/${feed.id}`, feed);
+    console.log(data);
+    return data;
+}
+
 export async function deleteFeed(feed: Feed) {
     let response = await axios.delete(`/feeds/${feed.id}`)
 

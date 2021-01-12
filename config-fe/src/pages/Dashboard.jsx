@@ -58,6 +58,7 @@ class Dashboard extends React.Component {
                                     Active={value.active}
                                     Snapshot={(this.props.snapshots && this.props.snapshots.length > 0) ? this.props.snapshots.find(x => x.feed_id == value.id)?.snapshot : null}
                                     OnStartStop={this.OnChangeFeedActive}
+                                    Feed={value}
                                 />
                             </Grid>)
                     })}

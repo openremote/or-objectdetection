@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Feed, getFeeds, getFeedDetails, createFeed, deleteFeed, Snapshot, FeedChangeEvent, ChangeFeed } from 'api/FeedApi';
+import { Feed, getFeeds, getFeedDetails, createFeed, updateFeed, deleteFeed, Snapshot, FeedChangeEvent, ChangeFeed } from 'api/FeedApi';
 import stompClient from 'rabbitMQ/rabbitMQ'
 import store from 'store/store';
 
@@ -9,32 +9,32 @@ const initialState: { videoSources: Feed[], snapshots: Snapshot[] } = {
 };
 
 export const sourcesSlice = createSlice({
-    name: 'sources',
-    initialState,
-    reducers: {
-      LoadSources: (state, action : PayloadAction<Feed[]>) => {
-        //set sources loaded from API to local state.
-        state.videoSources = action.payload;
-      },
-      AddSource: (state, action : PayloadAction<Feed>) => {
-        //add video source to local state array
-        state.videoSources.push(action.payload);
-      },
-      RemoveSource: (state, action : PayloadAction<Feed>) => {
-        //delete from local state array.
-        var indexOfVideoToDelete = state.videoSources.indexOf(action.payload);
-        state.videoSources.splice(indexOfVideoToDelete, 1);
-      },
-      ChangeFeedActive: (state, action : PayloadAction<Feed>) => {
-        var foundIndex = state.videoSources.findIndex(x => x.id == action.payload.id);
-        state.videoSources[foundIndex] = action.payload;
-      },
-      LoadSnapshots: (state, action: PayloadAction<Snapshot[]>) => {
-        state.snapshots = action.payload;
-      }
+  name: 'sources',
+  initialState,
+  reducers: {
+    LoadSources: (state, action: PayloadAction<Feed[]>) => {
+      //set sources loaded from API to local state.
+      state.videoSources = action.payload;
     },
-  });
-  
+    AddSource: (state, action: PayloadAction<Feed>) => {
+      //add video source to local state array
+      state.videoSources.push(action.payload);
+    },
+    RemoveSource: (state, action: PayloadAction<Feed>) => {
+      //delete from local state array.
+      var indexOfVideoToDelete = state.videoSources.indexOf(action.payload);
+      state.videoSources.splice(indexOfVideoToDelete, 1);
+    },
+    ChangeFeedActive: (state, action: PayloadAction<Feed>) => {
+      var foundIndex = state.videoSources.findIndex(x => x.id == action.payload.id);
+      state.videoSources[foundIndex] = action.payload;
+    },
+    LoadSnapshots: (state, action: PayloadAction<Snapshot[]>) => {
+      state.snapshots = action.payload;
+    }
+  },
+});
+
 export const { LoadSources, AddSource, RemoveSource, LoadSnapshots, ChangeFeedActive } = sourcesSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
@@ -55,6 +55,12 @@ export const AddVideoSource = (videoSource: Feed) => async (dispatch: any) => {
   dispatch(AddSource(feed));
 }
 
+export const UpdateVideoSource = (videoSource: Feed) => async (dispatch: any) => {
+  let feed = await updateFeed(videoSource);
+  console.log(feed);
+  dispatch(AddSource(feed));
+}
+
 export const RemoveVideoSource = (videoSource: Feed) => async (dispatch: any) => {
   let deleted = await deleteFeed(videoSource);
 
@@ -65,12 +71,12 @@ export const RemoveVideoSource = (videoSource: Feed) => async (dispatch: any) =>
   }
 }
 
-export const StartStopVideoSource = (FeedChangeEvent: FeedChangeEvent) => async (dispatch : any) => {
+export const StartStopVideoSource = (FeedChangeEvent: FeedChangeEvent) => async (dispatch: any) => {
   let updatedfeed = await ChangeFeed(FeedChangeEvent);
   dispatch(ChangeFeedActive(updatedfeed));
 }
 
-export const FetchSnapshots = () => async (dispatch : any) => {
+export const FetchSnapshots = () => async (dispatch: any) => {
   let tempSnapshots = [] as Snapshot[];
   //subscriptions storing the client subscribe messages.
   let subscriptions = [] as any[];
@@ -82,7 +88,7 @@ export const FetchSnapshots = () => async (dispatch : any) => {
     let sub = subscriptions[indexOfSub];
 
     let blob = new Blob([message.binaryBody]);
-    let snapshot: Snapshot = { feed_id: sub.feed_id, snapshot: blob};
+    let snapshot: Snapshot = { feed_id: sub.feed_id, snapshot: blob };
     tempSnapshots.push(snapshot);
 
     //finally unsubscribe from the subscription so we only receive one frame and remove the sub from the list.
@@ -99,13 +105,13 @@ export const FetchSnapshots = () => async (dispatch : any) => {
   //attempt to connect to rabbitmq
   client.activate();
 
-  client.onConnect =  (frame) => {
-    for(let feed of store.getState().sources.videoSources) {
+  client.onConnect = (frame) => {
+    for (let feed of store.getState().sources.videoSources) {
       //only fetch for active feeds.
-      if(feed.active) {
+      if (feed.active) {
         //subscribe to the queue for messages.
-        var sub = client.subscribe("/queue/video-queue", onQueueMessage, {'ack': 'client-individual', 'prefetch-count': 1 });
-        
+        var sub = client.subscribe("/queue/video-queue", onQueueMessage, { 'ack': 'client-individual', 'prefetch-count': 1 });
+
         subscriptions.push({
           subscription: sub,
           feed_id: feed.id
@@ -115,7 +121,7 @@ export const FetchSnapshots = () => async (dispatch : any) => {
   };
 
   //wait 3 seconds then deactivate the client to give the client time to receive a single frame.
-  setTimeout(function() {
+  setTimeout(function () {
     client.deactivate();
 
     //in the end, pass all the results to the snapshot state.

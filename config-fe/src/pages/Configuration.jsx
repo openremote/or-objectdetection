@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Card, TextField, FormGroup, Chip, FormControlLabel, Checkbox, Button, CardContent, FormControl, MenuItem, InputLabel, Box } from "@material-ui/core";
 import Canvas from "../features/custom/Canvas";
 import { SaveConfig, LoadConfig, UpdateConfig } from "../store/modules/configuration/configSlice";
+import { UpdateVideoSource } from "../store/modules/video_sources/sourcesSlice";
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Detections from '../Model/Detections';
@@ -78,7 +79,7 @@ const mapStateToProps = state => ({
     snapshots: state.sources.snapshots
 });
 
-const mapDispatch = { LoadConfig, SaveConfig, UpdateConfig }
+const mapDispatch = { LoadConfig, SaveConfig, UpdateConfig, UpdateVideoSource }
 
 class Configuration extends React.Component {
 
@@ -93,6 +94,18 @@ class Configuration extends React.Component {
             detection_types: [],
             drawables: ""
         };
+
+        this.feed = {
+            id: this.props.location.state.feed.id,
+            name: this.props.location.state.feed.name,
+            description: this.props.location.state.feed.description,
+            location: this.props.location.state.feed.location,
+            feed_type: this.props.location.state.feed.feed_type,
+            url: this.props.location.state.feed.url,
+            active: this.props.location.state.feed.active,
+            configuration: this.props.location.state.feed.configuration,
+        }
+        console.log(this.feed);
 
         this.state = {
             isLoading: true,
@@ -111,7 +124,7 @@ class Configuration extends React.Component {
 
     async componentDidMount() {
         await this.props.LoadConfig(this.props.match.params.id);
-        if(this.props.config != null) {
+        if (this.props.config != null) {
             this.setState({ existingConfig: true });
             this.configuration.name = this.props.config.name;
             this.configuration.resolution = this.props.config.resolution;
@@ -125,9 +138,9 @@ class Configuration extends React.Component {
     }
 
     SnapshotAvailable() {
-        if(this.props.snapshots && this.props.snapshots.length > 0) {
+        if (this.props.snapshots && this.props.snapshots.length > 0) {
             let blob = this.props.snapshots.find(x => x.feed_id == this.props.match.params.id)?.snapshot;
-            if(blob) {
+            if (blob) {
                 return true;
             } else {
                 return false;
@@ -138,9 +151,9 @@ class Configuration extends React.Component {
     }
 
     FetchBlobPreview() {
-        if(this.props.snapshots && this.props.snapshots.length > 0) {
+        if (this.props.snapshots && this.props.snapshots.length > 0) {
             let blob = this.props.snapshots.find(x => x.feed_id == this.props.match.params.id)?.snapshot;
-            if(blob) {
+            if (blob) {
                 let url = URL.createObjectURL(blob);
                 return url;
             } else {
@@ -167,11 +180,15 @@ class Configuration extends React.Component {
         e.preventDefault();
 
         //check if we are updating an existing config or creating a new one.
-        if(this.state.existingConfig) {
+        if (this.state.existingConfig) {
             this.configuration.id = this.props.config.id;
+            this.feed.name = this.configuration.name;
             this.props.UpdateConfig(this.configuration)
+            this.props.UpdateVideoSource(this.feed);
         } else {
+            this.feed.name = this.configuration.name;
             this.props.SaveConfig(this.configuration)
+            this.props.UpdateVideoSource(this.feed);
         }
 
         this.configuration.detection_types.map(object => {
@@ -199,8 +216,8 @@ class Configuration extends React.Component {
                     <Grid container spacing={3} style={{ margin: "1%" }}>
                         <Grid item xs={6}>
                             <Typography variant="h3" className={classes.title}>
-                                Configuratie - Camera X
-                        </Typography>
+                                Configuratie - {this.feed.name}
+                            </Typography>
 
                             <Card className={classes.root}>
                                 <CardContent className={classes.cardContent}>
@@ -217,7 +234,7 @@ class Configuration extends React.Component {
                                                 >
                                                     <TextField
                                                         id="standard-basic"
-                                                        defaultValue={config?.name}
+                                                        defaultValue={this.feed.name}
                                                         onInput={e => this.configuration.name = e.target.value}
                                                     />
                                                 </Typography>
@@ -233,6 +250,7 @@ class Configuration extends React.Component {
                                                 >
                                                     <TextField
                                                         id="standard-basic"
+                                                        defaultValue={this.feed.location}
                                                         disabled
                                                     />
                                                 </Typography>
@@ -245,10 +263,11 @@ class Configuration extends React.Component {
                                                     className={classes.title2}
                                                     color="textSecondary"
                                                     gutterBottom
+
                                                 >
                                                     <TextField
                                                         id="standard-basic"
-                                                        value="NSA cam"
+                                                        defaultValue="Livestream"
                                                         disabled
                                                     />
                                                 </Typography>
@@ -298,7 +317,7 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     className={classes.textField}
                                                     id="standard-basic"
-                                                    value={this.state.value}
+                                                    defaultValue={this.feed.url}
                                                     onChange={this.handleChange}
                                                     disabled
                                                 />
@@ -427,7 +446,7 @@ class Configuration extends React.Component {
                                                             variant="contained"
                                                             color="default"
                                                             className={classes.Buttons}
-                                                            
+
                                                         >
                                                             Cancel
                                                         </Button>
@@ -443,7 +462,7 @@ class Configuration extends React.Component {
                             <Typography variant="h3" className={classes.title}>
                                 Camera Preview
                     </Typography>
-                            <img src={(this.SnapshotAvailable()) ? this.FetchBlobPreview() : OfflinePlaceholder}/>
+                            <img src={(this.SnapshotAvailable()) ? this.FetchBlobPreview() : OfflinePlaceholder} />
                             <Canvas width={1280} height={720} onDrawablesRecieve={this.handleDrawables} />
                         </Grid>
                     </Grid>

@@ -29,7 +29,7 @@ const styles = theme => ({
 
 class customVideoCard extends React.Component {
     FetchUrlObjectForBlob(blob) {
-        if(blob) {
+        if (blob) {
             let url = URL.createObjectURL(blob);
             return url;
         } else {
@@ -66,18 +66,18 @@ class customVideoCard extends React.Component {
                 </CardContent>
                 <CardActions disableSpacing>
                     <IconButton aria-label="add to favorites">
-                        <Link to={'/configuration/' + this.props.Id}>
+                        <Link to={{ pathname: '/configuration/' + this.props.Id, state: { feed: this.props.Feed } }}>
                             <EditIcon color="primary" />
                         </Link>
                     </IconButton>
                     {(this.props.Active) ?
-                    <IconButton aria-label="Start" onClick={() => this.props.OnStartStop(this.props.Id)}>
-                         <StopIcon/>
-                    </IconButton>
-                    :
-                    <IconButton aria-label="Stop" onClick={() => this.props.OnStartStop(this.props.Id)}>
-                        <PlayIcon/>
-                    </IconButton>
+                        <IconButton aria-label="Start" onClick={() => this.props.OnStartStop(this.props.Id)}>
+                            <StopIcon />
+                        </IconButton>
+                        :
+                        <IconButton aria-label="Stop" onClick={() => this.props.OnStartStop(this.props.Id)}>
+                            <PlayIcon />
+                        </IconButton>
                     }
                 </CardActions>
             </Card>
