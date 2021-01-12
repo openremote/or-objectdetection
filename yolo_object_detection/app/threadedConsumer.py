@@ -123,7 +123,7 @@ def consume_file(video_path):
 			print('Video has ended or failed, try a different video format!')
 			break
 
-def start_analysis(video_path, interpreter, input_details, output_details, infer, encoder, tracker):
+def start_analysis(video_path, interpreter, input_details, output_details, infer, encoder, tracker, feed_id):
 	frame_num = 0
 	outputFrame = None
 	# while video is running
@@ -155,7 +155,7 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 
 			#publish frame to rabbitMQ
 			(_, encodedImage) = cv2.imencode(".jpg", outputFrame)
-			producer.publish(encodedImage.tobytes(), content_type='image/jpeg', content_encoding='binary',expiration=10)
+			producer.publish(encodedImage.tobytes(), content_type='image/jpeg', content_encoding='binary',expiration=10, headers={feed_id: feed_id})
 			# if cv2.waitKey(1) & 0xFF == ord('q'): break
 	cv2.destroyAllWindows()
 
@@ -182,13 +182,17 @@ class Worker(ConsumerMixin, threading.Thread):
 			return [Consumer(queues=self.queues, callbacks=[self.on_message], accept=['application/json'])]
 
 	def on_message(self, raw_body, message):
+		print(raw_body)
+		print(message)
 		print("The body is {}".format(raw_body))
 		if(not self.is_busy):
 			message.ack()
-			body = json.loads(raw_body)		
+			body = raw_body if not isinstance(raw_body,str) else json.loads(isinstance(raw_body,str))	
 			url =  body['url']
+			id = message['properties']['correlation_id']
+			print('corr id is'+ id)
 			print('Message received!')
 			self.is_busy = True
 				
-			start_analysis(url, self.interpreter, input_details=self.input_details, output_details=self.output_details, infer=self.infer, encoder=self.encoder, tracker=self.tracker)
+			start_analysis(url, self.interpreter, input_details=self.input_details, output_details=self.output_details, infer=self.infer, encoder=self.encoder, tracker=self.tracker, feed_id=id)
 			self.is_busy = False
