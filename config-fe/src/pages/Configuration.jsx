@@ -1,7 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Card, TextField, FormGroup, Chip, FormControlLabel, Checkbox, Button, CardContent, FormControl, MenuItem, InputLabel, Box } from "@material-ui/core";
-import Canvas from "../features/custom/Canvas";
+import Canvas from "../features/custom/Canvas2";
 import { SaveConfig, LoadConfig, UpdateConfig } from "../store/modules/configuration/configSlice";
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -444,7 +444,7 @@ class Configuration extends React.Component {
                                 Camera Preview
                     </Typography>
                             <img src={(this.SnapshotAvailable()) ? this.FetchBlobPreview() : OfflinePlaceholder}/>
-                            <Canvas width={1280} height={720} onDrawablesRecieve={this.handleDrawables} />
+                            <Canvas width={1280} height={720} onDrawablesRecieve={this.handleDrawables} snapshot={this.props.snapshots.find(x => x.feed_id == this.props.match.params.id)?.snapshot} drawables={this.props.config?.drawables}/>
                         </Grid>
                     </Grid>
                 }
