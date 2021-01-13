@@ -315,7 +315,7 @@ class Configuration extends React.Component {
                                                 <TextField
                                                     className={classes.textField}
                                                     id="standard-basic"
-                                                    defaultValue={this.props.feed.name}
+                                                    defaultValue={this.props.feed.url}
                                                     onChange={this.handleChange}
                                                     disabled
                                                 />
