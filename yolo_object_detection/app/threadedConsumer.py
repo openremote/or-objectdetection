@@ -5,7 +5,7 @@ import tensorflow as tf
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 if len(physical_devices) > 0:
 		tf.config.experimental.set_memory_growth(physical_devices[0], True)
-from absl.flags import Error, FLAGS
+from absl.flags import FLAGS
 
 import core.utils as utils
 from core.yolov4 import filter_boxes
@@ -29,9 +29,7 @@ lock = threading.Lock()
 max_cosine_distance = 0.4
 nn_budget = None
 
-is_busy = False
-
-current_video_stream_id = None
+(queue, exchange, producer, connection) = rabbit.setup_rabbitMQ()
 
 def analyse_frame(frame, input_size, interpreter, input_details, output_details, infer, detection_classes = None):
 		image_data = cv2.resize(frame, (input_size, input_size))
@@ -135,94 +133,67 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 	else:
 		video_consumer = consume_stream(video_path, framerate = 20, quality='normal')
 
-	producer = rabbit.setup_video_producer()
-
 	for frame in video_consumer:
-		t = threading.currentThread()
-		if getattr(t, "stop_thread", True):
-			print('stop signal received, stopping the video analysis')
-			break
+			frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+			frame_num += 1
 
-		frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-		frame_num += 1
+			start_time = time.time()
 
-		start_time = time.time()
+			detection_classes = None
+			# detection_classes=['person']
+			frame, bboxes, scores, names = analyse_frame(frame, FLAGS.size, interpreter, input_details, output_details, infer, detection_classes=detection_classes)
+			result = obj_helper.apply_deepsort(encoder, tracker, frame, bboxes, scores, names, nms_max_overlap)
 
-		detection_classes = None
-		# detection_classes=['person']
-		frame, bboxes, scores, names = analyse_frame(frame, FLAGS.size, interpreter, input_details, output_details, infer, detection_classes=detection_classes)
-		result = obj_helper.apply_deepsort(encoder, tracker, frame, bboxes, scores, names, nms_max_overlap)
+			if not FLAGS.dont_show:
+				cv2.imshow("Output Video", result)
+	
+			with lock:
+				outputFrame = result
 
-		if not FLAGS.dont_show:
-			cv2.imshow("Output Video", result)
+			fps = 1.0 / (time.time() - start_time)
+			print("Frame " + str(frame_num) + " FPS: %.2f" % fps, end='\r')
 
-		with lock:
-			outputFrame = result
-
-		fps = 1.0 / (time.time() - start_time)
-		print("Frame " + str(frame_num) + " FPS: %.2f" % fps, end='\r')
-
-		#publish frame to rabbitMQ
-		(_, encodedImage) = cv2.imencode(".jpg", outputFrame)
-		print('i just wanna produce the frame :(')
-		producer.publish(encodedImage.tobytes(), content_type='image/jpeg', content_encoding='binary',expiration=10, properties={"correlation_id": feed_id})
-		# if cv2.waitKey(1) & 0xFF == ord('q'): break
+			#publish frame to rabbitMQ
+			(_, encodedImage) = cv2.imencode(".jpg", outputFrame)
+			producer.publish(encodedImage.tobytes(), content_type='image/jpeg', content_encoding='binary',expiration=10, properties={"correlation_id": feed_id})
+			# if cv2.waitKey(1) & 0xFF == ord('q'): break
 	cv2.destroyAllWindows()
-	global is_busy
-	is_busy = False
 
 # Kombu Message Consuming Worker
-
 class Worker(ConsumerMixin, threading.Thread):
-	def __init__(self, interpreter, input_details, output_details, infer, encoder, tracker):
-		(queue, exchange, connection) = rabbit.setup_feed_exchange()
-		self.connection = connection
-		self.queues = queue
-		
-		self.interpreter = interpreter
-		self.input_details = input_details
-		self.output_details = output_details
-		self.infer = infer
-		self.encoder = encoder
-		self.tracker = tracker
-		super(Worker, self).__init__(daemon=True)
+	is_busy = False
+	def __init__(self, feed_queue, interpreter, input_details, output_details, infer, encoder, tracker):
+			self.connection = connection
+
+			self.queues = feed_queue
+			
+			self.interpreter = interpreter
+			self.input_details = input_details
+			self.output_details = output_details
+			self.infer = infer
+			self.encoder = encoder
+			self.tracker = tracker
+			super(Worker, self).__init__(daemon=True)
 
 	def run(self):
-		super(Worker, self).run()
+			super(Worker, self).run()
 
 	def get_consumers(self, Consumer, channel):
-		return [Consumer(queues=self.queues, callbacks=[self.on_message], accept=['application/json'])]
+			return [Consumer(queues=self.queues, callbacks=[self.on_message], accept=['application/json'])]
 
 	def on_message(self, raw_body, message):
-		global is_busy
 		print("The body is {}".format(raw_body))
-		global current_video_stream_id
-		body = raw_body if not isinstance(raw_body,str) else json.loads(isinstance(raw_body,str))	
-		if not body.get('active'):
+		if not raw_body.get('active'):
 			print('this was a stop signal')
-			try:
-				id = body.get('id')
-				if id is not None:
-					try:
-						id =  int(id)
-						print("id is set to: "+str(id))
-					except ValueError:
-						print('receive id is not integer')
-					
-					if id == current_video_stream_id:
-						message.ack()
-						self.analyis_thread.stop_thread = True
-						current_video_stream_id = None
-						is_busy = False
-			except Error:
-				print('Error parsing id?')
 			return
 
-		if not is_busy:
+		if not self.is_busy:
 			message.ack()
-			
+			body = raw_body if not isinstance(raw_body,str) else json.loads(isinstance(raw_body,str))	
 			url =  body['url']
-			id = body['id']
+
+
+			id = message.properties.get('correlation_id')
 			if id is not None:
 				try:
 					id =  int(id)
@@ -230,12 +201,8 @@ class Worker(ConsumerMixin, threading.Thread):
 				except ValueError:
 					print('receive id is not integer')
 
-			current_video_stream_id = id
-
 			print('Message received!')
-			is_busy = True
-			thread = threading.Thread(target= start_analysis,args = (url, self.interpreter, self.input_details, self.output_details, self.infer, self.encoder, self.tracker, id), daemon=True)
-			self.analyis_thread = thread
-			thread.start()
-			print( 'thread started')
-			
+			self.is_busy = True
+				
+			start_analysis(url, self.interpreter, input_details=self.input_details, output_details=self.output_details, infer=self.infer, encoder=self.encoder, tracker=self.tracker, feed_id=id)
+			self.is_busy = False
