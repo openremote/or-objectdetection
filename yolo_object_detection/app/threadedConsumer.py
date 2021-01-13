@@ -123,10 +123,12 @@ def consume_file(video_path):
 			print('Video has ended or failed, try a different video format!')
 			break
 
-def start_analysis(video_path, interpreter, input_details, output_details, infer, encoder, tracker, feed_id):
+def start_analysis(video_path, interpreter, drawables, input_details, output_details, infer, encoder, tracker, feed_id):
 	frame_num = 0
 	outputFrame = None
 	# while video is running
+
+	print("DRAWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWABLES!", drawables)
 
 	if False:
 		video_consumer = consume_file(video_path)
@@ -143,6 +145,24 @@ def start_analysis(video_path, interpreter, input_details, output_details, infer
 			# detection_classes=['person']
 			frame, bboxes, scores, names = analyse_frame(frame, FLAGS.size, interpreter, input_details, output_details, infer, detection_classes=detection_classes)
 			result = obj_helper.apply_deepsort(encoder, tracker, frame, bboxes, scores, names, nms_max_overlap)
+
+			if drawables:
+				obj = json.loads(drawables)
+				lineObjects = obj['children'][1]['children']
+
+				client_width = obj['attrs']['width']
+				client_height = obj['attrs']['height']
+
+				for lineObj in lineObjects:
+					if lineObj['className'] == 'Line':
+						cv_width = result.shape[1]
+						cv_height = result.shape[0]
+						points = lineObj['attrs']['points']
+
+						w_mult = cv_width / client_width
+						h_mult = cv_height / client_height
+						line_thickness = 2
+						cv2.line(result, (int(w_mult * points[0]), int(h_mult * points[1])), (int(w_mult * points[2]), int(h_mult * points[3])), (0, 255, 0), thickness=line_thickness)
 
 			if not FLAGS.dont_show:
 				cv2.imshow("Output Video", result)
@@ -191,7 +211,7 @@ class Worker(ConsumerMixin, threading.Thread):
 			message.ack()
 			body = raw_body if not isinstance(raw_body,str) else json.loads(isinstance(raw_body,str))	
 			url =  body['url']
-
+			drawables = body['drawables']
 
 			id = message.properties.get('correlation_id')
 			if id is not None:
@@ -204,5 +224,5 @@ class Worker(ConsumerMixin, threading.Thread):
 			print('Message received!')
 			self.is_busy = True
 				
-			start_analysis(url, self.interpreter, input_details=self.input_details, output_details=self.output_details, infer=self.infer, encoder=self.encoder, tracker=self.tracker, feed_id=id)
+			start_analysis(url, self.interpreter, drawables, input_details=self.input_details, output_details=self.output_details, infer=self.infer, encoder=self.encoder, tracker=self.tracker, feed_id=id)
 			self.is_busy = False
