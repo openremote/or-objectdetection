@@ -1,6 +1,9 @@
 # OpenRemote Object Tracking
 Open source implementation of an object tracking algorithm that takes an input of a video source and calculates different parameters from the objects in the frame (people, bikes, cars) then displays the parameters (number of objects, average speed, direction of moving) and sends them to be displayed on the Open Remote manager throw an HTTP API in a Json format.
 
+# demo of the application:
+https://www.youtube.com/watch?v=1NQoLWasbcI
+
 ![Image description](https://github.com/openremote/or-objectdetection/blob/master/YOLO_DETECTION/demoPicture.png)
 
 # Installation
