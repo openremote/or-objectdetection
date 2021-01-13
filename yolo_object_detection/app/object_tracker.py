@@ -48,15 +48,11 @@ encoder = None
 tracker = None
 
 worker = None
-from kombu import Exchange, Queue
-
-feed_exchange = Exchange("feed-exchange", type="direct", delivery_mode=1)
-feed_queue = Queue(name="feed-queue", exchange=feed_exchange, routing_key="feed") 
 
 def start_feed_listener():
 	print('starting to fucking listen')
 	global worker
-	worker = Worker(feed_queue, interpreter, input_details, output_details, infer, encoder, tracker)
+	worker = Worker(interpreter, input_details, output_details, infer, encoder, tracker)
 	worker.start()
 
 def main(_argv):
@@ -87,9 +83,9 @@ def main(_argv):
 			infer = saved_model_loaded.signatures['serving_default']
 
 	start_feed_listener()
-	# start_feed_listener()
 	
 	worker.join()
+	print('worker finished its business')
 	# while True:
 	# 	time.sleep(1)		
 
