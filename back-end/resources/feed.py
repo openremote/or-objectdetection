@@ -11,7 +11,6 @@ from rabbitmq.rabbitMQ import rabbit_url, feed_queue
 from kombu import Connection
 import json
 
-
 class VideoFeedListAPI(Resource):
     def get(self):
         feeds = Feed.query.all()
@@ -36,7 +35,6 @@ class VideoFeedListAPI(Resource):
 
         feed_schema = FeedSchema()
         return feed_schema.dump(feed)
-
 
 class VideoFeedAPI(Resource):
     def get(self, feed_ID):
@@ -117,6 +115,7 @@ class VideoFeedStreamAPI(Resource):
                     producer.publish(
                         {'id': feed.id, 'feed_type': json.dumps(feed.feed_type), 'url': feed.url, 'active': feed.active, 'detections': dt_schema.dump(detections, many=True), 'drawables': drawables},
                         retry=True,
+                        expiration=10,
                         exchange=feed_queue.exchange,
                         routing_key=feed_queue.routing_key,
                         declare=[feed_queue],  # declares exchange, queue and binds.
