@@ -54,7 +54,7 @@ feed_exchange = Exchange("feed-exchange", type="direct", delivery_mode=1)
 feed_queue = Queue(name="feed-queue", exchange=feed_exchange, routing_key="feed") 
 
 def start_feed_listener():
-	print('starting to fucking listen')
+	print('RabbitMQ initialized, starting to listen for incomming messages...')
 	global worker
 	worker = Worker(feed_queue, interpreter, input_details, output_details, infer, encoder, tracker)
 	worker.start()
@@ -77,21 +77,18 @@ def main(_argv):
 	global output_details
 	global infer
 	if FLAGS.framework == 'tflite':
-			interpreter = tf.lite.Interpreter(model_path=FLAGS.weights)
-			interpreter.allocate_tensors()
-			input_details = interpreter.get_input_details()
-			output_details = interpreter.get_output_details()
+		interpreter = tf.lite.Interpreter(model_path=FLAGS.weights)
+		interpreter.allocate_tensors()
+		input_details = interpreter.get_input_details()
+		output_details = interpreter.get_output_details()
 	# otherwise load standard tensorflow saved model
 	else:
-			saved_model_loaded = tf.saved_model.load(FLAGS.weights, tags=[tag_constants.SERVING])
-			infer = saved_model_loaded.signatures['serving_default']
+		saved_model_loaded = tf.saved_model.load(FLAGS.weights, tags=[tag_constants.SERVING])
+		infer = saved_model_loaded.signatures['serving_default']
 
 	start_feed_listener()
-	# start_feed_listener()
-	
-	worker.join()
-	# while True:
-	# 	time.sleep(1)		
+
+	worker.join()	
 
 if __name__ == '__main__':
 		try:

@@ -126,9 +126,6 @@ def consume_file(video_path):
 def start_analysis(video_path, interpreter, drawables, input_details, output_details, infer, encoder, tracker, feed_id):
 	frame_num = 0
 	outputFrame = None
-	# while video is running
-
-	print("DRAWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWABLES!", drawables)
 
 	if False:
 		video_consumer = consume_file(video_path)
@@ -142,7 +139,7 @@ def start_analysis(video_path, interpreter, drawables, input_details, output_det
 			start_time = time.time()
 
 			detection_classes = None
-			# detection_classes=['person']
+			# detection_classes=['person'] TODO: use the detection classes received from rabbitmq
 			frame, bboxes, scores, names = analyse_frame(frame, FLAGS.size, interpreter, input_details, output_details, infer, detection_classes=detection_classes)
 			result = obj_helper.apply_deepsort(encoder, tracker, frame, bboxes, scores, names, nms_max_overlap)
 
@@ -176,7 +173,6 @@ def start_analysis(video_path, interpreter, drawables, input_details, output_det
 			#publish frame to rabbitMQ
 			(_, encodedImage) = cv2.imencode(".jpg", outputFrame)
 			producer.publish(encodedImage.tobytes(), content_type='image/jpeg', content_encoding='binary',expiration=10, properties={"correlation_id": feed_id})
-			# if cv2.waitKey(1) & 0xFF == ord('q'): break
 	cv2.destroyAllWindows()
 
 # Kombu Message Consuming Worker
