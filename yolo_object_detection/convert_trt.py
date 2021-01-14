@@ -30,10 +30,7 @@ def representative_data_gen():
       image_data = utils.image_preporcess(np.copy(original_image), [FLAGS.input_size, FLAGS.input_size])
       img_in = image_data[np.newaxis, ...].astype(np.float32)
       batched_input[input_value, :] = img_in
-      # batched_input = tf.constant(img_in)
       print(input_value)
-      # yield (batched_input, )
-      # yield tf.random.normal((1, 416, 416, 3)),
     else:
       continue
   batched_input = tf.constant(batched_input)

@@ -4,13 +4,10 @@ from kombu import Connection, Exchange, Queue, Producer, Consumer
 import os
 
 def setup_rabbitMQ():
-    # Default RabbitMQ server URI
     rabbit_domain = os.environ.get('RABBITMQ_URL')
     rabbit_domain = rabbit_domain if rabbit_domain is not None else 'localhost'
     rabbit_url = 'amqp://rabbitmq:rabbitmq@'+rabbit_domain+':5672//'
 
-    print('the ulr is: '+ rabbit_url)
-    
     # Kombu Connection
     conn = Connection(rabbit_url)
     channel = conn.channel()
