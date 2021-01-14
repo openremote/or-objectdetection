@@ -3,15 +3,42 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@reduxjs/toolkit": "^1.4.0",
+    "@stomp/stompjs": "^6.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^14.14.7",
+    "@types/qs": "^6.9.5",
+    "@types/react": "^16.9.56",
+    "@types/react-dom": "^16.9.9",
+    "amqplib": "^0.6.0",
+    "axios": "^0.21.0",
+    "base64-arraybuffer": "^0.2.0",
+    "clsx": "^1.1.1",
+    "cors": "^2.8.5",
+    "fontsource-roboto": "^3.0.3",
+    "konva": "^7.2.0",
+    "line-reader": "^0.4.0",
+    "prop-types": "^15.7.2",
+    "qs": "^6.9.4",
     "react": "^16.13.1",
+    "react-async-component": "^2.0.0",
+    "react-chips": "^0.8.0",
     "react-dom": "^16.13.1",
+    "react-konva": "^16.13.0-6",
+    "react-player": "^2.6.2",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3"
+    "react-scripts": "^4.0.0",
+    "socket.io-client": "^2.3.0",
+    "typescript": "^4.0.5",
+    "use-image": "^1.0.6",
+    "websocket": "^1.0.32"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,5 +60,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^2.1.2",
+    "video.js": "^7.8.4"
   }
 }

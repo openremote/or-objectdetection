@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "target": "es2015",
+    "jsx": "react",
+    "types": [
+      "react"
+    ],
+    "module": "esNext",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "declaration": false,
+    "removeComments": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "strict": false,
+    "outDir": "dist",
+    "baseUrl": "src",
+    "typeRoots": [
+      "./types",
+      "node_modules/@types"
+    ],
+    "strictNullChecks": true,
+    "allowJs": true,
+    "noFallthroughCasesInSwitch": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "include": [
+    "src"
+  ]
+}
