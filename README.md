@@ -40,7 +40,7 @@ If you are having problems starting the program:
 https://github.com/openremote/openremote/blob/master/README.md
 
 - Setup HTTP API 
-https://github.com/openremote/or-objectdetection/wiki/Editing-Seting-up-the-HTTP-API-connection-with-the-manager
+https://github.com/openremote/or-objectdetection/wiki/Editing-Setting-up-the-HTTP-API-connection-with-the-manager
 
 THIS REPO IS WORK IN PROGRESS. THERE ARE BUGS! A DETAILED INSTRUCTIONS WILL COME LATER.
 
