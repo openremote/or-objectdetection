@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Configuration component matches the snapshot 1`] = `
+<div>
+  <div
+    class="MuiContainer-root"
+  >
+    <img
+      class="Livefeed-videoPlayer-1"
+      id="image"
+    />
+  </div>
+</div>
+`;

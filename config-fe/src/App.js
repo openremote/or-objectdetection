@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Box } from "@material-ui/core";
 
+import { AuthenticationContext } from "./store/modules/context/AuthContext";
+
 // Custom components
 import Routes from "router/routes";
 import Sidebar from "features/core/Sidebar/Sidebar";
@@ -12,13 +14,13 @@ import { checkIsUserAuthenticated } from "./store/modules/auth/authSlice";
 
 const App = () => {
   const dispatch = useDispatch();
-  const authSelect = useSelector(state => state.auth);
+  const authSelect = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(checkIsUserAuthenticated());
   }, []);
 
-  if(!authSelect.loading) {
+  if (!authSelect.loading) {
     return (
       <Container maxWidth={false} disableGutters>
         <Box display="flex" flexDirection="row">
@@ -40,9 +42,7 @@ const App = () => {
     );
   }
 
-  return (
-    <p>Loading WIP</p>
-  )
+  return <p>Loading WIP</p>;
 };
 
 export default App;

@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Configuration component matches the snapshot 1`] = `
+<div>
+  <div>
+    <img
+      alt="loading..."
+      src="notfound.gif"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard component matches the snapshot 1`] = `
+<div>
+  <div>
+    <h4
+      class="MuiTypography-root Dashboard-title-1 MuiTypography-h4 MuiTypography-colorPrimary"
+    >
+      VIDEO SOURCES
+    </h4>
+    <div
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 MuiGrid-grid-xl-2"
+        heigth="100%"
+      >
+        <div>
+          <div
+            class="MuiPaper-root MuiCard-root makeStyles-root-16 MuiPaper-outlined MuiPaper-rounded"
+          >
+            <div
+              class="MuiCardHeader-root"
+            >
+              <div
+                class="MuiCardHeader-avatar"
+              >
+                <div
+                  class="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-14 MuiAvatar-colorDefault"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="MuiCardHeader-content"
+              >
+                <span
+                  class="MuiTypography-root MuiCardHeader-title makeStyles-title-15 MuiTypography-h6 MuiTypography-displayBlock"
+                >
+                  New Source
+                </span>
+                <span
+                  class="MuiTypography-root MuiCardHeader-subheader makeStyles-title-15 MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
+                >
+                  Click here to add a new source
+                </span>
+              </div>
+            </div>
+            <div
+              class="makeStyles-mediaContainer-17"
+            >
+              <div
+                class="MuiCardMedia-root makeStyles-media-13"
+                style="background-image: url(plusicon.png);"
+                title="plusIcon"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

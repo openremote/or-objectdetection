@@ -1,0 +1,563 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Configuration component matches the snapshot 1`] = `
+<div>
+  <div>
+    <div
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3"
+      style="margin: 1%;"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
+      >
+        <h3
+          class="MuiTypography-root makeStyles-title-3 MuiTypography-h3"
+        >
+          Configuratie - Camera X
+        </h3>
+        <div
+          class="MuiPaper-root MuiCard-root makeStyles-root-11 MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <div
+            class="MuiCardContent-root makeStyles-cardContent-14"
+          >
+            <div
+              class="MuiBox-root MuiBox-root-15 makeStyles-box-10"
+            >
+              <div
+                style="display: inline-block;"
+              >
+                <label
+                  class="MuiFormLabel-root MuiInputLabel-root makeStyles-inputTitle-5 MuiInputLabel-animated"
+                >
+                  <b>
+                    Naam:
+                  </b>
+                </label>
+                <p
+                  class="MuiTypography-root makeStyles-title2-4 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-gutterBottom"
+                >
+                  <div
+                    class="MuiFormControl-root MuiTextField-root"
+                  >
+                    <div
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                    >
+                      <input
+                        aria-invalid="false"
+                        class="MuiInputBase-input MuiInput-input"
+                        id="standard-basic"
+                        type="text"
+                        value="Kruispunt XY"
+                      />
+                    </div>
+                  </div>
+                </p>
+              </div>
+              <div
+                style="display: inline-block;"
+              >
+                <label
+                  class="MuiFormLabel-root MuiInputLabel-root makeStyles-inputTitle-5 MuiInputLabel-animated"
+                >
+                  <b>
+                    Locatie:
+                  </b>
+                </label>
+                <p
+                  class="MuiTypography-root makeStyles-title2-4 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-gutterBottom"
+                >
+                  <div
+                    class="MuiFormControl-root MuiTextField-root"
+                  >
+                    <div
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                    >
+                      <input
+                        aria-invalid="false"
+                        class="MuiInputBase-input MuiInput-input"
+                        id="standard-basic"
+                        type="text"
+                        value="Strijp S"
+                      />
+                    </div>
+                  </div>
+                </p>
+              </div>
+              <div
+                style="display: inline-block;"
+              >
+                <label
+                  class="MuiFormLabel-root MuiInputLabel-root makeStyles-inputTitle-5 MuiInputLabel-animated"
+                >
+                  <b>
+                    Type:
+                  </b>
+                </label>
+                <p
+                  class="MuiTypography-root makeStyles-title2-4 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-gutterBottom"
+                >
+                  <div
+                    class="MuiFormControl-root MuiTextField-root"
+                  >
+                    <div
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline Mui-disabled Mui-disabled MuiInputBase-formControl MuiInput-formControl"
+                    >
+                      <input
+                        aria-invalid="false"
+                        class="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
+                        disabled=""
+                        id="standard-basic"
+                        type="text"
+                        value="Camera C920"
+                      />
+                    </div>
+                  </div>
+                </p>
+              </div>
+              <div
+                style="display: inline-block;"
+              >
+                <label
+                  class="MuiFormLabel-root MuiInputLabel-root makeStyles-inputTitle-5 MuiInputLabel-animated"
+                >
+                  <b>
+                    Resolutie:
+                  </b>
+                </label>
+                <p
+                  class="MuiTypography-root makeStyles-title2-4 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-gutterBottom"
+                >
+                  <div
+                    class="MuiFormControl-root MuiTextField-root"
+                  >
+                    <div
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline Mui-disabled Mui-disabled MuiInputBase-formControl MuiInput-formControl"
+                    >
+                      <input
+                        aria-invalid="false"
+                        class="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
+                        disabled=""
+                        id="standard-basic"
+                        type="text"
+                        value="1920x1080"
+                      />
+                    </div>
+                  </div>
+                </p>
+              </div>
+              <div
+                style="display: inline-block;"
+              >
+                <label
+                  class="MuiFormLabel-root MuiInputLabel-root makeStyles-inputTitle-5 MuiInputLabel-animated"
+                >
+                  <b>
+                    Framerate:
+                  </b>
+                </label>
+                <p
+                  class="MuiTypography-root makeStyles-title2-4 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-gutterBottom"
+                >
+                  <div
+                    class="MuiFormControl-root MuiTextField-root"
+                  >
+                    <div
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline Mui-disabled Mui-disabled MuiInputBase-formControl MuiInput-formControl"
+                    >
+                      <input
+                        aria-invalid="false"
+                        class="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
+                        disabled=""
+                        id="standard-basic"
+                        type="text"
+                        value="30fps"
+                      />
+                    </div>
+                  </div>
+                </p>
+              </div>
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root makeStyles-inputTitle-5 MuiInputLabel-animated"
+              >
+                <b>
+                  Url:
+                </b>
+              </label>
+              <p
+                class="MuiTypography-root makeStyles-title-3 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-gutterBottom"
+              >
+                <div
+                  class="MuiFormControl-root MuiTextField-root makeStyles-textField-12"
+                >
+                  <div
+                    class="MuiInputBase-root MuiInput-root MuiInput-underline Mui-disabled Mui-disabled MuiInputBase-formControl MuiInput-formControl"
+                  >
+                    <input
+                      aria-invalid="false"
+                      class="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
+                      disabled=""
+                      id="standard-basic"
+                      type="text"
+                      value="https://www.openremote.com/videofeed/kruispunt"
+                    />
+                  </div>
+                </div>
+              </p>
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root makeStyles-inputTitle-5 MuiInputLabel-animated"
+              >
+                <b>
+                  Selecteer Detecties
+                </b>
+              </label>
+              <div
+                class="MuiFormControl-root MuiTextField-root makeStyles-comboField-13"
+              >
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                >
+                  <div
+                    aria-haspopup="listbox"
+                    class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <span>
+                      ​
+                    </span>
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput"
+                    tabindex="-1"
+                    value=""
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSelect-icon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <ul
+                class="makeStyles-chipControl-7"
+              />
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root makeStyles-inputTitle-5 MuiInputLabel-animated"
+              >
+                <b>
+                  Detectie Opties
+                </b>
+              </label>
+              <fieldset
+                class="MuiFormControl-root makeStyles-formControl-1"
+              >
+                <div
+                  class="MuiFormGroup-root"
+                >
+                  <label
+                    class="MuiFormControlLabel-root"
+                  >
+                    <span
+                      aria-disabled="false"
+                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-16 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                      style="color: rgb(77, 157, 42);"
+                    >
+                      <span
+                        class="MuiIconButton-label"
+                      >
+                        <input
+                          class="PrivateSwitchBase-input-19"
+                          data-indeterminate="false"
+                          name="D"
+                          type="checkbox"
+                          value=""
+                        />
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="MuiTouchRipple-root"
+                      />
+                    </span>
+                    <span
+                      class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+                    >
+                      Directions
+                    </span>
+                  </label>
+                  <label
+                    class="MuiFormControlLabel-root"
+                  >
+                    <span
+                      aria-disabled="false"
+                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-16 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                      style="color: rgb(77, 157, 42);"
+                    >
+                      <span
+                        class="MuiIconButton-label"
+                      >
+                        <input
+                          class="PrivateSwitchBase-input-19"
+                          data-indeterminate="false"
+                          name="BB"
+                          type="checkbox"
+                          value=""
+                        />
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="MuiTouchRipple-root"
+                      />
+                    </span>
+                    <span
+                      class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+                    >
+                      Boundary Boxes
+                    </span>
+                  </label>
+                  <label
+                    class="MuiFormControlLabel-root"
+                  >
+                    <span
+                      aria-disabled="false"
+                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-16 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                      style="color: rgb(77, 157, 42);"
+                    >
+                      <span
+                        class="MuiIconButton-label"
+                      >
+                        <input
+                          class="PrivateSwitchBase-input-19"
+                          data-indeterminate="false"
+                          name="CLC"
+                          type="checkbox"
+                          value=""
+                        />
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="MuiTouchRipple-root"
+                      />
+                    </span>
+                    <span
+                      class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+                    >
+                      Calculate Line Cross
+                    </span>
+                  </label>
+                  <label
+                    class="MuiFormControlLabel-root"
+                  >
+                    <span
+                      aria-disabled="false"
+                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-16 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                      style="color: rgb(77, 157, 42);"
+                    >
+                      <span
+                        class="MuiIconButton-label"
+                      >
+                        <input
+                          class="PrivateSwitchBase-input-19"
+                          data-indeterminate="false"
+                          name="CO"
+                          type="checkbox"
+                          value=""
+                        />
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="MuiTouchRipple-root"
+                      />
+                    </span>
+                    <span
+                      class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+                    >
+                      Count Objects
+                    </span>
+                  </label>
+                  <label
+                    class="MuiFormControlLabel-root"
+                  >
+                    <span
+                      aria-disabled="false"
+                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-16 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                      style="color: rgb(77, 157, 42);"
+                    >
+                      <span
+                        class="MuiIconButton-label"
+                      >
+                        <input
+                          class="PrivateSwitchBase-input-19"
+                          data-indeterminate="false"
+                          name="SOS"
+                          type="checkbox"
+                          value=""
+                        />
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="MuiTouchRipple-root"
+                      />
+                    </span>
+                    <span
+                      class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+                    >
+                      Show object speed
+                    </span>
+                  </label>
+                  <label
+                    class="MuiFormControlLabel-root"
+                  >
+                    <span
+                      aria-disabled="false"
+                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-16 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                      style="color: rgb(77, 157, 42);"
+                    >
+                      <span
+                        class="MuiIconButton-label"
+                      >
+                        <input
+                          class="PrivateSwitchBase-input-19"
+                          data-indeterminate="false"
+                          name="VC"
+                          type="checkbox"
+                          value=""
+                        />
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="MuiTouchRipple-root"
+                      />
+                    </span>
+                    <span
+                      class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+                    >
+                      Visualize Centers
+                    </span>
+                  </label>
+                  <button
+                    class="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-Buttons-6 MuiButton-containedPrimary"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <span
+                      class="MuiButton-label"
+                    >
+                      Save
+                    </span>
+                    <span
+                      class="MuiTouchRipple-root"
+                    />
+                  </button>
+                  <button
+                    class="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-Buttons-6"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <span
+                      class="MuiButton-label"
+                    >
+                      Cancel
+                    </span>
+                    <span
+                      class="MuiTouchRipple-root"
+                    />
+                  </button>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
+      >
+        <h3
+          class="MuiTypography-root makeStyles-title-3 MuiTypography-h3"
+        >
+          Camera Preview
+        </h3>
+        <img
+          src="https://static.dw.com/image/47113704_303.jpg"
+        />
+        <div>
+          <button
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="MuiButton-label"
+            >
+              Open Editor
+            </span>
+            <span
+              class="MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
