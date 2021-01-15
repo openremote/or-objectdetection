@@ -25,10 +25,10 @@ Below is a simple high level overview of all the components that make up the obj
 ![image](https://raw.githubusercontent.com/openremote/or-objectdetection/develop/wiki/drawio/overview/overview.png)
 
 ## Front-end
-The front-end is a small react application meant as a friendly GUI around the creation of and configuring of video feeds. Besides this the front-end also has a built-in editor for drawing detection lines, these lines are stored in the configuration and passed on to the object detection system. Of course, you are also able to view the analyzed frames of feeds on the front-end.
+The front-end is a small react application meant as a friendly GUI around the creation of and configuring of video feeds. Besides this the front-end also has a built-in editor for drawing detection lines, these lines are stored in the configuration and passed on to the object detection system. Of course, you are also able to view the analyzed frames of feeds on the front-end. The front-end is hosted on port 3000, the IP address depends on which method you use to run docker (could be localhost, could be 192.168.99.100)
 
 ## Back-end
-The back-end is responsible for storing all the data about video feeds (name, feed_url, etc) and communicating with the object detection on behalf of the front-end. It is a simple Flask REST API. The communication between the object detection and the backend is done using RabbitMQ as can be seen in the figure above, for this communication we use [kombu](https://github.com/celery/kombu).
+The back-end is responsible for storing all the data about video feeds (name, feed_url, etc) and communicating with the object detection on behalf of the front-end. It is a simple Flask REST API. The communication between the object detection and the backend is done using RabbitMQ as can be seen in the figure above, for this communication we use [kombu](https://github.com/celery/kombu). The back-end runs on port 5000, as said above the ip address depends on your method of running docker.
 
 ## Object-Detection
 The object detection container is responsible for, you guessed it, the object detection. The current iteration available in develop is a small worker which listens for start/stop signals and starts analyzing a feed when a signal is received. This only works when one feed is run at a time. 
@@ -41,4 +41,7 @@ We have worked on a proper asynchronous thread manager which can spawn multiple 
 
 ## RabbitMQ
 [RabbitMQ](https://www.rabbitmq.com/) is the message queue we have chosen for cross container asynchronous communication, the message queue is responsible for handling the start/stop signals between the back-end and object detection, besides this RabbitMQ also receives analyzed frames from the object detection in a queue, this queue can be subscribed to by any consumer of choice. However, in the default application the analyzed frames queue is consumed by the front end using the [STOMP Plugin](https://www.rabbitmq.com/stomp.html) to display live video feeds to the user in the browser.
+
+The RabbitMQ dashboard is available at port 15672, it provides a nice dashboard to view what is happening inside your RabbitMQ instance, and can be used for debug purposes.
+port 5672 is used to publish/subscribe to RabbitMQ using AMQP. port 15672 is used to be able to connect to RabbitMQ topics using the STOMP plugin.
 
