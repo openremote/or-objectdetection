@@ -4,13 +4,14 @@ dependencies:
   - python==3.7
   - pip
   - pip:
-    - flask
-    - Flask-RESTful
-    - SQLAlchemy
-    - Flask-SQLAlchemy
-    - marshmallow-sqlalchemy
-    - marshmallow-enum
-    - kombu
-    - eventlet
-    - Flask-Cors
-    - pytest
+      - flask
+      - Flask-RESTful
+      - SQLAlchemy
+      - Flask-SQLAlchemy
+      - marshmallow-sqlalchemy
+      - marshmallow-enum
+      - kombu
+      - eventlet
+      - Flask-Cors
+      - pytest
+      - paho-mqtt
