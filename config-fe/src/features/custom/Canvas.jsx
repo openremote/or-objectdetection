@@ -1,7 +1,18 @@
-import React, { useRef, useState } from "react";
-import { Stage, Layer, Line, Rect } from 'react-konva';
-import { Button } from '@material-ui/core';
+import React, { useRef, useState, useEffect } from "react";
+import { Stage, Layer, Line, Rect, Image } from 'react-konva';
+import { useSelector } from "react-redux";
 import useImage from 'use-image';
+import OfflinePlaceholder from 'assets/offline.png';
+import { Container, Dialog, DialogContent, DialogTitle, Button, Slide, makeStyles } from "@material-ui/core";
+import { URL } from "url";
+
+
+const useStyles = makeStyles({
+    dialog: {
+        padding: 0,
+        marginLeft: 0,
+    }
+});
 
 class Drawable {
     constructor(startx, starty) {
@@ -56,15 +67,36 @@ class RectDrawable extends Drawable {
     }
 }
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export default function Canvas(props) {
     const stage = useRef();
 
-    const [image] = useImage("https://static.dw.com/image/47113704_303.jpg");
+    const snapshots = useSelector(state => state.sources.snapshots);
+
+    let imageUrl;
+    useEffect(() => {
+        //fetch a blob if present for this feed
+        var blob = snapshots?.find(x => x.feed_id == props.feed_id)?.snapshot;
+        if(blob) {
+            imageUrl = window.URL.createObjectURL(blob)
+        }
+    }, []);
+
+      
+    const [snapshot] = useImage(imageUrl);
+    const [placeholder] = useImage(OfflinePlaceholder);
+
+
+    console.log(snapshot);
 
     const [drawables, setDrawables] = useState([]);
     const [newDrawable, setNewDrawables] = useState([]);
     const [newDrawableType, setNewDrawableType] = useState("LineDrawable");
-
+    const [open, setOpen] = React.useState(false);
+    const classes = useStyles();
 
     const getNewDrawableBasedOnType = (x, y, type) => {
 
@@ -88,7 +120,6 @@ export default function Canvas(props) {
             );
             setNewDrawables([updatedNewDrawable]);
         }
-
     };
 
     const handleMouseUp = e => {
@@ -111,42 +142,73 @@ export default function Canvas(props) {
         }
     };
 
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleDrawablesSend = (drawables) => {
+
+        props.onDrawablesRecieve(drawables);
+        handleClose();
+    }
+
     //combine the drawables and new drawable currently being added so we can display live drawing to the user.
     const visibleDrawables = [...drawables, ...newDrawable];
     return (
         <div>
-            <Button
-                onClick={e => {
-                    setNewDrawableType("LineDrawable");
-                }}
-            >
-                Draw Lines
+            <Button variant="contained" color="primary" onClick={handleClickOpen}>Open Editor</Button>
+            <Dialog open={open} maxWidth={false} onClose={handleClose} TransitionComponent={Transition} className={classes.dialog}>
+                <DialogContent>
+                    <Container disableGutters maxWidth={false} style={{ position: 'relative' }}>
+                        {/* <div className={clsx(classes.test)}/> */}
+
+                        <Button
+                            onClick={e => {
+                                setNewDrawableType("LineDrawable");
+                            }}
+                        >
+                            Draw Lines
             </Button>
-            <Button
-                onClick={e => {
-                    setNewDrawableType("RectDrawable");
-                }}
-            >
-                Draw Rectangle
+                        <Button
+                            onClick={e => {
+                                setNewDrawableType("RectDrawable");
+                            }}
+                        >
+                            Draw Rectangle
             </Button>
-            <Button
-                onClick={e => {
-                    console.log(stage.current.toJSON());
-                    console.log(image.height);
-                    console.log(image.width);
-                }}
-            >
-                log to JSON
+                        <Button
+                            onClick={e => {
+
+                                console.log(stage.current.toJSON());
+                                console.log(placeholder.height);
+                                console.log(placeholder.width);
+                            }}
+                        >
+                            log to JSON
             </Button>
-            <Stage width={props.width} height={props.height} ref={stage} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} >
-                <Layer >
-                    {/* Om image te scalen | fillPatternScaleX = requiredWidth / imageWidth -- zelfde met Heigth/Y */}
-                    <Rect width={props.width} height={props.height} fillPatternImage={image} fillPatternScaleX={props.width / 700} fillPatternScaleY={props.height / 394} />
-                    {visibleDrawables.map(drawable => {
-                        return drawable.render();
-                    })}
-                </Layer>
-            </Stage>
+                        <Stage width={props.width} height={props.height} ref={stage} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} >
+
+                            <Layer >
+                                {/* Om image te scalen | fillPatternScaleX = requiredWidth / imageWidth -- zelfde met Heigth/Y */}
+                                {visibleDrawables.map(drawable => {
+                                    return drawable.render();
+                                })}
+                            </Layer>
+                            <Layer>
+                                <Image width={props.width} height={props.height} fillPatternImage={placeholder} fillPatternScaleX={props.width / placeholder?.height} fillPatternScaleY={props.height / placeholder?.height} />
+                            </Layer>
+                        </Stage>
+
+
+                    </Container>
+                    <Button style={{ marginTop: 20, marginRight: 10 }} variant="contained" color="primary" onClick={e => { handleDrawablesSend(stage.current.toJSON()) }}>Save</Button>
+                    <Button style={{ marginTop: 20 }} onClick={handleClose} variant="contained" color="default">Cancel</Button>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

@@ -11,7 +11,6 @@ from rabbitmq.rabbitMQ import rabbit_url, feed_queue
 from kombu import Connection
 import json
 
-
 class VideoFeedListAPI(Resource):
     def get(self):
         feeds = Feed.query.all()
@@ -36,7 +35,6 @@ class VideoFeedListAPI(Resource):
 
         feed_schema = FeedSchema()
         return feed_schema.dump(feed)
-
 
 class VideoFeedAPI(Resource):
     def get(self, feed_ID):
@@ -102,9 +100,6 @@ class VideoFeedStreamAPI(Resource):
             if feed is None:
                 abort(404, description=f"Feed {feed_ID} not found")
             else:
-                json_data = request.get_json(force=True)
-                # TODO : in de toekomst meer waardes sturen naast de id?, bijv coco classes, tenzij we deze ook
-                #  opslaan in de db.
                 with Connection(rabbit_url, heartbeat=4) as conn:
                     # flip boolean
                     feed.active = not feed.active
@@ -113,9 +108,14 @@ class VideoFeedStreamAPI(Resource):
                     # Produce a message to RabbitMQ so detection manager can consume and start the approriate feed
                     # with the given data.
                     producer = conn.Producer(serializer='json')
+
+                    detections = None if feed.configuration is None else feed.configuration.detections
+                    drawables = None if feed.configuration is None else feed.configuration.drawables
+
                     producer.publish(
-                        {'id': feed.id, 'feed_type': json.dumps(feed.feed_type), 'url': feed.url, 'active': feed.active, 'detections': dt_schema.dump(feed.configuration.detections, many=True), 'drawables': feed.configuration.drawables},
+                        {'id': feed.id, 'feed_type': json.dumps(feed.feed_type), 'url': feed.url, 'active': feed.active, 'detections': dt_schema.dump(detections, many=True), 'drawables': drawables},
                         retry=True,
+                        expiration=10,
                         exchange=feed_queue.exchange,
                         routing_key=feed_queue.routing_key,
                         declare=[feed_queue],  # declares exchange, queue and binds.
@@ -124,3 +124,7 @@ class VideoFeedStreamAPI(Resource):
                     scoped_session.commit()
 
                     conn.release()
+
+                # convert to JSON and return to user
+                feed_schema = FeedSchema()
+                return feed_schema.dump(feed)

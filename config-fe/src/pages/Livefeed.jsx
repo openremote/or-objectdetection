@@ -1,10 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
-import stompClient from 'rabbitMQ/rabbitMQ'
-import { Client, Message } from '@stomp/stompjs';
-
+import { fetchNewStompClient } from 'rabbitMQ/rabbitMQ'
+import { connect } from 'react-redux'
+import OfflinePlaceholder from 'assets/offline.png';
 import { Container } from '@material-ui/core';
 import { withStyles  } from '@material-ui/core/styles';
+
+const mapStateToProps = state => ({
+    feeds: state.sources.videoSources
+});
 
 const styles = theme => ({
     videoPlayer: {
@@ -21,6 +25,7 @@ class Livefeed extends React.Component {
         this.imageRef = React.createRef();
         this.context = null;
         this.stompClient = null;
+        this.subscription = null;
     }
 
     componentDidMount() {
@@ -29,44 +34,36 @@ class Livefeed extends React.Component {
     }
 
     connectToRabbitMQ(id) {
-        //fetch stompclient instance
-        this.stompClient = stompClient;
+        //check if feed is active before we connect
+        let active = this.props.feeds?.find(x => x.id == this.id)?.active;
+        if(active && active === true) {
+            //fetch stompclient instance
+            this.stompClient = fetchNewStompClient();
 
-        //attempt to connect to rabbitmq
-        this.stompClient.activate();
+            //attempt to connect to rabbitmq
+            this.stompClient.activate();
 
-        this.stompClient.onConnect =  (frame) => {
-            console.log("CONNECTED TO RABBITMQ")
+            this.stompClient.onConnect =  (frame) => {
+                console.log("CONNECTED TO RABBITMQ")
 
-            var subscription = this.stompClient.subscribe("/queue/video-queue", onQueueMessage);
-            // Do something, all subscribes must be done is this callback
-            // This is needed because this will be executed after a (re)connect
-        };
+                this.subscription = this.stompClient.subscribe("/queue/video-queue", onQueueMessage);
+                // Do something, all subscribes must be done is this callback
+                // This is needed because this will be executed after a (re)connect
+            };
 
-        var onQueueMessage = (message) => {
-            let image = new Image();
-            let blob = new Blob([message.binaryBody]);
-            let url = URL.createObjectURL(blob);
-            document.querySelector("#image").src = url;
-            /*image.onload = () => {
-
-                URL.revokeObjectURL(url)
-                var wrh = image.width / image.height;
-                var newWidth = this.imageRef.current.clientWidth;
-                var newHeight = newWidth / wrh;
-                if (newHeight > this.imageRef.current.clientHeight) {
-                    newHeight = this.imageRef.current.clientHeight;
-                    newWidth = newHeight * wrh;
-                }
-
-                this.context.drawImage(image, 0, 0, 200 , 200);
+            var onQueueMessage = (message) => {
+                let blob = new Blob([message.binaryBody]);
+                let url = URL.createObjectURL(blob);
+                document.querySelector("#image").src = url;
             }
-            image.src = url;*/
+        } else {
+            document.querySelector("#image").src = OfflinePlaceholder;
         }
     }
 
     componentWillUnmount() {
-        this.stompClient.deactivate();
+        this.subscription?.unsubscribe();
+        this.stompClient?.deactivate();
     }
 
     render() {
@@ -74,10 +71,9 @@ class Livefeed extends React.Component {
         return(
             <Container maxWidth={false}>
                 <img id="image" className={clsx(classes.videoPlayer)}/>
-                {/*<canvas className={clsx(classes.videoPlayer)} ref={this.imageRef}/> */}
             </Container>
         )
     }
 }
 
-export default withStyles(styles, {withTheme: true})(Livefeed);
+export default connect(mapStateToProps)(withStyles(styles)(Livefeed));

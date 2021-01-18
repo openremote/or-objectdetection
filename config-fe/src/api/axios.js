@@ -3,7 +3,7 @@ import * as qs from "qs";
 import { PathLike } from "fs";
 
 let API_URL = process.env.API_URL || "http://localhost:5000";
-
+console.warn('de api url is' + API_URL)
 const apiConfig = {
   returnRejectedPromiseOnError: true,
   withCredentials: true,

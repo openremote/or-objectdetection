@@ -7,24 +7,17 @@ import re
 import time
 
 def consume_ipcam(url):
-	# -I dummy --dummy-quiet 
-	# instance = vlc.Instance('--no-video --quiet')
-	# player = instance.media_player_new()
-	
-	# player.set_mrl(url)
-	# # player.set_media(media)
+	print('starting to analyse ip camera')
 
-	player = vlc.MediaPlayer(url)
+	instance = vlc.Instance('--intf dummy --vout=dummy --no-audio --no-sout-audio --no-ts-trust-pcr --ts-seek-percent')
+	player = instance.media_player_new()
+	player.set_mrl(url)
 	player.play()
-	i=0
 	while True:
-		i+=1
-		print ('frame '+ str(i))
 		player.video_take_snapshot(0,'file.png',0,0)
 		raw_image = cv2.imread('file.png', 0)
 		width,height = player.video_get_size()
 		if raw_image is not None and width > 0 and height > 0:
-			print('yielded')
 			image = numpy.frombuffer(raw_image, dtype='uint8')
 			image = image.reshape((height, width, 1))
 			yield image
@@ -64,27 +57,29 @@ def consume_youtube(youtube_url, quality = 'normal'):
 		info_dict = dloader.extract_info(youtube_url, download=False)
 		stream_url = info_dict['url']
 
-		player = vlc.MediaPlayer(stream_url)
+		i = vlc.Instance("--intf dummy --vout=dummy --no-audio --no-sout-audio --no-ts-trust-pcr --ts-seek-percent")
+		p = i.media_player_new()
+		p.set_mrl(stream_url)
+		player = p
 		player.play()
 
 		while True:
 			player.video_take_snapshot(0,'file.png',0,0)
 			raw_image = cv2.imread('file.png', 0)
-			if raw_image is not None:
+			width, height = player.video_get_size()
+			if raw_image is not None and width > 0 and height > 0 :
 				image = numpy.frombuffer(raw_image, dtype='uint8')
 				image = image.reshape((format.get('height'), format.get('width'), 1))
 				yield image
 
-def consume_stream(url, framerate = 5, quality = 'normal'):
+def consume_stream(url, framerate = 10, quality = 'normal'):
 	consumer=None
 	if re.search("http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?", url) is not None:
 		consumer = consume_youtube(url, quality)
 	else:
 		consumer = consume_ipcam(url)
-	
-	starttime = time.time()
-	for frame in consumer:
-		timepast = (time.time() - starttime)/1000		
+
+	for frame in consumer:	
 		yield frame
-		sleep((1/framerate)-timepast)
-		starttime = time.time()
+		sleeptime = (1./framerate)
+		sleep(sleeptime)

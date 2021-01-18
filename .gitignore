@@ -11,3 +11,12 @@ command.txt
 yolo_object_detection/file.png
 
 yolo_object_detection/img.png
+
+yolo_object_detection/yolov4.weights
+yolo_object_detection/weights/
+
+yolo_object_detection/app/checkpoints/yolov4-416/saved_model.pb
+
+yolo_object_detection/app/checkpoints/yolov4-416/variables/variables.data-00000-of-00001
+
+yolo_object_detection/app/checkpoints/yolov4-416/variables/variables.index
